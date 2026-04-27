@@ -372,277 +372,781 @@ html, body {
     <button class="menu-btn" onclick="openPage('包数','https://www.kdocs.cn/l/cbJs05zRewYZ')">包数</button>
     <button class="menu-btn" onclick="openPage('单量','https://www.kdocs.cn/l/cdiNjSnC4i2E')">单量</button>
     <button class="menu-btn" onclick="openPage('人效','https://www.kdocs.cn/l/coByacPZqwoP')">人效</button>
-    <button class="menu-btn" onclick="openPage('小包','https://www.kdocs.cn/l/cgZfZ6RmT5hJ')">小包</button>
+    <button class="menu-btn" onclick="openPage('小包','http://120.77.151.112:16321/module/index?mv=index')">小包</button>
+    <button class="menu-btn" onclick="openIllustrationPage()">插图</button>
+    <!-- 退出按钮 -->
     <button class="menu-btn logout-btn" onclick="doLogout()">退出登录</button>
   </div>
-  <div class="toggle-btn" onclick="toggleSidebar()">≡</div>
+  
+  <div class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">▶</div>
+
   <div class="content">
     <div class="tabs" id="tabs"></div>
-    <div class="pages" id="pages"></div>
+    <div class="pages" id="pages">
+      <!-- 插图功能页面 -->
+      <div class="page" id="illustration-page">
+        <div class="config-group">
+          <h4>插入模式</h4>
+          <label><input type="radio" name="insertMode" value="embed" checked> 嵌入图片</label>
+        </div>
+        <div class="config-group">
+          <h4>起始单元格</h4>
+          <input type="text" id="startCell" value="A1" placeholder="例如：A1">
+        </div>
+        <div class="config-group">
+          <h4>排版方式</h4>
+          <label><input type="radio" name="layout" value="horizontal" checked> 按行横排</label>
+          <label><input type="radio" name="layout" value="vertical"> 按列竖排</label>
+          <label>每行/列数量：<input type="number" id="perRow" value="4" min="1" max="20"></label>
+        </div>
+        <div class="config-group">
+          <h4>图片名称显示</h4>
+          <label><input type="radio" name="addName" value="none" checked> 不显示</label>
+          <label><input type="radio" name="addName" value="above"> 图片上方</label>
+          <label><input type="radio" name="addName" value="below"> 图片下方</label>
+        </div>
+        <div class="config-group">
+          <h4>单元格尺寸</h4>
+          <button class="unit-btn active" id="unit-cm">厘米(cm)</button>
+          <button class="unit-btn" id="unit-px">像素(px)</button>
+          <input type="number" id="cellWidth" value="4.12" step="0.01"> × 
+          <input type="number" id="cellHeight" value="4.74" step="0.01">
+          <span id="unit-tip">当前：4.12cm×4.74cm ≈ 116.8px×134.4px</span>
+        </div>
+        
+        <div class="btn-group">
+          <button id="addImagesBtn">添加图片</button>
+          <button id="clearImagesBtn" class="danger">清空图片</button>
+          <button id="startInsert">开始插入</button>
+          <button id="refreshPreviewBtn">刷新预览</button>
+          <button id="exportExcelBtn">导出Excel</button>
+        </div>
+        
+        <div class="drop-area" id="dropArea">
+          拖拽图片到此处上传<br>或点击上方「添加图片」按钮
+        </div>
+        
+        <div id="preview-stats" style="margin: 10px 0; font-size: 14px;">已选择：0 张图片</div>
+        <div id="preview-content">
+          <div class="no-preview">
+            暂无预览内容<br>请添加图片并点击「开始插入」生成预览
+          </div>
+        </div>
+        
+        <!-- 隐藏的文件输入 -->
+        <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+        
+        <!-- 进度弹窗 -->
+        <div class="progress-modal" id="progress-modal">
+          <div class="progress-content">
+            <h3>处理中...</h3>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div id="progress-text">0% - 初始化...</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-/**
- * 应用模块
- * 封装所有功能，避免全局变量污染
- */
-const App = {
-  /**
-   * 初始化应用
-   */
-  init() {
-    this.bindEvents();
-    this.checkLoginStatus();
-  },
-  
-  /**
-   * 绑定事件
-   */
-  bindEvents() {
-    // 侧边栏切换按钮事件
-    const toggleBtn = document.querySelector('.toggle-btn');
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', () => this.toggleSidebar());
-    }
-    
-    // 登录按钮事件
-    const loginBtn = document.querySelector('.login button');
-    if (loginBtn) {
-      loginBtn.addEventListener('click', () => this.doLogin());
-    }
-    
-    // 回车键登录
-    const userInput = document.getElementById('user');
-    const pwdInput = document.getElementById('pwd');
-    if (userInput && pwdInput) {
-      [userInput, pwdInput].forEach(input => {
-        input.addEventListener('keyup', (e) => {
-          if (e.key === 'Enter') {
-            this.doLogin();
-          }
-        });
-      });
-    }
-  },
-  
-  /**
-   * 登录功能
-   * 实现基本的账号密码验证和登录状态管理
-   */
-  doLogin() {
-    try {
-      const user = document.getElementById('user').value.trim();
-      const pwd = document.getElementById('pwd').value.trim();
-      
-      // 基本验证
-      if (!user) {
-        alert('请输入账号');
-        return;
-      }
-      if (!pwd) {
-        alert('请输入密码');
-        return;
-      }
-      
-      // 这里可以添加更复杂的验证逻辑，比如与后端API交互
-      // 这里使用简单的硬编码验证
-      if (user === 'admin' && pwd === '123456') {
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('main').style.display = 'flex';
-        // 存储登录状态到本地存储
-        localStorage.setItem('isLoggedIn', 'true');
-      } else {
-        alert('账号或密码错误');
-      }
-    } catch (error) {
-      console.error('登录失败:', error);
-      alert('登录过程中发生错误，请重试');
-    }
-  },
+let tabs = JSON.parse(localStorage.getItem('savedTabs') || '[]');
+let activeId = localStorage.getItem('activeTab') || (tabs[0]?.id || null);
+let iframes = {};
+let pageElements = {}; // 缓存page容器元素
+let isSidebarCollapsed = false;
 
-  /**
-   * 退出登录功能
-   * 清除登录状态并返回登录页面
-   */
-  doLogout() {
-    try {
-      if (confirm('确定要退出登录吗？')) {
-        document.getElementById('main').style.display = 'none';
-        document.getElementById('login').style.display = 'flex';
-        document.getElementById('user').value = '';
-        document.getElementById('pwd').value = '';
-        // 移除本地存储中的登录状态
-        localStorage.removeItem('isLoggedIn');
-      }
-    } catch (error) {
-      console.error('退出登录失败:', error);
-      alert('退出登录过程中发生错误，请重试');
-    }
-  },
+// 登录函数
+function doLogin() {
+  localStorage.setItem('logined', '1');
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('main').style.display = 'flex';
+  initPages(); // 初始化页面容器
+  renderTabs(); // 只渲染标签栏
+  switchTab(activeId); // 切换到激活的标签
+}
 
-  /**
-   * 侧边栏切换功能
-   * 切换侧边栏的展开/折叠状态
-   */
-  toggleSidebar() {
-    try {
-      const sidebar = document.getElementById('sidebar');
-      if (sidebar) {
-        sidebar.classList.toggle('collapse');
-      } else {
-        console.error('侧边栏元素未找到');
-      }
-    } catch (error) {
-      console.error('切换侧边栏失败:', error);
-    }
-  },
-
-  /**
-   * 打开页面功能
-   * @param {string} name - 页面名称
-   * @param {string} url - 页面URL
-   */
-  openPage(name, url) {
-    try {
-      const tabs = document.getElementById('tabs');
-      const pages = document.getElementById('pages');
-      
-      if (!tabs || !pages) {
-        console.error('标签页或页面容器未找到');
-        return;
-      }
-      
-      // 检查是否已存在该标签页
-      let existingTab = document.querySelector(`.tab[data-name="${name}"]`);
-      if (existingTab) {
-        // 切换到已存在的标签页
-        this.switchTab(name);
-        return;
-      }
-      
-      // 创建新标签页
-      const tab = document.createElement('div');
-      tab.className = 'tab active';
-      tab.dataset.name = name;
-      tab.innerHTML = `${name} <span class="close">×</span>`;
-      tab.onclick = () => this.switchTab(name);
-      
-      // 添加关闭按钮事件
-      const closeBtn = tab.querySelector('.close');
-      if (closeBtn) {
-        closeBtn.onclick = (e) => {
-          e.stopPropagation(); // 阻止事件冒泡
-          this.closeTab(name);
-        };
-      }
-      
-      tabs.appendChild(tab);
-      
-      // 创建新页面
-      const page = document.createElement('div');
-      page.className = 'page active';
-      page.dataset.name = name;
-      const iframe = document.createElement('iframe');
-      iframe.src = url;
-      // 添加iframe加载错误处理
-      iframe.onerror = function() {
-        console.error(`页面 ${name} 加载失败: ${url}`);
-      };
-      page.appendChild(iframe);
-      pages.appendChild(page);
-      
-      // 移除其他标签页和页面的active类
-      document.querySelectorAll('.tab:not([data-name="' + name + '"])').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.page:not([data-name="' + name + '"])').forEach(page => page.classList.remove('active'));
-    } catch (error) {
-      console.error('打开页面失败:', error);
-      alert('打开页面过程中发生错误，请重试');
-    }
-  },
-
-  /**
-   * 切换标签页功能
-   * @param {string} name - 页面名称
-   */
-  switchTab(name) {
-    try {
-      const tab = document.querySelector(`.tab[data-name="${name}"]`);
-      const page = document.querySelector(`.page[data-name="${name}"]`);
-      
-      if (!tab || !page) {
-        console.error('标签页或页面未找到');
-        return;
-      }
-      
-      // 移除所有标签页和页面的active类
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-      
-      // 添加当前标签页和页面的active类
-      tab.classList.add('active');
-      page.classList.add('active');
-    } catch (error) {
-      console.error('切换标签页失败:', error);
-    }
-  },
-
-  /**
-   * 关闭标签页功能
-   * @param {string} name - 页面名称
-   */
-  closeTab(name) {
-    try {
-      const tab = document.querySelector(`.tab[data-name="${name}"]`);
-      const page = document.querySelector(`.page[data-name="${name}"]`);
-      
-      if (tab && page) {
-        const isActive = tab.classList.contains('active');
-        tab.remove();
-        page.remove();
-        
-        // 如果关闭的是当前活动标签页，切换到第一个标签页
-        if (isActive) {
-          const firstTab = document.querySelector('.tab');
-          if (firstTab) {
-            const firstTabName = firstTab.dataset.name;
-            this.switchTab(firstTabName);
-          }
-        }
-      } else {
-        console.error('标签页或页面未找到');
-      }
-    } catch (error) {
-      console.error('关闭标签页失败:', error);
-    }
-  },
-
-  /**
-   * 检查登录状态
-   */
-  checkLoginStatus() {
-    try {
-      // 检查本地存储中的登录状态
-      if (localStorage.getItem('isLoggedIn') === 'true') {
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('main').style.display = 'flex';
-      }
-    } catch (error) {
-      console.error('检查登录状态失败:', error);
-      // 本地存储不可用时，默认显示登录页面
-    }
+// 退出登录函数
+function doLogout() {
+  if (confirm('确定要退出登录吗？')) {
+    // 清空本地存储
+    localStorage.removeItem('logined');
+    localStorage.removeItem('savedTabs');
+    localStorage.removeItem('activeTab');
+    // 重置变量
+    tabs = [];
+    activeId = null;
+    iframes = {};
+    pageElements = {};
+    // 隐藏主界面，显示登录界面
+    document.getElementById('main').style.display = 'none';
+    document.getElementById('login').style.display = 'flex';
+    // 清空输入框
+    document.getElementById('user').value = '';
+    document.getElementById('pwd').value = '';
   }
-};
+}
 
-// 页面加载完成后初始化应用
-window.addEventListener('DOMContentLoaded', () => {
-  App.init();
+// 初始化所有页面容器（只在登录时执行一次）
+function initPages() {
+  const pagesEl = document.getElementById('pages');
+  tabs.forEach(t => {
+    if (!pageElements[t.id]) {
+      // 创建page容器
+      const page = document.createElement('div');
+      page.className = 'page';
+      page.id = t.id;
+      pageElements[t.id] = page;
+      pagesEl.appendChild(page);
+
+      // 创建iframe并缓存
+      if (!iframes[t.id]) {
+        const iframe = document.createElement('iframe');
+        iframe.src = t.url;
+        iframe.dataset.id = t.id;
+        iframes[t.id] = iframe;
+        page.appendChild(iframe);
+      }
+    }
+  });
+}
+
+// 只渲染标签栏
+function renderTabs() {
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = '';
+
+  tabs.forEach(t => {
+    const tab = document.createElement('div');
+    tab.className = 'tab ' + (t.id === activeId ? 'active' : '');
+    tab.innerHTML = t.name + '<span class="close" onclick="closeTab(event,\'' + t.id + '\')">×</span>';
+    tab.onclick = e => {
+      if (!e.target.classList.contains('close')) switchTab(t.id);
+    };
+    tabsEl.appendChild(tab);
+  });
+}
+
+// 打开常规页面
+function openPage(name, url) {
+  const exist = tabs.find(t => t.name === name);
+  if (exist) {
+    switchTab(exist.id);
+    return;
+  }
+
+  // 新增标签页
+  const id = 'page_' + Date.now();
+  const newTab = { id, name, url };
+  tabs.push(newTab);
+  saveTabs();
+
+  // 创建新的page容器和iframe
+  const pagesEl = document.getElementById('pages');
+  const page = document.createElement('div');
+  page.className = 'page';
+  page.id = id;
+  pageElements[id] = page;
+  pagesEl.appendChild(page);
+
+  const iframe = document.createElement('iframe');
+  iframe.src = url;
+  iframe.dataset.id = id;
+  iframes[id] = iframe;
+  page.appendChild(iframe);
+
+  // 重新渲染标签栏并切换到新标签
+  renderTabs();
+  switchTab(id);
+}
+
+// 打开插图功能页面
+function openIllustrationPage() {
+  // 检查是否已有插图标签
+  const exist = tabs.find(t => t.name === '插图');
+  if (exist) {
+    switchTab(exist.id);
+    return;
+  }
+
+  // 新增插图标签页
+  const id = 'page_illustration';
+  const newTab = { id, name: '插图', type: 'illustration' };
+  tabs.push(newTab);
+  saveTabs();
+
+  // 重新渲染标签栏并切换到插图页面
+  renderTabs();
+  switchTab(id);
+}
+
+// 切换标签：仅控制显示/隐藏，不重新创建DOM
+function switchTab(id) {
+  if (!id) return;
+
+  // 隐藏所有page
+  Object.keys(pageElements).forEach(pid => {
+    if (pageElements[pid]) pageElements[pid].style.display = 'none';
+  });
+  // 隐藏插图页面
+  document.getElementById('illustration-page').style.display = 'none';
+
+  // 判断是否是插图页面
+  const tab = tabs.find(t => t.id === id);
+  if (tab && tab.type === 'illustration') {
+    // 显示插图页面
+    document.getElementById('illustration-page').style.display = 'block';
+  } else if (pageElements[id]) {
+    // 显示常规页面
+    pageElements[id].style.display = 'block';
+  }
+
+  // 更新激活的标签样式
+  document.querySelectorAll('.tab').forEach(tabEl => {
+    tabEl.classList.remove('active');
+    if (tabEl.textContent.includes(tabs.find(t => t.id === id)?.name || '')) {
+      tabEl.classList.add('active');
+    }
+  });
+
+  activeId = id;
+  localStorage.setItem('activeTab', activeId);
+}
+
+// 关闭标签
+function closeTab(e, id) {
+  e.stopPropagation();
+  const index = tabs.findIndex(t => t.id === id);
+  if (index === -1) return;
+
+  // 移除标签数据
+  tabs.splice(index, 1);
+  saveTabs();
+
+  // 移除DOM元素和缓存
+  if (pageElements[id]) {
+    pageElements[id].remove();
+    delete pageElements[id];
+  }
+  delete iframes[id];
+
+  // 更新激活标签
+  activeId = tabs[0]?.id || null;
+  localStorage.setItem('activeTab', activeId);
+
+  // 重新渲染标签栏并切换标签
+  renderTabs();
+  switchTab(activeId);
+}
+
+// 保存标签到本地存储
+function saveTabs() {
+  localStorage.setItem('savedTabs', JSON.stringify(tabs));
+}
+
+// 侧边栏切换
+function toggleSidebar() {
+    isSidebarCollapsed = !isSidebarCollapsed;
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggleBtn');
+    
+    if (isSidebarCollapsed) {
+        sidebar.classList.add('collapse');
+        toggleBtn.textContent = '◀';
+    } else {
+        sidebar.classList.remove('collapse');
+        toggleBtn.textContent = '▶';
+    }
+}
+
+// 页面加载时恢复登录状态
+window.addEventListener('load', () => {
+  if (localStorage.getItem('logined')) {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('main').style.display = 'flex';
+    initPages();
+    renderTabs();
+    switchTab(activeId);
+  }
+  
+  // 初始化插图功能
+  initIllustrationFunction();
 });
 
-// 暴露必要的方法到全局，以便在HTML中调用
-window.doLogin = () => App.doLogin();
-window.doLogout = () => App.doLogout();
-window.openPage = (name, url) => App.openPage(name, url);
+// 初始化插图功能
+function initIllustrationFunction() {
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const addImagesBtn = document.getElementById('addImagesBtn');
+    const clearImagesBtn = document.getElementById('clearImagesBtn');
+    const startInsertBtn = document.getElementById('startInsert');
+    const exportExcelBtn = document.getElementById('exportExcelBtn');
+    const refreshPreviewBtn = document.getElementById('refreshPreviewBtn');
+    const previewContent = document.getElementById('preview-content');
+    const previewStats = document.getElementById('preview-stats');
+    const unitCmBtn = document.getElementById('unit-cm');
+    const unitPxBtn = document.getElementById('unit-px');
+    const cellWidthInput = document.getElementById('cellWidth');
+    const cellHeightInput = document.getElementById('cellHeight');
+    const unitTip = document.getElementById('unit-tip');
+    const progressModal = document.getElementById('progress-modal');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+
+    let selectedFiles = [];
+    let imageBase64List = [];
+    let currentUnit = 'cm';
+    const CM_TO_PX = 28.35;
+    const CM_TO_EXCEL_COL = 3.78;
+    const CM_TO_EXCEL_ROW = 21.59;
+    const EXCEL_COORD_COEFF = 80;
+
+    // 单位切换事件
+    if (unitCmBtn) {
+        unitCmBtn.addEventListener('click', () => {
+            currentUnit = 'cm';
+            unitCmBtn.classList.add('active');
+            if (unitPxBtn) unitPxBtn.classList.remove('active');
+            const widthPx = parseFloat(cellWidthInput.value);
+            const heightPx = parseFloat(cellHeightInput.value);
+            if (!isNaN(widthPx) && !isNaN(heightPx)) {
+                cellWidthInput.value = (widthPx / CM_TO_PX).toFixed(2);
+                cellHeightInput.value = (heightPx / CM_TO_PX).toFixed(2);
+            }
+            updateUnitTip();
+        });
+    }
+
+    if (unitPxBtn) {
+        unitPxBtn.addEventListener('click', () => {
+            currentUnit = 'px';
+            unitPxBtn.classList.add('active');
+            if (unitCmBtn) unitCmBtn.classList.remove('active');
+            const widthCm = parseFloat(cellWidthInput.value);
+            const heightCm = parseFloat(cellHeightInput.value);
+            if (!isNaN(widthCm) && !isNaN(heightCm)) {
+                cellWidthInput.value = Math.round(widthCm * CM_TO_PX);
+                cellHeightInput.value = Math.round(heightCm * CM_TO_PX);
+            }
+            updateUnitTip();
+        });
+    }
+
+    function updateUnitTip() {
+        let widthCm, heightCm, widthPx, heightPx;
+        if (currentUnit === 'cm') {
+            widthCm = parseFloat(cellWidthInput.value) || 4.12;
+            heightCm = parseFloat(cellHeightInput.value) || 4.74;
+            widthPx = Math.round(widthCm * CM_TO_PX * 10) / 10;
+            heightPx = Math.round(heightCm * CM_TO_PX * 10) / 10;
+        } else {
+            widthPx = parseFloat(cellWidthInput.value) || 116.8;
+            heightPx = parseFloat(cellHeightInput.value) || 134.4;
+            widthCm = Math.round((widthPx / CM_TO_PX) * 100) / 100;
+            heightCm = Math.round((heightPx / CM_TO_PX) * 100) / 100;
+        }
+        if (unitTip) unitTip.textContent = `当前：${widthCm}cm×${heightCm}cm ≈ ${widthPx}px×${heightPx}px`;
+    }
+
+    if (cellWidthInput) cellWidthInput.addEventListener('input', updateUnitTip);
+    if (cellHeightInput) cellHeightInput.addEventListener('input', updateUnitTip);
+
+    if (addImagesBtn) {
+        addImagesBtn.addEventListener('click', () => {
+            if (fileInput) {
+                fileInput.value = '';
+                fileInput.click();
+            }
+        });
+    }
+
+    if (clearImagesBtn) {
+        clearImagesBtn.addEventListener('click', () => {
+            selectedFiles = [];
+            imageBase64List = [];
+            updatePreviewStats();
+            if (previewContent) {
+                previewContent.innerHTML = `
+                    <div class="no-preview">
+                        暂无预览内容<br>请添加图片并点击「开始插入」生成预览
+                    </div>
+                `;
+            }
+            alert('已清空所有选择的图片！');
+        });
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', async function(e) {
+            try {
+                const files = Array.from(this.files || []);
+                if (files.length === 0) return;
+                const imageFiles = files.filter(f => f.type && f.type.startsWith('image/'));
+                if (imageFiles.length === 0) {
+                    alert('请选择有效的图片文件（jpg、png、gif等）！');
+                    return;
+                }
+                const newFiles = [];
+                for (const file of imageFiles) {
+                    const isDuplicate = selectedFiles.some(f => 
+                        f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
+                    );
+                    if (!isDuplicate) {
+                        selectedFiles.push(file);
+                        newFiles.push(file);
+                        const base64 = await fileToBase64(file);
+                        imageBase64List.push({
+                            name: file.name,
+                            type: file.type,
+                            data: base64
+                        });
+                    }
+                }
+                updatePreviewStats();
+                alert(`成功添加 ${newFiles.length} 张图片，当前共选择 ${selectedFiles.length} 张`);
+                generatePreview();
+            } catch (error) {
+                console.error('处理图片失败：', error);
+                alert('添加图片失败，请重试！');
+            }
+        });
+    }
+
+    if (dropArea) {
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.classList.add('dragover');
+        });
+
+        dropArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropArea.classList.remove('dragover');
+        });
+
+        dropArea.addEventListener('drop', async (e) => {
+            try {
+                e.preventDefault();
+                e.stopPropagation();
+                dropArea.classList.remove('dragover');
+                const files = Array.from(e.dataTransfer.files || []);
+                if (files.length === 0) return;
+                const imageFiles = files.filter(f => f.type && f.type.startsWith('image/'));
+                if (imageFiles.length === 0) {
+                    alert('请拖拽图片文件！');
+                    return;
+                }
+                const newFiles = [];
+                for (const file of imageFiles) {
+                    const isDuplicate = selectedFiles.some(f => 
+                        f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
+                    );
+                    if (!isDuplicate) {
+                        selectedFiles.push(file);
+                        newFiles.push(file);
+                        const base64 = await fileToBase64(file);
+                        imageBase64List.push({
+                            name: file.name,
+                            type: file.type,
+                            data: base64
+                        });
+                    }
+                }
+                updatePreviewStats();
+                alert(`成功添加 ${newFiles.length} 张图片，当前共选择 ${selectedFiles.length} 张`);
+                generatePreview();
+            } catch (error) {
+                console.error('拖拽图片失败：', error);
+                alert('拖拽添加图片失败，请重试！');
+            }
+        });
+    }
+
+    if (startInsertBtn) startInsertBtn.addEventListener('click', generatePreview);
+    if (refreshPreviewBtn) refreshPreviewBtn.addEventListener('click', generatePreview);
+    if (exportExcelBtn) exportExcelBtn.addEventListener('click', exportToExcelWithProgress);
+
+    function updatePreviewStats() {
+        if (previewStats) previewStats.textContent = `已选择：${selectedFiles.length} 张图片`;
+    }
+
+    function getCellSizeInPx() {
+        let width, height;
+        if (currentUnit === 'cm') {
+            width = parseFloat(cellWidthInput.value) || 4.12;
+            height = parseFloat(cellHeightInput.value) || 4.74;
+            return { width: width * CM_TO_PX, height: height * CM_TO_PX };
+        } else {
+            width = parseFloat(cellWidthInput.value) || 116.8;
+            height = parseFloat(cellHeightInput.value) || 134.4;
+            return { width, height };
+        }
+    }
+
+    function generatePreview() {
+        if (selectedFiles.length === 0) {
+            alert('请先选择图片！');
+            return;
+        }
+        try {
+            const config = getCurrentConfig();
+            const table = document.createElement('table');
+            table.id = 'preview-table';
+            const perRow = config.perRow;
+            const totalImages = selectedFiles.length;
+            const totalRows = config.layout === 'horizontal' ? Math.ceil(totalImages / perRow) : perRow;
+            const totalCols = config.layout === 'horizontal' ? perRow : Math.ceil(totalImages / perRow);
+            const cellSize = getCellSizeInPx();
+            const cellWidth = cellSize.width;
+            const cellHeight = cellSize.height;
+            let fileIndex = 0;
+            const startPos = parseCellAddress(config.startCell);
+            let currentRow = startPos.row;
+            let currentCol = startPos.col;
+            for (let r = 0; r < totalRows; r++) {
+                const tr = document.createElement('tr');
+                const rowHeight = cellHeight + (config.addName !== 'none' ? 20 : 0);
+                tr.style.height = `${rowHeight}px`;
+                for (let c = 0; c < totalCols; c++) {
+                    const td = document.createElement('td');
+                    td.style.width = `${cellWidth}px`;
+                    td.style.height = `${cellHeight}px`;
+                    const cellAddr = getCellAddress(currentRow, currentCol);
+                    td.setAttribute('data-cell', cellAddr);
+                    if (fileIndex < totalImages) {
+                        const file = selectedFiles[fileIndex];
+                        const url = URL.createObjectURL(file);
+                        const cellContainer = document.createElement('div');
+                        cellContainer.style.display = 'flex';
+                        cellContainer.style.flexDirection = 'column';
+                        cellContainer.style.height = '100%';
+                        if (config.addName === 'above') {
+                            const nameDiv = document.createElement('div');
+                            nameDiv.className = 'file-name-label';
+                            nameDiv.textContent = file.name;
+                            cellContainer.appendChild(nameDiv);
+                        }
+                        const imgWrapper = document.createElement('div');
+                        imgWrapper.style.flex = 1;
+                        imgWrapper.style.overflow = 'hidden';
+                        const img = document.createElement('img');
+                        img.src = url;
+                        img.alt = file.name;
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.objectFit = 'cover';
+                        imgWrapper.appendChild(img);
+                        cellContainer.appendChild(imgWrapper);
+                        if (config.addName === 'below') {
+                            const nameDiv = document.createElement('div');
+                            nameDiv.className = 'file-name-label';
+                            nameDiv.textContent = file.name;
+                            cellContainer.appendChild(nameDiv);
+                        }
+                        td.appendChild(cellContainer);
+                        fileIndex++;
+                    } else {
+                        td.style.backgroundColor = '#f8f8f8';
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.style.color = '#ccc';
+                        emptyDiv.style.fontSize = '12px';
+                        emptyDiv.style.display = 'flex';
+                        emptyDiv.style.alignItems = 'center';
+                        emptyDiv.style.justifyContent = 'center';
+                        emptyDiv.style.height = '100%';
+                        emptyDiv.textContent = cellAddr;
+                        td.appendChild(emptyDiv);
+                    }
+                    tr.appendChild(td);
+                    currentCol++;
+                }
+                table.appendChild(tr);
+                currentRow++;
+                currentCol = startPos.col;
+            }
+            if (previewContent) {
+                previewContent.innerHTML = '';
+                previewContent.appendChild(table);
+                const previewNote = document.createElement('div');
+                previewNote.className = 'tip';
+                const size = getCellSizeInPx();
+                const cmWidth = (size.width / CM_TO_PX).toFixed(2);
+                const cmHeight = (size.height / CM_TO_PX).toFixed(2);
+                previewNote.innerHTML = `
+                    预览配置：${config.layout === 'horizontal' ? '按行横排' : '按列竖排'} | 
+                    每行${config.perRow}张 | 
+                    单元格尺寸${cmWidth}cm×${cmHeight}cm (${Math.round(size.width)}px×${Math.round(size.height)}px) | 
+                    图片名：${config.addName === 'none' ? '不显示' : (config.addName === 'above' ? '上方显示' : '下方显示')}
+                `;
+                previewContent.appendChild(previewNote);
+            }
+        } catch (error) {
+            console.error('生成预览失败：', error);
+            alert('生成预览失败，请检查控制台！');
+        }
+    }
+
+    function getCurrentConfig() {
+        return {
+            insertMode: document.querySelector('input[name="insertMode"]:checked')?.value || 'embed',
+            startCell: document.getElementById('startCell')?.value.trim() || 'A1',
+            layout: document.querySelector('input[name="layout"]:checked')?.value || 'horizontal',
+            perRow: parseInt(document.getElementById('perRow')?.value) || 4,
+            addName: document.querySelector('input[name="addName"]:checked')?.value || 'none'
+        };
+    }
+
+    function parseCellAddress(address) {
+        address = address.toUpperCase().replace(/\s/g, '');
+        const colMatch = address.match(/[A-Z]+/);
+        const rowMatch = address.match(/\d+/);
+        let col = 0;
+        if (colMatch) {
+            const colStr = colMatch[0];
+            for (let i = 0; i < colStr.length; i++) {
+                col = col * 26 + (colStr.charCodeAt(i) - 65);
+            }
+        }
+        const row = rowMatch ? parseInt(rowMatch[0]) - 1 : 0;
+        return { row, col };
+    }
+
+    function getCellAddress(row, col) {
+        let colStr = '';
+        let c = col;
+        do {
+            colStr = String.fromCharCode(65 + (c % 26)) + colStr;
+            c = Math.floor(c / 26) - 1;
+        } while (c >= 0);
+        const rowStr = (row + 1).toString();
+        return colStr + rowStr;
+    }
+
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const base64 = e.target.result.split(',')[1];
+                    resolve(base64);
+                } catch (err) {
+                    reject(err);
+                }
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function updateProgress(percent, text) {
+        if (progressFill) progressFill.style.width = `${percent}%`;
+        if (progressText) progressText.textContent = `${Math.round(percent)}% - ${text}`;
+    }
+
+    async function exportToExcelWithProgress() {
+        if (selectedFiles.length === 0 || imageBase64List.length === 0) {
+            alert('请先选择图片！');
+            return;
+        }
+        if (progressModal) progressModal.style.display = 'flex';
+        updateProgress(0, '初始化Excel工作簿...');
+        try {
+            const config = getCurrentConfig();
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('LOT复测');
+            const perRow = config.perRow;
+            const addName = config.addName;
+            const layout = config.layout;
+            const cellSizePx = getCellSizeInPx();
+            const cellWidthCm = cellSizePx.width / CM_TO_PX;
+            const cellHeightCm = cellSizePx.height / CM_TO_PX;
+            const excelColWidth = Math.round(cellWidthCm * CM_TO_EXCEL_COL * 100) / 100;
+            const excelRowHeight = Math.round(cellHeightCm * CM_TO_EXCEL_ROW * 100) / 100;
+            const nameRowHeight = 25;
+            const startPos = parseCellAddress(config.startCell);
+            let currentRow = startPos.row + 1;
+            let currentCol = startPos.col + 1;
+            const totalSteps = imageBase64List.length * 3;
+            let currentStep = 0;
+            for (let i = 0; i < imageBase64List.length; i++) {
+                const imgData = imageBase64List[i];
+                currentStep++;
+                updateProgress((currentStep / totalSteps) * 100, `处理图片 ${i+1}/${imageBase64List.length}`);
+                worksheet.getColumn(currentCol).width = excelColWidth;
+                worksheet.getRow(currentRow).height = excelRowHeight;
+                if (addName === 'above') {
+                    const nameCell = worksheet.getCell(currentRow, currentCol);
+                    nameCell.value = imgData.name;
+                    nameCell.font = { size: 10 };
+                    nameCell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    worksheet.getRow(currentRow).height = nameRowHeight;
+                    currentRow++;
+                    worksheet.getRow(currentRow).height = excelRowHeight;
+                }
+                currentStep++;
+                updateProgress((currentStep / totalSteps) * 100, `插入图片 ${i+1}/${imageBase64List.length}`);
+                const imageId = workbook.addImage({
+                    base64: imgData.data,
+                    extension: imgData.type.split('/')[1] || 'png'
+                });
+                const imagePosition = {
+                    tl: { col: currentCol - 1, row: currentRow - 1 },
+                    br: { col: (currentCol - 1) + (cellSizePx.width / EXCEL_COORD_COEFF), row: (currentRow - 1) + (cellSizePx.height / EXCEL_COORD_COEFF) }
+                };
+                worksheet.addImage(imageId, imagePosition);
+                if (addName === 'below') {
+                    currentRow++;
+                    const nameCell = worksheet.getCell(currentRow, currentCol);
+                    nameCell.value = imgData.name;
+                    nameCell.font = { size: 10 };
+                    nameCell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    worksheet.getRow(currentRow).height = nameRowHeight;
+                }
+                currentStep++;
+                updateProgress((currentStep / totalSteps) * 100, `排版完成 ${i+1}/${imageBase64List.length}`);
+                if (layout === 'horizontal') {
+                    currentCol++;
+                    if ((i + 1) % perRow === 0) {
+                        const moveDown = addName === 'above' || addName === 'below' ? 2 : 1;
+                        currentRow += moveDown;
+                        currentCol = startPos.col + 1;
+                    }
+                } else {
+                    const moveDown = addName === 'above' || addName === 'below' ? 2 : 1;
+                    currentRow += moveDown;
+                    if ((i + 1) % perRow === 0) {
+                        currentCol++;
+                        currentRow = startPos.row + 1;
+                    }
+                }
+            }
+            updateProgress(90, '生成Excel文件...');
+            const buffer = await workbook.xlsx.writeBuffer();
+            updateProgress(95, '准备下载...');
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            if (typeof saveAs !== 'undefined') {
+                saveAs(blob, `LOT复测`);
+            } else {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `LOT复测_${cellWidthCm.toFixed(2)}x${cellHeightCm.toFixed(2)}cm.xlsx`;
+                link.click();
+            }
+            updateProgress(100, '导出完成！');
+            setTimeout(() => {
+                if (progressModal) progressModal.style.display = 'none';
+                alert(`✅ 导出成功！\n共导出 ${selectedFiles.length} 张图片\n单元格尺寸：${cellWidthCm.toFixed(2)}cm × ${cellHeightCm.toFixed(2)}cm`);
+            }, 500);
+        } catch (error) {
+            console.error('导出Excel失败：', error);
+            if (progressModal) progressModal.style.display = 'none';
+            alert(`导出失败：${error.message}\n请查看控制台获取详细信息`);
+        }
+    }
+}
 </script>
 </body>
 </html>
