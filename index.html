@@ -287,17 +287,45 @@ html, body {
 .sidebar.collapse {
     width: 60px;
 }
-.sidebar .title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    transition: opacity 0.3s ease;
+.sidebar-avatar-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: 0 auto 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    object-fit: cover;
 }
-.sidebar.collapse .title {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
+.sidebar-avatar-img[src=""]::before {
+    content: '👤';
+    color: white;
+    font-size: 24px;
+}
+.sidebar-avatar-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+}
+.add-function-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    font-weight: 600;
+}
+.add-function-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+.sidebar.collapse .sidebar-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    margin: 0 auto 12px;
 }
 .menu-btn {
     display: block;
@@ -585,6 +613,23 @@ html, body {
     justify-content: space-between;
     flex-wrap: wrap;
     border: 1px solid #f0f0f0;
+}
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.user-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
 }
 .logo-area h1 {
     font-size: 24px;
@@ -1017,6 +1062,308 @@ html, body {
     padding: 30px;
     overflow-y: auto;
 }
+/* 用户信息面板样式 */
+.user-panel {
+    position: fixed;
+    top: 100px;
+    left: 50px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    width: 280px;
+    padding: 24px;
+    z-index: 10000;
+    display: none;
+    border: 1px solid #e8e8e8;
+}
+.user-panel.show {
+    display: block;
+}
+.user-panel-header {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.avatar-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 12px;
+}
+.user-panel-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+.user-panel-avatar-img[src=""] {
+    content: '👤';
+    font-size: 36px;
+    color: white;
+}
+.avatar-upload-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #667eea;
+    color: white;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.5);
+    transition: background 0.2s, transform 0.2s;
+}
+.avatar-upload-btn:hover {
+    background: #764ba2;
+    transform: scale(1.1);
+}
+.user-panel-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+.user-panel-role {
+    font-size: 13px;
+    color: #6b7280;
+    background: #f3f4f6;
+    padding: 2px 10px;
+    border-radius: 20px;
+    display: inline-block;
+}
+.user-panel-menu {
+    padding-top: 16px;
+}
+.user-panel-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: #374151;
+    font-size: 14px;
+}
+.user-panel-item:hover {
+    background: #f3f4f6;
+}
+.user-panel-item i {
+    font-size: 18px;
+}
+.user-panel-divider {
+    height: 1px;
+    background: #f0f0f0;
+    margin: 12px 0;
+}
+.user-panel-logout {
+    color: #ef4444;
+}
+.user-panel-logout:hover {
+    background: #fef2f2 !important;
+}
+
+/* 用户资料编辑模态框样式 */
+.profile-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    display: none;
+}
+.profile-modal.show {
+    display: flex;
+}
+.profile-modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 420px;
+    max-width: 90%;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.profile-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f0f0f0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+.profile-modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+.profile-modal-close {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+.profile-modal-close:hover {
+    background: rgba(255,255,255,0.3);
+}
+.profile-modal-body {
+    padding: 24px;
+}
+.form-group {
+    margin-bottom: 16px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #374151;
+    font-weight: 500;
+}
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+.profile-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #f0f0f0;
+    background: #f9fafb;
+}
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-cancel {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+.btn-cancel:hover {
+    background: #e5e7eb;
+}
+.btn-save {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+.btn-save:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #374151;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.color-picker-container {
+    margin-top: 8px;
+}
+
+.preset-colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.color-preset {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid transparent;
+}
+
+.color-preset:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.color-preset.selected {
+    border-color: #374151;
+    transform: scale(1.15);
+}
+
+.custom-color {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.custom-color label {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.custom-color input[type="color"] {
+    width: 40px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
 .back-top {
     position: fixed;
     bottom: 30px;
@@ -1104,7 +1451,7 @@ html, body {
 
 <div class="main" id="mainPage" style="display:none;">
   <div class="sidebar" id="sidebar">
-    <div class="title">数据</div>
+    <img id="sidebarAvatarImg" src="" alt="头像" class="sidebar-avatar-img" />
     <button class="menu-btn" onclick="openHomePage()">首页</button>
     <button class="menu-btn" onclick="openPage('仓储','https://www.kdocs.cn/l/cpbe93n5eBd3')">仓储</button>
     <button class="menu-btn" onclick="openPage('专线','https://www.kdocs.cn/l/cemJcjSGypRD')">专线</button>
@@ -1115,6 +1462,7 @@ html, body {
     <button class="menu-btn" onclick="openPage('人效','https://www.kdocs.cn/l/coByacPZqwoP')">人效</button>
     <button class="menu-btn" onclick="openPage('渠道','https://doc.weixin.qq.com/sheet/e3_AX4ADQYYAIcCNw5xAM1F2STG4905n?scode=AGMAxAeNAHY86J1eP0AX4ADQYYAIc&version=5.0.6.6018&platform=win&tab=adhkmx')">渠道</button>
     <button class="menu-btn" onclick="openIllustrationPage()">插图</button>
+    <button class="menu-btn add-function-btn" id="addFunctionBtn">+ 添加功能</button>
     <button class="menu-btn" style="background:#f56c6c;margin-top:20px;" onclick="App.logout()">退出登录</button>
   </div>
   <div class="toggle-btn" id="toggleBtn">▶</div>
@@ -1300,6 +1648,223 @@ html, body {
                 </div>
             </div>
         </div>
+      </div>
+      
+      <!-- 用户信息面板 -->
+      <div class="user-panel" id="userPanel">
+          <div class="user-panel-header">
+              <div class="avatar-container">
+                  <img id="panelAvatarImg" src="" alt="头像" class="user-panel-avatar-img" />
+                  <div class="avatar-upload-btn" id="avatarUploadBtn">+</div>
+              </div>
+              <div class="user-panel-name" id="panelUserName">小东</div>
+              <div class="user-panel-role" id="panelUserRole">管理员</div>
+              <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" />
+          </div>
+          <div class="user-panel-menu">
+              <div class="user-panel-item" id="panelProfile">
+                  <span>👤</span>
+                  <span>我的资料</span>
+              </div>
+              <div class="user-panel-item" id="panelNotifications">
+                  <span>🔔</span>
+                  <span>消息通知</span>
+              </div>
+              <div class="user-panel-item" id="panelSettings">
+                  <span>⚙️</span>
+                  <span>系统设置</span>
+              </div>
+              <div class="user-panel-item" id="panelStatistics">
+                  <span>📊</span>
+                  <span>数据统计</span>
+              </div>
+              <div class="user-panel-divider"></div>
+              <div class="user-panel-item user-panel-logout" id="panelLogout">
+                  <span>🚪</span>
+                  <span>退出登录</span>
+              </div>
+          </div>
+      </div>
+
+      <!-- 添加功能模态框 -->
+      <div class="profile-modal" id="addFunctionModal">
+          <div class="profile-modal-content">
+              <div class="profile-modal-header">
+                  <h3>➕ 添加功能</h3>
+                  <button class="profile-modal-close" id="addFunctionModalClose">✕</button>
+              </div>
+              <div class="profile-modal-body">
+                  <div class="form-group">
+                      <label>功能名称</label>
+                      <input type="text" id="functionName" placeholder="输入功能名称">
+                  </div>
+                  <div class="form-group">
+                      <label>功能图标</label>
+                      <input type="text" id="functionIcon" placeholder="输入emoji图标，如 🌍">
+                  </div>
+                  <div class="form-group">
+                      <label>功能链接</label>
+                      <input type="text" id="functionUrl" placeholder="输入网页链接">
+                  </div>
+              </div>
+              <div class="profile-modal-footer">
+                  <button class="btn btn-cancel" id="addFunctionCancel">取消</button>
+                  <button class="btn btn-save" id="addFunctionSave">添加</button>
+              </div>
+          </div>
+      </div>
+
+      <!-- 系统设置编辑模态框 -->
+      <div class="profile-modal" id="settingsModal">
+          <div class="profile-modal-content">
+              <div class="profile-modal-header">
+                  <h3>⚙️ 系统设置</h3>
+                  <button class="profile-modal-close" id="settingsModalClose">✕</button>
+              </div>
+              <div class="profile-modal-body">
+                  <div class="form-group">
+                      <label>主题</label>
+                      <select id="settingsTheme">
+                          <option value="default">默认主题</option>
+                          <option value="dark">深色主题</option>
+                          <option value="light">浅色主题</option>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label>语言</label>
+                      <select id="settingsLanguage">
+                          <option value="zh-CN">简体中文</option>
+                          <option value="zh-TW">繁体中文</option>
+                          <option value="en">English</option>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label>通知设置</label>
+                      <div class="checkbox-group">
+                          <label class="checkbox-item">
+                              <input type="checkbox" id="settingsNotifications">
+                              <span>启用通知</span>
+                          </label>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label>自动保存</label>
+                      <div class="checkbox-group">
+                          <label class="checkbox-item">
+                              <input type="checkbox" id="settingsAutoSave">
+                              <span>启用自动保存</span>
+                          </label>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label>默认打开页面</label>
+                      <select id="settingsDefaultPage">
+                          <option value="home">首页</option>
+                          <option value="storage">仓储</option>
+                          <option value="express">专线</option>
+                          <option value="speed">速量</option>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label>主题颜色</label>
+                      <div class="color-picker-container">
+                          <div class="preset-colors">
+                              <span class="color-preset" data-color="#667eea" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></span>
+                              <span class="color-preset" data-color="#f56c6c" style="background: linear-gradient(135deg, #f56c6c 0%, #f78360 100%);"></span>
+                              <span class="color-preset" data-color="#10b981" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"></span>
+                              <span class="color-preset" data-color="#3b82f6" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);"></span>
+                              <span class="color-preset" data-color="#f59e0b" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);"></span>
+                              <span class="color-preset" data-color="#ec4899" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);"></span>
+                              <span class="color-preset" data-color="#8b5cf6" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);"></span>
+                              <span class="color-preset" data-color="#06b6d4" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);"></span>
+                          </div>
+                          <div class="custom-color">
+                              <label>自定义颜色</label>
+                              <input type="color" id="settingsColor" value="#667eea">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label>侧边栏按钮颜色</label>
+                      <div class="color-picker-container">
+                          <div class="preset-colors">
+                              <span class="color-preset" data-color="#3c4658" style="background: #3c4658;"></span>
+                              <span class="color-preset" data-color="#2d3748" style="background: #2d3748;"></span>
+                              <span class="color-preset" data-color="#1a202c" style="background: #1a202c;"></span>
+                              <span class="color-preset" data-color="#4a5568" style="background: #4a5568;"></span>
+                              <span class="color-preset" data-color="#553c9a" style="background: #553c9a;"></span>
+                              <span class="color-preset" data-color="#3182ce" style="background: #3182ce;"></span>
+                              <span class="color-preset" data-color="#2f855a" style="background: #2f855a;"></span>
+                              <span class="color-preset" data-color="#c05621" style="background: #c05621;"></span>
+                          </div>
+                          <div class="custom-color">
+                              <label>自定义</label>
+                              <input type="color" id="sidebarBtnColor" value="#3c4658">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label>文字艺术效果</label>
+                      <select id="textStyle">
+                          <option value="normal">普通文字</option>
+                          <option value="bold">粗体</option>
+                          <option value="italic">斜体</option>
+                          <option value="shadow">阴影效果</option>
+                          <option value="glow">发光效果</option>
+                          <option value="gradient">渐变文字</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="profile-modal-footer">
+                  <button class="btn btn-cancel" id="settingsCancel">取消</button>
+                  <button class="btn btn-save" id="settingsSave">保存</button>
+              </div>
+          </div>
+      </div>
+
+      <!-- 用户资料编辑模态框 -->
+      <div class="profile-modal" id="profileModal">
+          <div class="profile-modal-content">
+              <div class="profile-modal-header">
+                  <h3>👤 我的资料</h3>
+                  <button class="profile-modal-close" id="profileModalClose">✕</button>
+              </div>
+              <div class="profile-modal-body">
+                  <div class="form-group">
+                      <label>姓名</label>
+                      <input type="text" id="profileName" placeholder="请输入姓名">
+                  </div>
+                  <div class="form-group">
+                      <label>角色</label>
+                      <select id="profileRole">
+                          <option value="管理员">管理员</option>
+                          <option value="普通用户">普通用户</option>
+                          <option value="审核员">审核员</option>
+                          <option value="访客">访客</option>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label>部门</label>
+                      <input type="text" id="profileDepartment" placeholder="请输入部门">
+                  </div>
+                  <div class="form-group">
+                      <label>入职时间</label>
+                      <input type="date" id="profileJoinDate">
+                  </div>
+                  <div class="form-group">
+                      <label>邮箱</label>
+                      <input type="email" id="profileEmail" placeholder="请输入邮箱">
+                  </div>
+                  <div class="form-group">
+                      <label>电话</label>
+                      <input type="tel" id="profilePhone" placeholder="请输入电话">
+                  </div>
+              </div>
+              <div class="profile-modal-footer">
+                  <button class="btn btn-cancel" id="profileCancel">取消</button>
+                  <button class="btn btn-save" id="profileSave">保存</button>
+              </div>
+          </div>
       </div>
       
       <div class="modal-mask" id="modal-mask"></div>
@@ -1522,7 +2087,7 @@ const App = {
   },
 
   loadNotice() {
-    const notice = localStorage.getItem('notice') || '大家好，我是mc 小弟 喜欢唱跳 rap ';
+    const notice = localStorage.getItem('notice') || '欢迎使用\n\n本平台提供仓储、专线、速量、泡比、包数、单量、人效、小包等功能。\n\n如有问题请联系管理员。';
     document.getElementById('noticeText').textContent = notice;
   },
 
@@ -1726,10 +2291,472 @@ const App = {
     this.renderTabs();
     this.switchTab(this.activeId);
     this.initIllustrationFunction();
+    this.initUserPanel();
     
     const toggleBtn = document.getElementById('toggleBtn');
     if (toggleBtn) {
       toggleBtn.onclick = () => this.toggleSidebar();
+    }
+  },
+
+  initUserPanel() {
+    // 用户头像点击事件
+    const sidebarAvatarImg = document.getElementById('sidebarAvatarImg');
+    const userPanel = document.getElementById('userPanel');
+    const panelLogout = document.getElementById('panelLogout');
+
+    if (sidebarAvatarImg) {
+      sidebarAvatarImg.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (userPanel) {
+          userPanel.classList.toggle('show');
+        }
+      });
+    }
+
+    // 点击页面其他地方关闭用户面板
+    document.addEventListener('click', function(e) {
+      if (userPanel && userPanel.classList.contains('show')) {
+        const isClickInside = userPanel.contains(e.target) || 
+                             (sidebarAvatarImg && sidebarAvatarImg.contains(e.target));
+        if (!isClickInside) {
+          userPanel.classList.remove('show');
+        }
+      }
+    });
+
+    // 头像上传功能
+    const panelAvatarImg = document.getElementById('panelAvatarImg');
+    const avatarUploadBtn = document.getElementById('avatarUploadBtn');
+    const avatarFileInput = document.getElementById('avatarFileInput');
+
+    // 加载头像
+    function loadAvatar() {
+      const savedAvatar = localStorage.getItem('userAvatar');
+      if (savedAvatar) {
+        panelAvatarImg.src = savedAvatar;
+        // 同步加载侧边栏头像
+        if (sidebarAvatarImg) {
+          sidebarAvatarImg.src = savedAvatar;
+        }
+      }
+    }
+
+    // 保存头像
+    function saveAvatar(base64) {
+      localStorage.setItem('userAvatar', base64);
+      panelAvatarImg.src = base64;
+      // 同步更新侧边栏头像
+      if (sidebarAvatarImg) {
+        sidebarAvatarImg.src = base64;
+      }
+    }
+
+    // 点击上传按钮
+    if (avatarUploadBtn) {
+      avatarUploadBtn.addEventListener('click', function() {
+        if (avatarFileInput) {
+          avatarFileInput.click();
+        }
+      });
+    }
+
+    // 选择文件后处理
+    if (avatarFileInput) {
+      avatarFileInput.addEventListener('change', function(e) {
+        const file = e.target.files?.[0];
+        if (file && file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const base64 = event.target.result;
+            saveAvatar(base64);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    // 用户面板菜单项点击事件
+    const panelProfile = document.getElementById('panelProfile');
+    const panelNotifications = document.getElementById('panelNotifications');
+    const panelSettings = document.getElementById('panelSettings');
+    const panelStatistics = document.getElementById('panelStatistics');
+
+    // 打开用户资料编辑模态框
+    const profileModal = document.getElementById('profileModal');
+    const profileModalClose = document.getElementById('profileModalClose');
+    const profileCancel = document.getElementById('profileCancel');
+    const profileSave = document.getElementById('profileSave');
+    
+    const profileName = document.getElementById('profileName');
+    const profileRole = document.getElementById('profileRole');
+    const profileDepartment = document.getElementById('profileDepartment');
+    const profileJoinDate = document.getElementById('profileJoinDate');
+    const profileEmail = document.getElementById('profileEmail');
+    const profilePhone = document.getElementById('profilePhone');
+
+    const panelUserName = document.getElementById('panelUserName');
+    const panelUserRole = document.getElementById('panelUserRole');
+
+    // 加载用户资料
+    function loadUserProfile() {
+      const saved = localStorage.getItem('userProfile');
+      if (saved) {
+        const data = JSON.parse(saved);
+        profileName.value = data.name || '';
+        profileRole.value = data.role || '管理员';
+        profileDepartment.value = data.department || '';
+        profileJoinDate.value = data.joinDate || '';
+        profileEmail.value = data.email || '';
+        profilePhone.value = data.phone || '';
+        
+        // 更新用户面板显示
+        if (panelUserName) panelUserName.textContent = data.name || '小东';
+        if (panelUserRole) panelUserRole.textContent = data.role || '管理员';
+      } else {
+        // 默认值
+        profileName.value = '小东';
+        profileRole.value = '管理员';
+        profileDepartment.value = '技术部';
+        profileJoinDate.value = '2024-01-01';
+      }
+    }
+
+    // 保存用户资料
+    function saveUserProfile() {
+      const data = {
+        name: profileName.value,
+        role: profileRole.value,
+        department: profileDepartment.value,
+        joinDate: profileJoinDate.value,
+        email: profileEmail.value,
+        phone: profilePhone.value
+      };
+      localStorage.setItem('userProfile', JSON.stringify(data));
+      
+      // 更新用户面板显示
+      if (panelUserName) panelUserName.textContent = data.name || '小东';
+      if (panelUserRole) panelUserRole.textContent = data.role || '管理员';
+      
+      closeProfileModal();
+    }
+
+    // 打开用户资料模态框
+    function openProfileModal() {
+      loadUserProfile();
+      if (profileModal) profileModal.classList.add('show');
+      if (userPanel) userPanel.classList.remove('show');
+    }
+
+    // 关闭用户资料模态框
+    function closeProfileModal() {
+      if (profileModal) profileModal.classList.remove('show');
+    }
+
+    if (panelProfile) {
+      panelProfile.addEventListener('click', openProfileModal);
+    }
+
+    if (profileModalClose) {
+      profileModalClose.addEventListener('click', closeProfileModal);
+    }
+
+    if (profileCancel) {
+      profileCancel.addEventListener('click', closeProfileModal);
+    }
+
+    if (profileSave) {
+      profileSave.addEventListener('click', saveUserProfile);
+    }
+
+    // 点击模态框背景关闭
+    if (profileModal) {
+      profileModal.addEventListener('click', function(e) {
+        if (e.target === profileModal) {
+          closeProfileModal();
+        }
+      });
+    }
+
+    // 消息通知
+    if (panelNotifications) {
+      panelNotifications.addEventListener('click', function() {
+        alert('消息通知\n\n暂无新消息');
+        if (userPanel) userPanel.classList.remove('show');
+      });
+    }
+
+    // 系统设置模态框相关
+    const settingsModal = document.getElementById('settingsModal');
+    const settingsModalClose = document.getElementById('settingsModalClose');
+    const settingsCancel = document.getElementById('settingsCancel');
+    const settingsSave = document.getElementById('settingsSave');
+    
+    const settingsTheme = document.getElementById('settingsTheme');
+    const settingsLanguage = document.getElementById('settingsLanguage');
+    const settingsNotifications = document.getElementById('settingsNotifications');
+    const settingsAutoSave = document.getElementById('settingsAutoSave');
+    const settingsDefaultPage = document.getElementById('settingsDefaultPage');
+    const settingsColor = document.getElementById('settingsColor');
+    const sidebarBtnColor = document.getElementById('sidebarBtnColor');
+    const textStyle = document.getElementById('textStyle');
+
+    // 主题颜色映射
+    const colorMaps = {
+      '#667eea': { primary: '#667eea', secondary: '#764ba2' },
+      '#f56c6c': { primary: '#f56c6c', secondary: '#f78360' },
+      '#10b981': { primary: '#10b981', secondary: '#059669' },
+      '#3b82f6': { primary: '#3b82f6', secondary: '#1d4ed8' },
+      '#f59e0b': { primary: '#f59e0b', secondary: '#d97706' },
+      '#ec4899': { primary: '#ec4899', secondary: '#be185d' },
+      '#8b5cf6': { primary: '#8b5cf6', secondary: '#7c3aed' },
+      '#06b6d4': { primary: '#06b6d4', secondary: '#0891b2' }
+    };
+
+    // 加载系统设置
+    function loadSettings() {
+      const saved = localStorage.getItem('systemSettings');
+      if (saved) {
+        const data = JSON.parse(saved);
+        settingsTheme.value = data.theme || 'default';
+        settingsLanguage.value = data.language || 'zh-CN';
+        settingsNotifications.checked = data.notifications || true;
+        settingsAutoSave.checked = data.autoSave || false;
+        settingsDefaultPage.value = data.defaultPage || 'home';
+        settingsColor.value = data.color || '#667eea';
+        sidebarBtnColor.value = data.sidebarBtnColor || '#3c4658';
+        textStyle.value = data.textStyle || 'normal';
+      } else {
+        // 默认值
+        settingsTheme.value = 'default';
+        settingsLanguage.value = 'zh-CN';
+        settingsNotifications.checked = true;
+        settingsAutoSave.checked = false;
+        settingsDefaultPage.value = 'home';
+        settingsColor.value = '#667eea';
+        sidebarBtnColor.value = '#3c4658';
+        textStyle.value = 'normal';
+      }
+      // 更新预设颜色选中状态
+      updateColorPresetSelection();
+    }
+
+    // 更新预设颜色选中状态
+    function updateColorPresetSelection() {
+      document.querySelectorAll('.color-preset').forEach(preset => {
+        preset.classList.remove('selected');
+        if (preset.dataset.color === settingsColor.value) {
+          preset.classList.add('selected');
+        }
+      });
+    }
+
+    // 应用主题颜色
+    function applyThemeColor(color) {
+      const colors = colorMaps[color] || { primary: color, secondary: adjustColor(color, 30) };
+      const gradient = `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`;
+      
+      // 创建或更新CSS变量
+      let styleSheet = document.getElementById('theme-style');
+      if (!styleSheet) {
+        styleSheet = document.createElement('style');
+        styleSheet.id = 'theme-style';
+        document.head.appendChild(styleSheet);
+      }
+      
+      styleSheet.textContent = `
+        :root {
+          --primary-color: ${colors.primary};
+          --secondary-color: ${colors.secondary};
+        }
+        .sidebar-avatar, .user-panel-avatar-img {
+          background: ${gradient} !important;
+        }
+        .btn-save, .profile-modal-header, .profile-modal-content button.btn-save {
+          background: ${gradient} !important;
+        }
+        .add-function-btn {
+          background: ${gradient} !important;
+        }
+        .add-function-btn:hover {
+          background: linear-gradient(135deg, ${colors.secondary} 0%, ${adjustColor(colors.secondary, -15)} 100%) !important;
+        }
+        .tabs button.active {
+          background: ${gradient} !important;
+        }
+        .sidebar-avatar:hover {
+          box-shadow: 0 6px 16px ${colors.primary}40 !important;
+        }
+        .avatar-upload-btn {
+          background: ${colors.primary} !important;
+        }
+        .avatar-upload-btn:hover {
+          background: ${colors.secondary} !important;
+        }
+        .checkbox-item input[type="checkbox"] {
+          accent-color: ${colors.primary} !important;
+        }
+      `;
+    }
+
+    // 调整颜色亮度
+    function adjustColor(color, amount) {
+      const num = parseInt(color.replace('#', ''), 16);
+      const r = Math.min(255, Math.max(0, (num >> 16) + amount));
+      const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
+      const b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
+      return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+    }
+
+    // 应用侧边栏样式
+    function applySidebarStyle(btnColor, styleType) {
+      const hoverColor = adjustColor(btnColor, 20);
+      
+      let textStyleCSS = '';
+      switch(styleType) {
+        case 'bold':
+          textStyleCSS = 'font-weight: bold;';
+          break;
+        case 'italic':
+          textStyleCSS = 'font-style: italic;';
+          break;
+        case 'shadow':
+          textStyleCSS = 'text-shadow: 2px 2px 4px rgba(0,0,0,0.5);';
+          break;
+        case 'glow':
+          textStyleCSS = 'text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5);';
+          break;
+        case 'gradient':
+          textStyleCSS = 'background: linear-gradient(135deg, #fff 0%, #aaa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;';
+          break;
+        default:
+          textStyleCSS = '';
+      }
+      
+      let styleSheet = document.getElementById('sidebar-style');
+      if (!styleSheet) {
+        styleSheet = document.createElement('style');
+        styleSheet.id = 'sidebar-style';
+        document.head.appendChild(styleSheet);
+      }
+      
+      styleSheet.textContent = `
+        .menu-btn:not(.add-function-btn):not([style*="background:#f56c6c"]) {
+          background: ${btnColor} !important;
+          ${textStyleCSS}
+        }
+        .menu-btn:not(.add-function-btn):not([style*="background:#f56c6c"]):hover {
+          background: ${hoverColor} !important;
+        }
+      `;
+    }
+
+    // 保存系统设置
+    function saveSettings() {
+      const data = {
+        theme: settingsTheme.value,
+        language: settingsLanguage.value,
+        notifications: settingsNotifications.checked,
+        autoSave: settingsAutoSave.checked,
+        defaultPage: settingsDefaultPage.value,
+        color: settingsColor.value,
+        sidebarBtnColor: sidebarBtnColor.value,
+        textStyle: textStyle.value
+      };
+      localStorage.setItem('systemSettings', JSON.stringify(data));
+      applyThemeColor(settingsColor.value);
+      applySidebarStyle(sidebarBtnColor.value, textStyle.value);
+      closeSettingsModal();
+    }
+
+    // 打开系统设置模态框
+    function openSettingsModal() {
+      loadSettings();
+      if (settingsModal) settingsModal.classList.add('show');
+      if (userPanel) userPanel.classList.remove('show');
+    }
+
+    // 关闭系统设置模态框
+    function closeSettingsModal() {
+      if (settingsModal) settingsModal.classList.remove('show');
+    }
+
+    if (panelSettings) {
+      panelSettings.addEventListener('click', openSettingsModal);
+    }
+
+    if (settingsModalClose) {
+      settingsModalClose.addEventListener('click', closeSettingsModal);
+    }
+
+    if (settingsCancel) {
+      settingsCancel.addEventListener('click', closeSettingsModal);
+    }
+
+    if (settingsSave) {
+      settingsSave.addEventListener('click', saveSettings);
+    }
+
+    // 点击模态框背景关闭
+    if (settingsModal) {
+      settingsModal.addEventListener('click', function(e) {
+        if (e.target === settingsModal) {
+          closeSettingsModal();
+        }
+      });
+    }
+
+    // 预设颜色点击事件
+    document.querySelectorAll('.color-preset').forEach(preset => {
+      preset.addEventListener('click', function() {
+        settingsColor.value = this.dataset.color;
+        updateColorPresetSelection();
+      });
+    });
+
+    // 自定义颜色变化事件
+    if (settingsColor) {
+      settingsColor.addEventListener('input', function() {
+        updateColorPresetSelection();
+      });
+    }
+
+    // 初始化应用主题颜色
+    const savedSettings = localStorage.getItem('systemSettings');
+    const savedColor = savedSettings ? JSON.parse(savedSettings).color : '#667eea';
+    applyThemeColor(savedColor);
+    
+    // 初始化应用侧边栏样式
+    const savedBtnColor = savedSettings ? JSON.parse(savedSettings).sidebarBtnColor : '#3c4658';
+    const savedTextStyle = savedSettings ? JSON.parse(savedSettings).textStyle : 'normal';
+    applySidebarStyle(savedBtnColor, savedTextStyle);
+
+    // 数据统计
+    if (panelStatistics) {
+      panelStatistics.addEventListener('click', function() {
+        alert('数据统计\n\n今日处理：120单\n本周处理：856单\n本月处理：3240单');
+        if (userPanel) userPanel.classList.remove('show');
+      });
+    }
+
+    // 用户面板退出登录
+    if (panelLogout) {
+      panelLogout.addEventListener('click', function() {
+        App.logout();
+      });
+    }
+
+    // 初始化加载用户资料和头像
+    loadUserProfile();
+    loadAvatar();
+    
+    // 初始化自定义功能菜单
+    initCustomFunctions();
+    
+    // 添加功能按钮事件绑定
+    const addFunctionBtn = document.getElementById('addFunctionBtn');
+    if (addFunctionBtn) {
+      addFunctionBtn.addEventListener('click', openAddFunctionModal);
     }
   },
 
@@ -3063,6 +4090,118 @@ App.initHomePage = function() {
     }
   }
 };
+
+// ========== 添加功能相关代码 ==========
+let customFunctions = [];
+
+// 初始化自定义功能
+function initCustomFunctions() {
+  const saved = localStorage.getItem('customFunctions');
+  if (saved) {
+    customFunctions = JSON.parse(saved);
+    renderCustomFunctions();
+  }
+}
+
+// 渲染自定义功能按钮
+function renderCustomFunctions() {
+  const sidebar = document.getElementById('sidebar');
+  if (!sidebar) return;
+  
+  // 移除已存在的自定义功能按钮
+  document.querySelectorAll('.custom-function-btn').forEach(btn => btn.remove());
+  
+  // 添加新的自定义功能按钮
+  customFunctions.forEach((func, index) => {
+    const btn = document.createElement('button');
+    btn.className = 'menu-btn custom-function-btn';
+    btn.innerHTML = `${func.icon || '📌'} ${func.name}`;
+    btn.onclick = function() {
+      openPage(func.name, func.url);
+    };
+    btn.dataset.index = index;
+    
+    // 在"添加功能"按钮之前插入
+    const addBtn = document.querySelector('.add-function-btn');
+    if (addBtn) {
+      addBtn.parentNode.insertBefore(btn, addBtn);
+    }
+  });
+}
+
+// 打开添加功能模态框
+function openAddFunctionModal() {
+  const modal = document.getElementById('addFunctionModal');
+  if (modal) {
+    document.getElementById('functionName').value = '';
+    document.getElementById('functionIcon').value = '';
+    document.getElementById('functionUrl').value = '';
+    modal.classList.add('show');
+  }
+}
+
+// 关闭添加功能模态框
+function closeAddFunctionModal() {
+  const modal = document.getElementById('addFunctionModal');
+  if (modal) {
+    modal.classList.remove('show');
+  }
+}
+
+// 保存功能
+function saveFunction() {
+  const name = document.getElementById('functionName').value.trim();
+  const icon = document.getElementById('functionIcon').value.trim();
+  const url = document.getElementById('functionUrl').value.trim();
+  
+  if (!name) {
+    alert('请输入功能名称');
+    return;
+  }
+  if (!url) {
+    alert('请输入功能链接');
+    return;
+  }
+  
+  customFunctions.push({
+    name,
+    icon: icon || '📌',
+    url
+  });
+  
+  localStorage.setItem('customFunctions', JSON.stringify(customFunctions));
+  renderCustomFunctions();
+  closeAddFunctionModal();
+}
+
+// 添加事件监听
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('addFunctionModal');
+  const closeBtn = document.getElementById('addFunctionModalClose');
+  const cancelBtn = document.getElementById('addFunctionCancel');
+  const saveBtn = document.getElementById('addFunctionSave');
+  
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeAddFunctionModal);
+  }
+  
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', closeAddFunctionModal);
+  }
+  
+  if (saveBtn) {
+    saveBtn.addEventListener('click', saveFunction);
+  }
+  
+  // 点击模态框背景关闭
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeAddFunctionModal();
+      }
+    });
+  }
+});
 </script>
 </body>
 </html>
