@@ -1505,9 +1505,9 @@ const App = {
     let accounts = JSON.parse(localStorage.getItem('accounts') || '[]');
     if (accounts.length === 0) {
       accounts = [
-        { name: '张三', role: '用户' },
-        { name: '李四', role: '用户' },
-        { name: '王五', role: '管理员' }
+        { name: '老大', role: ' ' },
+        { name: '小弟', role: ' ' },
+        { name: '小弟', role: '  ' }
       ];
       localStorage.setItem('accounts', JSON.stringify(accounts));
     }
@@ -2578,9 +2578,7 @@ App.initHomePage = function() {
       const textEl = this.closest('td')?.querySelector('.trans-text');
       if (textEl) {
         const text = textEl.textContent.trim();
-        navigator.clipboard.writeText(text).then(() => {
-          alert('复制成功: ' + text);
-        }).catch(() => alert('复制失败，但可手动复制'));
+        navigator.clipboard.writeText(text);
       }
     });
   });
