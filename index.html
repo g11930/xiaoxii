@@ -277,15 +277,21 @@ html, body {
 }
 
 .sidebar {
-    width: 180px;
+    width: 0;
     background: #2b3445;
     color: #fff;
     padding: 16px;
-    transition: width 0.3s ease, overflow 0.3s ease;
+    transition: width 0.3s ease, overflow 0.3s ease, padding 0.3s ease;
     overflow: hidden;
+    padding: 0;
+}
+.sidebar.expand {
+    width: 180px;
+    padding: 16px;
 }
 .sidebar.collapse {
     width: 60px;
+    padding: 16px;
 }
 .sidebar-avatar-img {
     width: 50px;
@@ -349,26 +355,225 @@ html, body {
 }
 
 .toggle-btn {
-    position: absolute;
-    left: 180px;
-    top: 20px;
-    width: 20px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background: #2b3445;
-    color: #fff;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+    position: fixed;
+    left: 64%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 80px;
+    background: transparent;
     cursor: pointer;
-    transition: left 0.3s ease;
-    z-index: 10;
+    z-index: 1000;
+    outline: none;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.toggle-lamp-base {
+    width: 50px;
+    height: 12px;
+    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    position: relative;
+}
+.toggle-lamp-arm {
+    width: 8px;
+    height: 30px;
+    background: linear-gradient(90deg, #718096 0%, #4a5568 50%, #718096 100%);
+    position: relative;
+}
+.toggle-lamp-head {
+    width: 40px;
+    height: 25px;
+    background: linear-gradient(180deg, #f5f5f5 0%, #e2e8f0 100%);
+    border-radius: 50% 50% 8px 8px;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+.toggle-lamp-head::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 15px;
+    background: #a0aec0;
+    border-radius: 50% 50% 4px 4px;
+    transition: all 0.3s ease;
+}
+.toggle-lamp-switch {
+    width: 16px;
+    height: 20px;
+    background: linear-gradient(90deg, #e53e3e 0%, #c53030 100%);
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+}
+.toggle-lamp-switch::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 3px;
+    width: 10px;
+    height: 12px;
+    background: #fc8181;
+    border-radius: 2px;
+}
+.toggle-lamp-switch:hover {
+    transform: translateY(-50%) translateX(2px);
+}
+.toggle-lamp-switch:active {
+    transform: translateY(-50%) translateX(1px);
+}
+
+/* 开灯状态 */
+.toggle-btn.on .toggle-lamp-head {
+    background: linear-gradient(180deg, #fffef0 0%, #fef9c3 100%);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 0 0 40px rgba(251, 191, 36, 0.4), 0 0 60px rgba(251, 191, 36, 0.2);
+}
+.toggle-btn.on .toggle-lamp-head::before {
+    background: #fcd34d;
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.8);
+}
+.toggle-btn.on .toggle-lamp-switch {
+    background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+}
+.toggle-btn.on .toggle-lamp-switch::after {
+    background: #68d391;
+}
+.toggle-lamp-glow {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 80px;
+    background: radial-gradient(ellipse at center top, rgba(251, 191, 36, 0.3) 0%, rgba(251, 191, 36, 0.1) 50%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+.toggle-btn.on .toggle-lamp-glow {
+    opacity: 1;
+}
+
+@keyframes swing {
+    0%, 100% { transform: translateY(-50%) rotate(0deg); }
+    25% { transform: translateY(-50%) rotate(-10deg); }
+    75% { transform: translateY(-50%) rotate(10deg); }
+}
+
+@keyframes sparkle {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.8; }
+}
+
+@keyframes ropePullDown {
+    0% { 
+        transform: translateX(-50%) translateY(0) rotate(0deg); 
+        box-shadow: 2px 3px 6px rgba(0,0,0,0.4);
+    }
+    15% { 
+        transform: translateX(-40%) translateY(30px) rotate(15deg); 
+        box-shadow: 3px 4px 10px rgba(0,0,0,0.35);
+    }
+    30% { 
+        transform: translateX(-60%) translateY(60px) rotate(-12deg); 
+        box-shadow: 4px 5px 12px rgba(0,0,0,0.3);
+    }
+    45% { 
+        transform: translateX(-45%) translateY(80px) rotate(10deg); 
+        box-shadow: 5px 6px 14px rgba(0,0,0,0.25);
+    }
+    60% { 
+        transform: translateX(-55%) translateY(100px) rotate(-8deg); 
+        box-shadow: 6px 7px 16px rgba(0,0,0,0.2);
+    }
+    75% { 
+        transform: translateX(-48%) translateY(60px) rotate(5deg); 
+        box-shadow: 4px 5px 12px rgba(0,0,0,0.25);
+    }
+    90% { 
+        transform: translateX(-52%) translateY(20px) rotate(-3deg); 
+        box-shadow: 3px 4px 10px rgba(0,0,0,0.35);
+    }
+    100% { 
+        transform: translateX(-50%) translateY(0) rotate(0deg); 
+        box-shadow: 2px 3px 6px rgba(0,0,0,0.4);
+    }
+}
+
+@keyframes ropeStretch {
+    0% { 
+        height: 200px;
+        transform: translateX(-50%) scaleY(1);
+    }
+    50% { 
+        height: 300px;
+        transform: translateX(-50%) scaleY(1.5);
+    }
+    100% { 
+        height: 200px;
+        transform: translateX(-50%) scaleY(1);
+    }
+}
+
+@keyframes ropeBounce {
+    0%, 100% { 
+        transform: translateX(-50%) translateY(0) rotate(0deg);
+    }
+    15% { 
+        transform: translateX(-45%) translateY(-20px) rotate(8deg);
+    }
+    30% { 
+        transform: translateX(-55%) translateY(-10px) rotate(-6deg);
+    }
+    45% { 
+        transform: translateX(-48%) translateY(3px) rotate(4deg);
+    }
+    60% { 
+        transform: translateX(-52%) translateY(-2px) rotate(-2deg);
+    }
+    75% { 
+        transform: translateX(-49%) translateY(1px) rotate(1deg);
+    }
+    90% { 
+        transform: translateX(-51%) translateY(0) rotate(-0.5deg);
+    }
+}
+
+.toggle-btn.pulling .toggle-knot {
+    animation: ropePullDown 0.8s ease-in-out;
+}
+
+.toggle-btn.pulling .toggle-rope {
+    animation: ropeStretch 0.8s ease-in-out;
+}
+
+.toggle-btn.bouncing .toggle-knot {
+    animation: ropeBounce 0.6s ease-out;
+}
+
+.sidebar.expand + .toggle-btn {
+    left: 180px;
+}
+.sidebar.expand + .toggle-btn .toggle-rope {
+    left: -8px;
+}
+.sidebar.expand + .toggle-btn .toggle-knot {
+    left: -12px;
 }
 .sidebar.collapse + .toggle-btn {
     left: 60px;
-}
-.toggle-btn:hover {
-    background: #4299e1;
 }
 
 .content {
@@ -1033,10 +1238,117 @@ html, body {
     background: rgba(0,0,0,0.3);
     z-index: 9998;
     display: none;
+    justify-content: center;
+    align-items: center;
     backdrop-filter: blur(3px);
 }
 .modal-mask.show {
-    display: block;
+    display: flex;
+}
+.profile-modal, .settings-modal {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.profile-modal-header, .settings-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+.profile-modal-header h3, .settings-modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+.profile-modal-close, .settings-modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+}
+.profile-modal-content, .settings-modal-content {
+    padding: 20px;
+}
+.form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+.form-row label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+.form-row input, .form-row select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+.form-row input[type="checkbox"] {
+    width: auto;
+    align-self: flex-start;
+}
+.color-presets {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.color-preset {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+.color-preset:hover, .color-preset.selected {
+    border-color: #333;
+    transform: scale(1.1);
+}
+.profile-modal-actions, .settings-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+.btn-cancel {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-cancel:hover {
+    background: #f5f5f5;
+}
+.btn-save {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-save:hover {
+    opacity: 0.9;
 }
 #illustration-modal {
     max-width: 1200px;
@@ -1192,7 +1504,162 @@ html, body {
 .profile-modal.show {
     display: flex;
 }
-.profile-modal-content {
+/* 自定义弹窗样式 */
+    .custom-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .custom-modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+    }
+
+    .custom-modal-content {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 420px;
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        animation: slideUp 0.3s ease;
+    }
+
+    .custom-modal-header {
+        display: flex;
+        align-items: center;
+        padding: 20px 24px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .custom-modal-icon {
+        font-size: 28px;
+        margin-right: 12px;
+    }
+
+    .custom-modal-title {
+        flex: 1;
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .custom-modal-close {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .custom-modal-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(90deg);
+    }
+
+    .custom-modal-body {
+        padding: 24px;
+    }
+
+    .custom-modal-body p {
+        margin: 0;
+        font-size: 15px;
+        color: #4a5568;
+        line-height: 1.6;
+    }
+
+    .custom-modal-body input {
+        width: 100%;
+        padding: 12px 16px;
+        margin-top: 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s;
+        box-sizing: border-box;
+    }
+
+    .custom-modal-body input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .custom-modal-footer {
+        display: flex;
+        gap: 12px;
+        padding: 16px 24px;
+        background: #f7fafc;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .custom-btn {
+        flex: 1;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .custom-btn-cancel {
+        background: #e2e8f0;
+        color: #4a5568;
+    }
+
+    .custom-btn-cancel:hover {
+        background: #cbd5e0;
+    }
+
+    .custom-btn-confirm {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .custom-btn-confirm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -40%);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    .profile-modal-content {
     background: white;
     border-radius: 16px;
     width: 420px;
@@ -1449,6 +1916,173 @@ html, body {
     </div>
 </div>
 
+<!-- 自定义弹窗组件 - 在所有页面外面，确保任何页面都能使用 -->
+<div class="custom-modal" id="customModal">
+    <div class="custom-modal-overlay"></div>
+    <div class="custom-modal-content">
+        <div class="custom-modal-header">
+            <span class="custom-modal-icon" id="customModalIcon">📢</span>
+            <h3 id="customModalTitle">提示</h3>
+            <button class="custom-modal-close" id="customModalClose">✕</button>
+        </div>
+        <div class="custom-modal-body">
+            <p id="customModalMessage"></p>
+            <input type="text" id="customModalInput" style="display:none;" placeholder="请输入内容">
+        </div>
+        <div class="custom-modal-footer">
+            <button class="custom-btn custom-btn-cancel" id="customModalCancel">取消</button>
+            <button class="custom-btn custom-btn-confirm" id="customModalConfirm">确定</button>
+        </div>
+    </div>
+</div>
+
+<!-- 用户资料编辑模态框 -->
+<div class="modal-mask" id="profileModal" style="display:none;">
+    <div class="profile-modal">
+        <div class="profile-modal-header">
+            <h3>我的资料</h3>
+            <button class="profile-modal-close" id="profileModalClose">✕</button>
+        </div>
+        <div class="profile-modal-content">
+            <div class="form-row">
+                <label>姓名</label>
+                <input type="text" id="profileName" placeholder="请输入姓名">
+            </div>
+            <div class="form-row">
+                <label>角色</label>
+                <input type="text" id="profileRole" placeholder="请输入角色">
+            </div>
+            <div class="form-row">
+                <label>部门</label>
+                <input type="text" id="profileDepartment" placeholder="请输入部门">
+            </div>
+            <div class="form-row">
+                <label>入职日期</label>
+                <input type="date" id="profileJoinDate">
+            </div>
+            <div class="form-row">
+                <label>邮箱</label>
+                <input type="email" id="profileEmail" placeholder="请输入邮箱">
+            </div>
+            <div class="form-row">
+                <label>电话</label>
+                <input type="tel" id="profilePhone" placeholder="请输入电话">
+            </div>
+            <div class="profile-modal-actions">
+                <button class="btn-cancel" id="profileCancel">取消</button>
+                <button class="btn-save" id="profileSave">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 系统设置模态框 -->
+<div class="modal-mask" id="settingsModal" style="display:none;">
+    <div class="settings-modal">
+        <div class="settings-modal-header">
+            <h3>系统设置</h3>
+            <button class="settings-modal-close" id="settingsModalClose">✕</button>
+        </div>
+        <div class="settings-modal-content">
+            <div class="form-row">
+                <label>主题</label>
+                <select id="settingsTheme">
+                    <option value="default">默认主题</option>
+                    <option value="dark">深色主题</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>语言</label>
+                <select id="settingsLanguage">
+                    <option value="zh-CN">简体中文</option>
+                    <option value="en-US">English</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>通知提醒</label>
+                <input type="checkbox" id="settingsNotifications">
+            </div>
+            <div class="form-row">
+                <label>自动保存</label>
+                <input type="checkbox" id="settingsAutoSave">
+            </div>
+            <div class="form-row">
+                <label>默认页面</label>
+                <select id="settingsDefaultPage">
+                    <option value="home">首页</option>
+                    <option value="dashboard">仪表盘</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>主题颜色</label>
+                <input type="color" id="settingsColor" value="#667eea">
+                <div class="color-presets">
+                    <span class="color-preset" data-color="#667eea" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></span>
+                    <span class="color-preset" data-color="#f56c6c" style="background:linear-gradient(135deg, #f56c6c 0%, #f78360 100%);"></span>
+                    <span class="color-preset" data-color="#10b981" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%);"></span>
+                    <span class="color-preset" data-color="#3b82f6" style="background:linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);"></span>
+                    <span class="color-preset" data-color="#f59e0b" style="background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%);"></span>
+                    <span class="color-preset" data-color="#ec4899" style="background:linear-gradient(135deg, #ec4899 0%, #be185d 100%);"></span>
+                    <span class="color-preset" data-color="#8b5cf6" style="background:linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);"></span>
+                    <span class="color-preset" data-color="#06b6d4" style="background:linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <label>侧边栏按钮颜色</label>
+                <input type="color" id="sidebarBtnColor" value="#3c4658">
+            </div>
+            <div class="form-row">
+                <label>文字样式</label>
+                <select id="textStyle">
+                    <option value="normal">普通</option>
+                    <option value="bold">粗体</option>
+                    <option value="italic">斜体</option>
+                </select>
+            </div>
+            <div class="settings-modal-actions">
+                <button class="btn-cancel" id="settingsCancel">取消</button>
+                <button class="btn-save" id="settingsSave">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 用户信息面板 - 在所有页面外面，确保任何页面都能使用 -->
+<div class="user-panel" id="userPanel">
+    <div class="user-panel-header">
+        <div class="avatar-container">
+            <img id="panelAvatarImg" src="" alt="头像" class="user-panel-avatar-img" />
+            <div class="avatar-upload-btn" id="avatarUploadBtn">+</div>
+        </div>
+        <div class="user-panel-name" id="panelUserName">小东</div>
+        <div class="user-panel-role" id="panelUserRole">管理员</div>
+        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" />
+    </div>
+    <div class="user-panel-menu">
+        <div class="user-panel-item" id="panelProfile">
+            <span>👤</span>
+            <span>我的资料</span>
+        </div>
+        <div class="user-panel-item" id="panelNotifications">
+            <span>🔔</span>
+            <span>消息通知</span>
+        </div>
+        <div class="user-panel-item" id="panelSettings">
+            <span>⚙️</span>
+            <span>系统设置</span>
+        </div>
+        <div class="user-panel-item" id="panelStatistics">
+            <span>📊</span>
+            <span>数据统计</span>
+        </div>
+        <div class="user-panel-divider"></div>
+        <div class="user-panel-item user-panel-logout" id="panelLogout">
+            <span>🚪</span>
+            <span>退出登录</span>
+        </div>
+    </div>
+</div>
+
 <div class="main" id="mainPage" style="display:none;">
   <div class="sidebar" id="sidebar">
     <img id="sidebarAvatarImg" src="" alt="头像" class="sidebar-avatar-img" />
@@ -1465,7 +2099,15 @@ html, body {
     <button class="menu-btn add-function-btn" id="addFunctionBtn">+ 添加功能</button>
     <button class="menu-btn" style="background:#f56c6c;margin-top:20px;" onclick="App.logout()">退出登录</button>
   </div>
-  <div class="toggle-btn" id="toggleBtn">▶</div>
+  <div class="toggle-btn" id="toggleBtn">
+    <div class="toggle-lamp-base"></div>
+    <div class="toggle-lamp-arm">
+        <div class="toggle-lamp-switch"></div>
+    </div>
+    <div class="toggle-lamp-head">
+        <div class="toggle-lamp-glow"></div>
+    </div>
+</div>
   <div class="content">
     <div class="tabs" id="tabs"></div>
     <div class="pages" id="pages"></div>
@@ -1650,222 +2292,7 @@ html, body {
         </div>
       </div>
       
-      <!-- 用户信息面板 -->
-      <div class="user-panel" id="userPanel">
-          <div class="user-panel-header">
-              <div class="avatar-container">
-                  <img id="panelAvatarImg" src="" alt="头像" class="user-panel-avatar-img" />
-                  <div class="avatar-upload-btn" id="avatarUploadBtn">+</div>
-              </div>
-              <div class="user-panel-name" id="panelUserName">小东</div>
-              <div class="user-panel-role" id="panelUserRole">管理员</div>
-              <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" />
-          </div>
-          <div class="user-panel-menu">
-              <div class="user-panel-item" id="panelProfile">
-                  <span>👤</span>
-                  <span>我的资料</span>
-              </div>
-              <div class="user-panel-item" id="panelNotifications">
-                  <span>🔔</span>
-                  <span>消息通知</span>
-              </div>
-              <div class="user-panel-item" id="panelSettings">
-                  <span>⚙️</span>
-                  <span>系统设置</span>
-              </div>
-              <div class="user-panel-item" id="panelStatistics">
-                  <span>📊</span>
-                  <span>数据统计</span>
-              </div>
-              <div class="user-panel-divider"></div>
-              <div class="user-panel-item user-panel-logout" id="panelLogout">
-                  <span>🚪</span>
-                  <span>退出登录</span>
-              </div>
-          </div>
-      </div>
-
-      <!-- 添加功能模态框 -->
-      <div class="profile-modal" id="addFunctionModal">
-          <div class="profile-modal-content">
-              <div class="profile-modal-header">
-                  <h3>➕ 添加功能</h3>
-                  <button class="profile-modal-close" id="addFunctionModalClose">✕</button>
-              </div>
-              <div class="profile-modal-body">
-                  <div class="form-group">
-                      <label>功能名称</label>
-                      <input type="text" id="functionName" placeholder="输入功能名称">
-                  </div>
-                  <div class="form-group">
-                      <label>功能图标</label>
-                      <input type="text" id="functionIcon" placeholder="输入emoji图标，如 🌍">
-                  </div>
-                  <div class="form-group">
-                      <label>功能链接</label>
-                      <input type="text" id="functionUrl" placeholder="输入网页链接">
-                  </div>
-              </div>
-              <div class="profile-modal-footer">
-                  <button class="btn btn-cancel" id="addFunctionCancel">取消</button>
-                  <button class="btn btn-save" id="addFunctionSave">添加</button>
-              </div>
-          </div>
-      </div>
-
-      <!-- 系统设置编辑模态框 -->
-      <div class="profile-modal" id="settingsModal">
-          <div class="profile-modal-content">
-              <div class="profile-modal-header">
-                  <h3>⚙️ 系统设置</h3>
-                  <button class="profile-modal-close" id="settingsModalClose">✕</button>
-              </div>
-              <div class="profile-modal-body">
-                  <div class="form-group">
-                      <label>主题</label>
-                      <select id="settingsTheme">
-                          <option value="default">默认主题</option>
-                          <option value="dark">深色主题</option>
-                          <option value="light">浅色主题</option>
-                      </select>
-                  </div>
-                  <div class="form-group">
-                      <label>语言</label>
-                      <select id="settingsLanguage">
-                          <option value="zh-CN">简体中文</option>
-                          <option value="zh-TW">繁体中文</option>
-                          <option value="en">English</option>
-                      </select>
-                  </div>
-                  <div class="form-group">
-                      <label>通知设置</label>
-                      <div class="checkbox-group">
-                          <label class="checkbox-item">
-                              <input type="checkbox" id="settingsNotifications">
-                              <span>启用通知</span>
-                          </label>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label>自动保存</label>
-                      <div class="checkbox-group">
-                          <label class="checkbox-item">
-                              <input type="checkbox" id="settingsAutoSave">
-                              <span>启用自动保存</span>
-                          </label>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label>默认打开页面</label>
-                      <select id="settingsDefaultPage">
-                          <option value="home">首页</option>
-                          <option value="storage">仓储</option>
-                          <option value="express">专线</option>
-                          <option value="speed">速量</option>
-                      </select>
-                  </div>
-                  <div class="form-group">
-                      <label>主题颜色</label>
-                      <div class="color-picker-container">
-                          <div class="preset-colors">
-                              <span class="color-preset" data-color="#667eea" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></span>
-                              <span class="color-preset" data-color="#f56c6c" style="background: linear-gradient(135deg, #f56c6c 0%, #f78360 100%);"></span>
-                              <span class="color-preset" data-color="#10b981" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);"></span>
-                              <span class="color-preset" data-color="#3b82f6" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);"></span>
-                              <span class="color-preset" data-color="#f59e0b" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);"></span>
-                              <span class="color-preset" data-color="#ec4899" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);"></span>
-                              <span class="color-preset" data-color="#8b5cf6" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);"></span>
-                              <span class="color-preset" data-color="#06b6d4" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);"></span>
-                          </div>
-                          <div class="custom-color">
-                              <label>自定义颜色</label>
-                              <input type="color" id="settingsColor" value="#667eea">
-                          </div>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label>侧边栏按钮颜色</label>
-                      <div class="color-picker-container">
-                          <div class="preset-colors">
-                              <span class="color-preset" data-color="#3c4658" style="background: #3c4658;"></span>
-                              <span class="color-preset" data-color="#2d3748" style="background: #2d3748;"></span>
-                              <span class="color-preset" data-color="#1a202c" style="background: #1a202c;"></span>
-                              <span class="color-preset" data-color="#4a5568" style="background: #4a5568;"></span>
-                              <span class="color-preset" data-color="#553c9a" style="background: #553c9a;"></span>
-                              <span class="color-preset" data-color="#3182ce" style="background: #3182ce;"></span>
-                              <span class="color-preset" data-color="#2f855a" style="background: #2f855a;"></span>
-                              <span class="color-preset" data-color="#c05621" style="background: #c05621;"></span>
-                          </div>
-                          <div class="custom-color">
-                              <label>自定义</label>
-                              <input type="color" id="sidebarBtnColor" value="#3c4658">
-                          </div>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label>文字艺术效果</label>
-                      <select id="textStyle">
-                          <option value="normal">普通文字</option>
-                          <option value="bold">粗体</option>
-                          <option value="italic">斜体</option>
-                          <option value="shadow">阴影效果</option>
-                          <option value="glow">发光效果</option>
-                          <option value="gradient">渐变文字</option>
-                      </select>
-                  </div>
-              </div>
-              <div class="profile-modal-footer">
-                  <button class="btn btn-cancel" id="settingsCancel">取消</button>
-                  <button class="btn btn-save" id="settingsSave">保存</button>
-              </div>
-          </div>
-      </div>
-
-      <!-- 用户资料编辑模态框 -->
-      <div class="profile-modal" id="profileModal">
-          <div class="profile-modal-content">
-              <div class="profile-modal-header">
-                  <h3>👤 我的资料</h3>
-                  <button class="profile-modal-close" id="profileModalClose">✕</button>
-              </div>
-              <div class="profile-modal-body">
-                  <div class="form-group">
-                      <label>姓名</label>
-                      <input type="text" id="profileName" placeholder="请输入姓名">
-                  </div>
-                  <div class="form-group">
-                      <label>角色</label>
-                      <select id="profileRole">
-                          <option value="管理员">管理员</option>
-                          <option value="普通用户">普通用户</option>
-                          <option value="审核员">审核员</option>
-                          <option value="访客">访客</option>
-                      </select>
-                  </div>
-                  <div class="form-group">
-                      <label>部门</label>
-                      <input type="text" id="profileDepartment" placeholder="请输入部门">
-                  </div>
-                  <div class="form-group">
-                      <label>入职时间</label>
-                      <input type="date" id="profileJoinDate">
-                  </div>
-                  <div class="form-group">
-                      <label>邮箱</label>
-                      <input type="email" id="profileEmail" placeholder="请输入邮箱">
-                  </div>
-                  <div class="form-group">
-                      <label>电话</label>
-                      <input type="tel" id="profilePhone" placeholder="请输入电话">
-                  </div>
-              </div>
-              <div class="profile-modal-footer">
-                  <button class="btn btn-cancel" id="profileCancel">取消</button>
-                  <button class="btn btn-save" id="profileSave">保存</button>
-              </div>
-          </div>
-      </div>
+      
       
       <div class="modal-mask" id="modal-mask"></div>
       <div class="func-modal" id="recheck-modal">
@@ -2042,6 +2469,145 @@ html, body {
 </div>
 
 <script>
+// 自定义弹窗组件
+const CustomModal = {
+  modal: null,
+  icon: null,
+  title: null,
+  message: null,
+  input: null,
+  cancelBtn: null,
+  confirmBtn: null,
+  closeBtn: null,
+  
+  init() {
+    this.modal = document.getElementById('customModal');
+    this.icon = document.getElementById('customModalIcon');
+    this.title = document.getElementById('customModalTitle');
+    this.message = document.getElementById('customModalMessage');
+    this.input = document.getElementById('customModalInput');
+    this.cancelBtn = document.getElementById('customModalCancel');
+    this.confirmBtn = document.getElementById('customModalConfirm');
+    this.closeBtn = document.getElementById('customModalClose');
+  },
+  
+  show(type, message, options = {}) {
+    if (!this.modal) this.init();
+    
+    this.modal.style.display = 'block';
+    this.message.textContent = message;
+    
+    // 设置类型图标和标题
+    switch(type) {
+      case 'alert':
+        this.icon.textContent = '📢';
+        this.title.textContent = '提示';
+        break;
+      case 'success':
+        this.icon.textContent = '✅';
+        this.title.textContent = '成功';
+        break;
+      case 'error':
+        this.icon.textContent = '❌';
+        this.title.textContent = '错误';
+        break;
+      case 'warning':
+        this.icon.textContent = '⚠️';
+        this.title.textContent = '警告';
+        break;
+      case 'confirm':
+        this.icon.textContent = '❓';
+        this.title.textContent = '确认';
+        break;
+      case 'prompt':
+        this.icon.textContent = '📝';
+        this.title.textContent = '输入';
+        break;
+    }
+    
+    // 显示/隐藏输入框
+    if (type === 'prompt') {
+      this.input.style.display = 'block';
+      this.input.value = options.defaultValue || '';
+      setTimeout(() => this.input.focus(), 100);
+    } else {
+      this.input.style.display = 'none';
+    }
+    
+    // 按钮文本
+    this.cancelBtn.textContent = options.cancelText || '取消';
+    this.confirmBtn.textContent = options.confirmText || '确定';
+    
+    return new Promise((resolve) => {
+      const handleConfirm = () => {
+        this.hide();
+        resolve(type === 'prompt' ? this.input.value : true);
+      };
+      
+      const handleCancel = () => {
+        this.hide();
+        resolve(false);
+      };
+      
+      const handleKeydown = (e) => {
+        if (e.key === 'Escape') {
+          handleCancel();
+        }
+      };
+      
+      this.confirmBtn.onclick = handleConfirm;
+      this.cancelBtn.onclick = handleCancel;
+      this.closeBtn.onclick = handleCancel;
+      
+      document.addEventListener('keydown', handleKeydown);
+      this.modal.onclick = (e) => {
+        if (e.target === this.modal) {
+          handleCancel();
+        }
+      };
+      
+      // 清理事件
+      const cleanup = () => {
+        document.removeEventListener('keydown', handleKeydown);
+      };
+      
+      const originalHide = this.hide.bind(this);
+      this.hide = () => {
+        cleanup();
+        this.hide = originalHide;
+        originalHide();
+      };
+    });
+  },
+  
+  hide() {
+    if (this.modal) {
+      this.modal.style.display = 'none';
+    }
+  }
+};
+
+// DOM加载完成后初始化弹窗组件
+document.addEventListener('DOMContentLoaded', () => {
+  CustomModal.init();
+});
+
+// 替换原生弹窗函数
+window.alert = async function(msg) {
+  if (!CustomModal.modal) CustomModal.init();
+  await CustomModal.show('alert', msg);
+};
+
+window.confirm = async function(msg) {
+  if (!CustomModal.modal) CustomModal.init();
+  return await CustomModal.show('confirm', msg);
+};
+
+window.prompt = async function(msg, defaultValue = '') {
+  if (!CustomModal.modal) CustomModal.init();
+  return await CustomModal.show('prompt', msg, { defaultValue });
+};
+
 const App = {
   tabs: [],
   activeId: null,
@@ -2154,12 +2720,12 @@ const App = {
     this.checkNotice();
   },
 
-  showAdminLogin() {
-    const password = prompt('请输入超级管理密码：');
+  async showAdminLogin() {
+    const password = await prompt('请输入超级管理密码：');
     if (password === '1') {
       this.isAdmin = true;
       this.showAdminPanel();
-    } else if (password !== null) {
+    } else if (password !== null && password !== false) {
       alert('密码错误！');
     }
   },
@@ -2444,13 +3010,13 @@ const App = {
     // 打开用户资料模态框
     function openProfileModal() {
       loadUserProfile();
-      if (profileModal) profileModal.classList.add('show');
+      if (profileModal) profileModal.style.display = 'flex';
       if (userPanel) userPanel.classList.remove('show');
     }
 
     // 关闭用户资料模态框
     function closeProfileModal() {
-      if (profileModal) profileModal.classList.remove('show');
+      if (profileModal) profileModal.style.display = 'none';
     }
 
     if (panelProfile) {
@@ -2672,13 +3238,13 @@ const App = {
     // 打开系统设置模态框
     function openSettingsModal() {
       loadSettings();
-      if (settingsModal) settingsModal.classList.add('show');
+      if (settingsModal) settingsModal.style.display = 'flex';
       if (userPanel) userPanel.classList.remove('show');
     }
 
     // 关闭系统设置模态框
     function closeSettingsModal() {
-      if (settingsModal) settingsModal.classList.remove('show');
+      if (settingsModal) settingsModal.style.display = 'none';
     }
 
     if (panelSettings) {
@@ -2811,15 +3377,25 @@ const App = {
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('toggleBtn');
     
-    if (sidebar && toggleBtn) {
-      const isCollapsed = sidebar.classList.contains('collapse');
-      if (isCollapsed) {
-        sidebar.classList.remove('collapse');
-        toggleBtn.textContent = '▶';
-      } else {
-        sidebar.classList.add('collapse');
-        toggleBtn.textContent = '◀';
-      }
+    if (!sidebar || !toggleBtn) return;
+    
+    // 切换侧边栏状态
+    const isExpanded = sidebar.classList.contains('expand');
+    if (isExpanded) {
+      sidebar.classList.remove('expand');
+      toggleBtn.classList.remove('on');
+    } else {
+      sidebar.classList.add('expand');
+      toggleBtn.classList.add('on');
+    }
+    
+    // 添加点击动画效果
+    const lampHead = toggleBtn.querySelector('.toggle-lamp-head');
+    if (lampHead) {
+      lampHead.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        lampHead.style.transform = '';
+      }, 150);
     }
   },
 
