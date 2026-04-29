@@ -375,116 +375,269 @@ html, body {
     cursor: grabbing;
     transform: scale(1.05);
 }
-/* 灯泡样式 */
-.toggle-bulb {
-    width: 50px;
-    height: 60px;
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
-    border-radius: 50% 50% 50% 50% / 55% 55% 45% 45%;
+/* 电子宠物样式 */
+.pet-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.pet-display {
     position: relative;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2), inset -5px -5px 15px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    overflow: hidden;
 }
-.toggle-bulb-filament {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 8px;
-    height: 20px;
-    background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-    opacity: 0.6;
-    transition: opacity 0.3s ease;
+.pet {
+    width: 60px;
+    height: 70px;
+    position: relative;
+    display: none;
 }
-.toggle-bulb-face {
+.pet.active {
+    display: block;
+}
+.pet-body {
+    width: 60px;
+    height: 70px;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    animation: petBounce 2s ease-in-out infinite;
+}
+.pet-face {
     position: absolute;
     top: 15px;
     left: 50%;
     transform: translateX(-50%);
-    width: 30px;
-    height: 20px;
+    width: 50px;
+    height: 40px;
 }
-.toggle-bulb-eye-left,
-.toggle-bulb-eye-right {
+.pet-eye-left,
+.pet-eye-right {
     position: absolute;
-    top: 0;
-    width: 7px;
-    height: 7px;
+    top: 5px;
+    width: 12px;
+    height: 14px;
     background: #1f2937;
     border-radius: 50%;
-    animation: blink 4s ease-in-out infinite;
+    animation: blink 3s ease-in-out infinite;
 }
-.toggle-bulb-eye-left {
-    left: 3px;
+.pet-eye-left {
+    left: 5px;
 }
-.toggle-bulb-eye-right {
-    right: 3px;
+.pet-eye-right {
+    right: 5px;
 }
-.toggle-bulb-mouth {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 16px;
-    height: 8px;
-    border: 2px solid #1f2937;
-    border-top: none;
-    border-radius: 0 0 10px 10px;
-    animation: smile 2s ease-in-out infinite;
-}
-.toggle-bulb-glow {
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
-    background: radial-gradient(circle, rgba(251, 191, 36, 0.4) 0%, rgba(251, 191, 36, 0.1) 40%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-.toggle-bulb-light {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30px;
-    height: 30px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(251, 191, 36, 0.5) 50%, transparent 70%);
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-.toggle-bulb-screw {
-    width: 25px;
-    height: 12px;
-    background: linear-gradient(180deg, #6b7280 0%, #4b5563 50%, #374151 100%);
-    border-radius: 0 0 4px 4px;
-    position: relative;
-}
-.toggle-bulb-screw::before {
+.pet-eye-left::after,
+.pet-eye-right::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 2px;
-    right: 2px;
-    height: 100%;
-    background: repeating-linear-gradient(180deg, #4b5563 0px, #4b5563 2px, #6b7280 2px, #6b7280 4px);
-    border-radius: 0 0 4px 4px;
+    top: 2px;
+    left: 3px;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
 }
-.toggle-bulb-base {
-    width: 35px;
+.pet-nose {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 6px;
+    background: #1f2937;
+    border-radius: 50%;
+}
+.pet-mouth {
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 10px;
+    border: 3px solid #1f2937;
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    animation: smile 2s ease-in-out infinite;
+}
+.pet-whisker-left,
+.pet-whisker-right {
+    position: absolute;
+    top: 20px;
+    width: 15px;
+    height: 2px;
+    background: #1f2937;
+}
+.pet-whisker-left {
+    left: -10px;
+    transform: rotate(-10deg);
+}
+.pet-whisker-right {
+    right: -10px;
+    transform: rotate(10deg);
+}
+
+/* 猫耳朵 */
+.pet-cat .pet-ear-left,
+.pet-cat .pet-ear-right {
+    position: absolute;
+    top: -8px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 18px solid #fbbf24;
+}
+.pet-cat .pet-ear-left {
+    left: 0;
+    transform: rotate(-15deg);
+}
+.pet-cat .pet-ear-right {
+    right: 0;
+    transform: rotate(15deg);
+}
+
+/* 狗嘴巴 */
+.pet-dog .pet-mouth {
+    width: 15px;
     height: 8px;
-    background: linear-gradient(180deg, #9ca3af 0%, #6b7280 100%);
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    border-radius: 0 0 10px 10px;
+}
+
+/* 兔子耳朵 */
+.pet-rabbit .pet-ear-left,
+.pet-rabbit .pet-ear-right {
+    position: absolute;
+    top: -25px;
+    width: 12px;
+    height: 30px;
+    background: #fde047;
+    border-radius: 50%;
+}
+.pet-rabbit .pet-ear-left {
+    left: 8px;
+    transform: rotate(-10deg);
+}
+.pet-rabbit .pet-ear-right {
+    right: 8px;
+    transform: rotate(10deg);
+}
+
+/* 熊 */
+.pet-bear .pet-ear-left,
+.pet-bear .pet-ear-right {
+    position: absolute;
+    top: -5px;
+    width: 18px;
+    height: 18px;
+    background: #92400e;
+    border-radius: 50%;
+}
+.pet-bear .pet-ear-left {
+    left: -5px;
+}
+.pet-bear .pet-ear-right {
+    right: -5px;
+}
+.pet-bear .pet-body {
+    background: linear-gradient(135deg, #92400e 0%, #78350f 50%, #451a03 100%);
+}
+
+/* 熊猫 */
+.pet-panda .pet-eye-left,
+.pet-panda .pet-eye-right {
+    background: white;
+    border: 2px solid #1f2937;
+}
+.pet-panda .pet-eye-left::before,
+.pet-panda .pet-eye-right::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 6px;
+    height: 6px;
+    background: #1f2937;
+    border-radius: 50%;
+}
+.pet-panda .pet-ear-left,
+.pet-panda .pet-ear-right {
+    position: absolute;
+    top: -8px;
+    width: 16px;
+    height: 16px;
+    background: #1f2937;
+    border-radius: 50%;
+}
+.pet-panda .pet-ear-left {
+    left: -2px;
+}
+.pet-panda .pet-ear-right {
+    right: -2px;
+}
+.pet-panda .pet-body {
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
+}
+
+/* 仓鼠 */
+.pet-hamster .pet-ear-left,
+.pet-hamster .pet-ear-right {
+    position: absolute;
+    top: -3px;
+    width: 14px;
+    height: 14px;
+    background: #fbbf24;
+    border-radius: 50%;
+}
+.pet-hamster .pet-ear-left {
+    left: 0;
+}
+.pet-hamster .pet-ear-right {
+    right: 0;
+}
+.pet-hamster .pet-body {
+    background: linear-gradient(135deg, #fde047 0%, #fbbf24 50%, #f59e0b 100%);
+    border-radius: 50%;
+}
+.pet-hamster .pet-whisker-left,
+.pet-hamster .pet-whisker-right {
+    top: 18px;
+}
+
+/* 宠物选择器 */
+.pet-selector {
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.pet-option {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    opacity: 0.6;
+}
+.pet-option:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+.pet-option.active {
+    opacity: 1;
+    background: rgba(251, 191, 36, 0.3);
+    box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
 }
 
 /* 亮度控制 */
 .toggle-brightness-control {
-    margin-top: 10px;
+    margin-top: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -520,25 +673,37 @@ html, body {
 }
 
 /* 开灯状态 */
-.toggle-btn.on .toggle-bulb {
-    background: linear-gradient(135deg, #fef08a 0%, #fde047 50%, #facc15 100%);
-    box-shadow: 0 0 25px rgba(251, 191, 36, 0.8), 0 0 50px rgba(251, 191, 36, 0.5), 0 4px 8px rgba(0,0,0,0.2);
+.toggle-btn.on .pet-body {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 0 0 40px rgba(251, 191, 36, 0.4), 0 4px 8px rgba(0,0,0,0.2);
 }
-.toggle-btn.on .toggle-bulb-filament {
-    opacity: 1;
-    box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
-}
-.toggle-btn.on .toggle-bulb-glow {
-    opacity: 1;
-}
-.toggle-btn.on .toggle-bulb-light {
-    opacity: 1;
+.toggle-btn.on .pet-mouth {
+    animation: smileOpen 2s ease-in-out infinite;
 }
 
 @keyframes swing {
     0%, 100% { transform: translateY(-50%) rotate(0deg); }
     25% { transform: translateY(-50%) rotate(-10deg); }
     75% { transform: translateY(-50%) rotate(10deg); }
+}
+
+@keyframes petBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes blink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+}
+
+@keyframes smile {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.1); }
+}
+
+@keyframes smileOpen {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.15); }
 }
 
 @keyframes sparkle {
@@ -2201,18 +2366,32 @@ html, body {
     <button class="menu-btn" style="background:#f56c6c;margin-top:20px;" onclick="App.logout()">退出登录</button>
   </div>
   <div class="toggle-btn" id="toggleBtn">
-    <div class="toggle-bulb">
-        <div class="toggle-bulb-glow"></div>
-        <div class="toggle-bulb-light"></div>
-        <div class="toggle-bulb-face">
-            <div class="toggle-bulb-eye-left"></div>
-            <div class="toggle-bulb-eye-right"></div>
-            <div class="toggle-bulb-mouth"></div>
+    <div class="pet-container">
+        <div class="pet-display">
+            <div class="pet pet-cat active" id="currentPet">
+                <div class="pet-body">
+                    <div class="pet-face">
+                        <div class="pet-ear-left"></div>
+                        <div class="pet-ear-right"></div>
+                        <div class="pet-eye-left"></div>
+                        <div class="pet-eye-right"></div>
+                        <div class="pet-nose"></div>
+                        <div class="pet-mouth"></div>
+                        <div class="pet-whisker-left"></div>
+                        <div class="pet-whisker-right"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="toggle-bulb-filament"></div>
+        <div class="pet-selector" id="petSelector">
+            <div class="pet-option active" data-pet="cat">🐱</div>
+            <div class="pet-option" data-pet="dog">🐶</div>
+            <div class="pet-option" data-pet="rabbit">🐰</div>
+            <div class="pet-option" data-pet="bear">🐻</div>
+            <div class="pet-option" data-pet="panda">🐼</div>
+            <div class="pet-option" data-pet="hamster">🐹</div>
+        </div>
     </div>
-    <div class="toggle-bulb-screw"></div>
-    <div class="toggle-bulb-base"></div>
     <div class="toggle-brightness-control">
         <input type="range" id="brightnessSlider" min="10" max="100" value="50">
         <span class="brightness-label">亮度</span>
@@ -3538,6 +3717,7 @@ const App = {
   initDragLamp() {
     const toggleBtn = document.getElementById('toggleBtn');
     const brightnessSlider = document.getElementById('brightnessSlider');
+    const petSelector = document.getElementById('petSelector');
     if (!toggleBtn) return;
     
     let isDragging = false;
@@ -3545,7 +3725,7 @@ const App = {
     let offsetY = 0;
     
     const handleMouseDown = (e) => {
-      if (e.target.closest('.toggle-bulb') || e.target.closest('#brightnessSlider')) {
+      if (e.target.closest('#brightnessSlider')) {
         return;
       }
       isDragging = true;
@@ -3582,26 +3762,47 @@ const App = {
     
     const handleBrightnessChange = (e) => {
       const brightness = e.target.value / 100;
-      const bulb = toggleBtn.querySelector('.toggle-bulb');
-      const glow = toggleBtn.querySelector('.toggle-bulb-glow');
-      const light = toggleBtn.querySelector('.toggle-bulb-light');
-      const filament = toggleBtn.querySelector('.toggle-bulb-filament');
+      const petBody = toggleBtn.querySelector('.pet-body');
       
       if (toggleBtn.classList.contains('on')) {
-        if (bulb) {
-          bulb.style.boxShadow = `0 0 ${25 * brightness}px rgba(251, 191, 36, ${0.8 * brightness}), 0 0 ${50 * brightness}px rgba(251, 191, 36, ${0.5 * brightness}), 0 4px 8px rgba(0,0,0,0.2)`;
+        if (petBody) {
+          petBody.style.boxShadow = `0 0 ${20 * brightness}px rgba(251, 191, 36, ${0.6 * brightness}), 0 0 ${40 * brightness}px rgba(251, 191, 36, ${0.4 * brightness}), 0 4px 8px rgba(0,0,0,0.2)`;
         }
-        if (glow) {
-          glow.style.opacity = brightness;
+      }
+    };
+    
+    const handlePetSelect = (e) => {
+      const option = e.target.closest('.pet-option');
+      if (!option) return;
+      
+      const petType = option.dataset.pet;
+      const currentPet = document.getElementById('currentPet');
+      const options = petSelector.querySelectorAll('.pet-option');
+      
+      options.forEach(opt => opt.classList.remove('active'));
+      option.classList.add('active');
+      
+      if (currentPet) {
+        currentPet.className = `pet pet-${petType} active`;
+      }
+      
+      localStorage.setItem('selectedPet', petType);
+    };
+    
+    const loadSavedPet = () => {
+      const savedPet = localStorage.getItem('selectedPet') || 'cat';
+      const currentPet = document.getElementById('currentPet');
+      const options = petSelector.querySelectorAll('.pet-option');
+      
+      options.forEach(opt => {
+        opt.classList.remove('active');
+        if (opt.dataset.pet === savedPet) {
+          opt.classList.add('active');
         }
-        if (light) {
-          light.style.opacity = brightness;
-          light.style.transform = `translate(-50%, -50%) scale(${0.8 + brightness * 0.4})`;
-        }
-        if (filament) {
-          filament.style.opacity = 0.6 + brightness * 0.4;
-          filament.style.boxShadow = `0 0 ${10 * brightness}px rgba(251, 191, 36, ${0.8 * brightness})`;
-        }
+      });
+      
+      if (currentPet) {
+        currentPet.className = `pet pet-${savedPet} active`;
       }
     };
     
@@ -3609,6 +3810,11 @@ const App = {
     
     if (brightnessSlider) {
       brightnessSlider.addEventListener('input', handleBrightnessChange);
+    }
+    
+    if (petSelector) {
+      petSelector.addEventListener('click', handlePetSelect);
+      loadSavedPet();
     }
   },
   
