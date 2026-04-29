@@ -375,137 +375,164 @@ html, body {
     cursor: grabbing;
     transform: scale(1.05);
 }
-.toggle-lamp-base {
+/* 灯泡样式 */
+.toggle-bulb {
     width: 50px;
-    height: 10px;
-    background: linear-gradient(180deg, #d1d5db 0%, #9ca3af 100%);
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-.toggle-lamp-arm {
-    width: 8px;
-    height: 35px;
-    background: linear-gradient(90deg, #e5e7eb 0%, #d1d5db 50%, #e5e7eb 100%);
+    height: 60px;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
+    border-radius: 50% 50% 50% 50% / 55% 55% 45% 45%;
     position: relative;
-}
-.toggle-lamp-rope {
-    position: absolute;
-    left: -8px;
-    top: 0;
-    width: 4px;
-    height: 40px;
-    background: repeating-linear-gradient(0deg, #374151 0px, #374151 3px, #6b7280 3px, #6b7280 6px);
-    border-radius: 2px;
-    animation: ropeSwing 2s ease-in-out infinite;
-    transform-origin: top center;
-}
-.toggle-lamp-head {
-    width: 60px;
-    height: 45px;
-    background: linear-gradient(180deg, #9ca3af 0%, #6b7280 50%, #4b5563 100%);
-    border-radius: 50% 50% 8px 8px;
-    position: relative;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2), inset -5px -5px 15px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
     overflow: hidden;
 }
-.toggle-lamp-head::before {
-    content: '';
+.toggle-bulb-filament {
     position: absolute;
-    bottom: 0;
+    bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
-    width: 50px;
-    height: 15px;
-    background: #9ca3af;
-    border-radius: 0 0 4px 4px;
-}
-.toggle-lamp-face {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 25px;
-}
-.toggle-lamp-eye-left,
-.toggle-lamp-eye-right {
-    position: absolute;
-    top: 2px;
     width: 8px;
-    height: 8px;
+    height: 20px;
+    background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+.toggle-bulb-face {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 20px;
+}
+.toggle-bulb-eye-left,
+.toggle-bulb-eye-right {
+    position: absolute;
+    top: 0;
+    width: 7px;
+    height: 7px;
     background: #1f2937;
     border-radius: 50%;
-    animation: blink 3s ease-in-out infinite;
+    animation: blink 4s ease-in-out infinite;
 }
-.toggle-lamp-eye-left {
-    left: 4px;
+.toggle-bulb-eye-left {
+    left: 3px;
 }
-.toggle-lamp-eye-right {
-    right: 4px;
+.toggle-bulb-eye-right {
+    right: 3px;
 }
-.toggle-lamp-mouth {
+.toggle-bulb-mouth {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 20px;
-    height: 12px;
-    border: 3px solid #1f2937;
+    width: 16px;
+    height: 8px;
+    border: 2px solid #1f2937;
     border-top: none;
-    border-radius: 0 0 12px 12px;
+    border-radius: 0 0 10px 10px;
     animation: smile 2s ease-in-out infinite;
 }
-.toggle-lamp-tongue {
+.toggle-bulb-glow {
     position: absolute;
-    bottom: -3px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 8px;
-    height: 6px;
-    background: #f87171;
-    border-radius: 50%;
-}
-.toggle-lamp-glow {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 100px;
-    background: radial-gradient(ellipse at center top, rgba(251, 191, 36, 0.5) 0%, rgba(251, 191, 36, 0.2) 40%, transparent 70%);
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.4) 0%, rgba(251, 191, 36, 0.1) 40%, transparent 70%);
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
 }
-.toggle-lamp-light {
+.toggle-bulb-light {
     position: absolute;
-    bottom: 0;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 8px;
-    background: #d1d5db;
-    border-radius: 4px;
-    opacity: 0.5;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(251, 191, 36, 0.5) 50%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
     transition: opacity 0.3s ease;
+}
+.toggle-bulb-screw {
+    width: 25px;
+    height: 12px;
+    background: linear-gradient(180deg, #6b7280 0%, #4b5563 50%, #374151 100%);
+    border-radius: 0 0 4px 4px;
+    position: relative;
+}
+.toggle-bulb-screw::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 2px;
+    right: 2px;
+    height: 100%;
+    background: repeating-linear-gradient(180deg, #4b5563 0px, #4b5563 2px, #6b7280 2px, #6b7280 4px);
+    border-radius: 0 0 4px 4px;
+}
+.toggle-bulb-base {
+    width: 35px;
+    height: 8px;
+    background: linear-gradient(180deg, #9ca3af 0%, #6b7280 100%);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 亮度控制 */
+.toggle-brightness-control {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+#brightnessSlider {
+    width: 60px;
+    height: 4px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+    border-radius: 2px;
+    cursor: pointer;
+}
+#brightnessSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+}
+#brightnessSlider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+.brightness-label {
+    font-size: 10px;
+    color: #6b7280;
+    text-align: center;
 }
 
 /* 开灯状态 */
-.toggle-btn.on .toggle-lamp-head {
-    background: linear-gradient(180deg, #a3e635 0%, #84cc16 50%, #65a30d 100%);
-    box-shadow: 0 0 20px rgba(163, 230, 53, 0.6), 0 0 40px rgba(163, 230, 53, 0.4), 0 4px 8px rgba(0,0,0,0.3);
+.toggle-btn.on .toggle-bulb {
+    background: linear-gradient(135deg, #fef08a 0%, #fde047 50%, #facc15 100%);
+    box-shadow: 0 0 25px rgba(251, 191, 36, 0.8), 0 0 50px rgba(251, 191, 36, 0.5), 0 4px 8px rgba(0,0,0,0.2);
 }
-.toggle-btn.on .toggle-lamp-glow {
+.toggle-btn.on .toggle-bulb-filament {
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+}
+.toggle-btn.on .toggle-bulb-glow {
     opacity: 1;
 }
-.toggle-btn.on .toggle-lamp-light {
-    background: #fef08a;
-    box-shadow: 0 0 10px rgba(254, 240, 138, 0.8);
+.toggle-btn.on .toggle-bulb-light {
     opacity: 1;
-}
-.toggle-btn.on .toggle-lamp-mouth {
-    animation: smileOpen 2s ease-in-out infinite;
 }
 
 @keyframes swing {
@@ -2174,21 +2201,22 @@ html, body {
     <button class="menu-btn" style="background:#f56c6c;margin-top:20px;" onclick="App.logout()">退出登录</button>
   </div>
   <div class="toggle-btn" id="toggleBtn">
-    <div class="toggle-lamp-head">
-        <div class="toggle-lamp-face">
-            <div class="toggle-lamp-eye-left"></div>
-            <div class="toggle-lamp-eye-right"></div>
-            <div class="toggle-lamp-mouth">
-                <div class="toggle-lamp-tongue"></div>
-            </div>
+    <div class="toggle-bulb">
+        <div class="toggle-bulb-glow"></div>
+        <div class="toggle-bulb-light"></div>
+        <div class="toggle-bulb-face">
+            <div class="toggle-bulb-eye-left"></div>
+            <div class="toggle-bulb-eye-right"></div>
+            <div class="toggle-bulb-mouth"></div>
         </div>
-        <div class="toggle-lamp-glow"></div>
-        <div class="toggle-lamp-light"></div>
+        <div class="toggle-bulb-filament"></div>
     </div>
-    <div class="toggle-lamp-arm">
-        <div class="toggle-lamp-rope"></div>
+    <div class="toggle-bulb-screw"></div>
+    <div class="toggle-bulb-base"></div>
+    <div class="toggle-brightness-control">
+        <input type="range" id="brightnessSlider" min="10" max="100" value="50">
+        <span class="brightness-label">亮度</span>
     </div>
-    <div class="toggle-lamp-base"></div>
 </div>
   <div class="content">
     <div class="tabs" id="tabs"></div>
@@ -3509,6 +3537,7 @@ const App = {
 
   initDragLamp() {
     const toggleBtn = document.getElementById('toggleBtn');
+    const brightnessSlider = document.getElementById('brightnessSlider');
     if (!toggleBtn) return;
     
     let isDragging = false;
@@ -3516,7 +3545,7 @@ const App = {
     let offsetY = 0;
     
     const handleMouseDown = (e) => {
-      if (e.target.closest('.toggle-lamp-head')) {
+      if (e.target.closest('.toggle-bulb') || e.target.closest('#brightnessSlider')) {
         return;
       }
       isDragging = true;
@@ -3551,7 +3580,36 @@ const App = {
       document.removeEventListener('mouseup', handleMouseUp);
     };
     
+    const handleBrightnessChange = (e) => {
+      const brightness = e.target.value / 100;
+      const bulb = toggleBtn.querySelector('.toggle-bulb');
+      const glow = toggleBtn.querySelector('.toggle-bulb-glow');
+      const light = toggleBtn.querySelector('.toggle-bulb-light');
+      const filament = toggleBtn.querySelector('.toggle-bulb-filament');
+      
+      if (toggleBtn.classList.contains('on')) {
+        if (bulb) {
+          bulb.style.boxShadow = `0 0 ${25 * brightness}px rgba(251, 191, 36, ${0.8 * brightness}), 0 0 ${50 * brightness}px rgba(251, 191, 36, ${0.5 * brightness}), 0 4px 8px rgba(0,0,0,0.2)`;
+        }
+        if (glow) {
+          glow.style.opacity = brightness;
+        }
+        if (light) {
+          light.style.opacity = brightness;
+          light.style.transform = `translate(-50%, -50%) scale(${0.8 + brightness * 0.4})`;
+        }
+        if (filament) {
+          filament.style.opacity = 0.6 + brightness * 0.4;
+          filament.style.boxShadow = `0 0 ${10 * brightness}px rgba(251, 191, 36, ${0.8 * brightness})`;
+        }
+      }
+    };
+    
     toggleBtn.addEventListener('mousedown', handleMouseDown);
+    
+    if (brightnessSlider) {
+      brightnessSlider.addEventListener('input', handleBrightnessChange);
+    }
   },
   
   toggleSidebar() {
