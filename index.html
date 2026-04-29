@@ -1530,7 +1530,7 @@ html, body {
 }
 
 /* 用户资料编辑模态框样式 */
-.profile-modal {
+.profile-modal-wrapper {
     position: fixed;
     top: 0;
     left: 0;
@@ -1543,8 +1543,40 @@ html, body {
     z-index: 10001;
     display: none;
 }
-.profile-modal.show {
+.profile-modal-wrapper.show {
     display: flex;
+}
+.profile-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 10002;
+    cursor: grab;
+}
+.profile-modal:active {
+    cursor: grabbing;
+}
+.profile-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+    cursor: grab;
+}
+.profile-modal-header:active {
+    cursor: grabbing;
 }
 /* 自定义弹窗样式 */
     .custom-modal {
@@ -1979,8 +2011,8 @@ html, body {
 </div>
 
 <!-- 用户资料编辑模态框 -->
-<div class="modal-mask" id="profileModal" style="display:none;">
-    <div class="profile-modal">
+<div class="profile-modal-wrapper" id="profileModalWrapper">
+    <div class="profile-modal" id="profileModal">
         <div class="profile-modal-header">
             <h3>我的资料</h3>
             <button class="profile-modal-close" id="profileModalClose">✕</button>
@@ -3000,6 +3032,7 @@ const App = {
     const panelStatistics = document.getElementById('panelStatistics');
 
     // 打开用户资料编辑模态框
+    const profileModalWrapper = document.getElementById('profileModalWrapper');
     const profileModal = document.getElementById('profileModal');
     const profileModalClose = document.getElementById('profileModalClose');
     const profileCancel = document.getElementById('profileCancel');
@@ -3061,13 +3094,63 @@ const App = {
     // 打开用户资料模态框
     function openProfileModal() {
       loadUserProfile();
-      if (profileModal) profileModal.style.display = 'flex';
+      if (profileModalWrapper) profileModalWrapper.classList.add('show');
+      if (profileModal) {
+        profileModal.style.left = '50%';
+        profileModal.style.top = '50%';
+        profileModal.style.transform = 'translate(-50%, -50%)';
+      }
       if (userPanel) userPanel.classList.remove('show');
     }
 
     // 关闭用户资料模态框
     function closeProfileModal() {
-      if (profileModal) profileModal.style.display = 'none';
+      if (profileModalWrapper) profileModalWrapper.classList.remove('show');
+    }
+
+    // 拖拽功能
+    let isProfileDragging = false;
+    let profileOffsetX = 0;
+    let profileOffsetY = 0;
+
+    function handleProfileMouseDown(e) {
+      if (e.target.closest('.profile-modal-close') || e.target.closest('button') || e.target.tagName === 'INPUT') {
+        return;
+      }
+      isProfileDragging = true;
+      const rect = profileModal.getBoundingClientRect();
+      profileOffsetX = e.clientX - rect.left;
+      profileOffsetY = e.clientY - rect.top;
+      document.addEventListener('mousemove', handleProfileMouseMove);
+      document.addEventListener('mouseup', handleProfileMouseUp);
+      e.preventDefault();
+    }
+
+    function handleProfileMouseMove(e) {
+      if (!isProfileDragging || !profileModal) return;
+      
+      let newX = e.clientX - profileOffsetX;
+      let newY = e.clientY - profileOffsetY;
+      
+      const maxX = window.innerWidth - profileModal.offsetWidth;
+      const maxY = window.innerHeight - profileModal.offsetHeight;
+      
+      newX = Math.max(0, Math.min(newX, maxX));
+      newY = Math.max(0, Math.min(newY, maxY));
+      
+      profileModal.style.left = newX + 'px';
+      profileModal.style.top = newY + 'px';
+      profileModal.style.transform = 'none';
+    }
+
+    function handleProfileMouseUp() {
+      isProfileDragging = false;
+      document.removeEventListener('mousemove', handleProfileMouseMove);
+      document.removeEventListener('mouseup', handleProfileMouseUp);
+    }
+
+    if (profileModal) {
+      profileModal.addEventListener('mousedown', handleProfileMouseDown);
     }
 
     if (panelProfile) {
@@ -3087,9 +3170,9 @@ const App = {
     }
 
     // 点击模态框背景关闭
-    if (profileModal) {
-      profileModal.addEventListener('click', function(e) {
-        if (e.target === profileModal) {
+    if (profileModalWrapper) {
+      profileModalWrapper.addEventListener('click', function(e) {
+        if (e.target === profileModalWrapper) {
           closeProfileModal();
         }
       });
