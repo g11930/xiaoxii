@@ -1676,14 +1676,89 @@ html, body {
 .modal-mask.show {
     display: flex;
 }
-/* 网络选择页面样式 */
-.network-select-container {
-    max-width: 600px;
-    margin: 40px auto;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    padding: 32px;
+
+.wifi-current {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+.wifi-icon {
+    font-size: 28px;
+}
+.wifi-details {
+    flex: 1;
+}
+.wifi-name {
+    font-weight: 600;
+    font-size: 15px;
+}
+.wifi-ip {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+.wifi-signal {
+    font-size: 18px;
+    color: #fde047;
+}
+.wifi-scan-section {
+    margin-top: 8px;
+}
+.scan-wifi-btn {
+    width: 100%;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+.scan-wifi-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+.wifi-list {
+    margin-top: 12px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.wifi-list-header {
+    padding: 10px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    background: rgba(255,255,255,0.1);
+}
+.wifi-items {
+    max-height: 200px;
+    overflow-y: auto;
+}
+.wifi-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.wifi-item:hover {
+    background: rgba(255,255,255,0.1);
+}
+.wifi-item-name {
+    flex: 1;
+    font-size: 13px;
+}
+.wifi-item-signal {
+    font-size: 14px;
+}
+.wifi-item-security {
+    font-size: 12px;
+    opacity: 0.7;
 }
 .network-status-card {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -1934,149 +2009,6 @@ html, body {
 .network-help li {
     margin-bottom: 6px;
 }
-
-/* 聊天页面样式 */
-.chat-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-.chat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 8px 8px 0 0;
-}
-.chat-header-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.back-btn {
-    background: rgba(255,255,255,0.2);
-    border: none;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.2s;
-}
-.back-btn:hover {
-    background: rgba(255,255,255,0.3);
-}
-.chat-header h2 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 500;
-}
-.chat-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-}
-.status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #9ca3af;
-}
-.status-dot.online {
-    background: #10b981;
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-}
-.chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
-    background: #f9fafb;
-}
-.chat-message {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-.chat-message.own {
-    flex-direction: row-reverse;
-}
-.chat-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 16px;
-    flex-shrink: 0;
-}
-.chat-message-content {
-    max-width: 70%;
-}
-.chat-message-name {
-    font-size: 12px;
-    color: #6b7280;
-    margin-bottom: 4px;
-}
-.chat-message-text {
-    background: white;
-    padding: 10px 14px;
-    border-radius: 18px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    font-size: 14px;
-    line-height: 1.5;
-}
-.chat-message.own .chat-message-text {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-.chat-message-time {
-    font-size: 11px;
-    color: #9ca3af;
-    margin-top: 4px;
-}
-.chat-input-area {
-    display: flex;
-    gap: 12px;
-    padding: 16px;
-    background: white;
-    border-top: 1px solid #e5e7eb;
-    border-radius: 0 0 8px 8px;
-}
-.chat-input-area input {
-    flex: 1;
-    padding: 12px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 24px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-}
-.chat-input-area input:focus {
-    border-color: #667eea;
-}
-.chat-input-area button {
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 24px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-.chat-input-area button:hover {
-    opacity: 0.9;
-}
-
 .profile-modal, .settings-modal {
     position: relative;
     background: white;
@@ -2960,7 +2892,6 @@ html, body {
     <button class="menu-btn" onclick="openPage('人效','https://www.kdocs.cn/l/coByacPZqwoP')">人效</button>
     <button class="menu-btn" onclick="openPage('渠道','https://doc.weixin.qq.com/sheet/e3_AX4ADQYYAIcCNw5xAM1F2STG4905n?scode=AGMAxAeNAHY86J1eP0AX4ADQYYAIc&version=5.0.6.6018&platform=win&tab=adhkmx')">渠道</button>
     <button class="menu-btn" onclick="openIllustrationPage()">插图</button>
-    <button class="menu-btn" onclick="openChatPage()">💬 聊天</button>
     <button class="menu-btn add-function-btn" id="addFunctionBtn">+ 添加功能</button>
     <button class="menu-btn" style="background:#f56c6c;margin-top:20px;" onclick="App.logout()">退出登录</button>
   </div>
@@ -3003,92 +2934,6 @@ html, body {
     <div class="tabs" id="tabs"></div>
     <div class="pages" id="pages"></div>
     
-    <div id="network-select-page" style="display:none; padding:20px; height:100%; background:#f0f2f5;">
-      <div class="network-select-container">
-        <!-- 网络状态信息 -->
-        <div class="network-status-card">
-          <h3>📶 当前网络状态</h3>
-          <div class="status-grid">
-            <div class="status-item">
-              <span class="status-label">连接类型:</span>
-              <span id="networkType" class="status-value">检测中...</span>
-            </div>
-            <div class="status-item">
-              <span class="status-label">IP地址:</span>
-              <span id="localIp" class="status-value">-</span>
-            </div>
-            <div class="status-item">
-              <span class="status-label">网络延迟:</span>
-              <span id="networkLatency" class="status-value">-</span>
-            </div>
-            <div class="status-item">
-              <span class="status-label">连接状态:</span>
-              <span id="connectionStatus" class="status-value offline">离线</span>
-            </div>
-          </div>
-          <button class="refresh-btn" onclick="refreshNetworkInfo()">🔄 刷新状态</button>
-        </div>
-        
-        <div class="network-select-header">
-          <h2>🔍 选择聊天服务器</h2>
-          <p>正在扫描局域网内的可用服务器...</p>
-        </div>
-        
-        <!-- 手动输入服务器IP -->
-        <div class="manual-ip-input">
-          <label>手动输入服务器地址:</label>
-          <div class="ip-input-group">
-            <input type="text" id="manualServerIp" placeholder="IP/域名/URL, 例如: 192.168.1.100" />
-            <button onclick="connectToManualServer()">连接</button>
-          </div>
-          <p class="input-hint">支持格式: IP地址、域名、完整URL（如 https://example.com:8080）</p>
-        </div>
-        
-        <div class="network-scan-status">
-          <div class="scan-animation"></div>
-          <span>扫描中...</span>
-        </div>
-        <div class="network-list" id="networkList">
-          <!-- 扫描结果将显示在这里 -->
-        </div>
-        <div class="network-actions">
-          <button onclick="scanNetworks()">🔄 重新扫描</button>
-          <button onclick="startLocalChat()">📱 本地模式</button>
-          <button onclick="testNetworkSpeed()">⚡ 测速</button>
-        </div>
-        
-        <!-- 使用说明 -->
-        <div class="network-help">
-          <h4>💡 使用说明</h4>
-          <ul>
-            <li>确保所有设备连接到同一个WiFi网络</li>
-            <li>服务器启动后会显示IP地址（如: 192.168.1.100）</li>
-            <li>如果扫描不到，可以手动输入服务器IP</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div id="chat-page" style="display:none; padding:0; height:100%; background:#f0f2f5;">
-      <div class="chat-container">
-        <div class="chat-header">
-          <div class="chat-header-left">
-            <button class="back-btn" onclick="showNetworkSelect()">← 返回</button>
-            <h2>💬 局域网聊天室</h2>
-          </div>
-          <div class="chat-status">
-            <span class="status-dot online"></span>
-            <span>在线</span>
-          </div>
-        </div>
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="chat-input-area">
-          <input type="text" id="chatInput" placeholder="输入消息..." onkeyup="if(event.keyCode==13) sendChatMessage()">
-          <button onclick="sendChatMessage()">发送</button>
-        </div>
-      </div>
-    </div>
-
     <div id="home-page" style="display:none; padding:0; height:100%; overflow-y:auto; background:#f0f2f5;">
       <div class="dashboard">
         <div class="header-card">
@@ -4541,32 +4386,6 @@ const App = {
     }
   },
 
-  openChatPage() {
-    try {
-      const id = 'chat';
-      
-      const existingTab = this.tabs.find(t => t.id === id);
-      if (existingTab) {
-        this.switchTab(id);
-        return;
-      }
-
-      const newTab = { id, name: '💬 聊天', url: null };
-      this.tabs.push(newTab);
-      this.activeId = id;
-      
-      this.saveTabs();
-      this.renderTabs();
-      
-      setTimeout(() => {
-        this.switchTab(id);
-        showNetworkSelect();
-      }, 100);
-    } catch (e) {
-      console.error('打开聊天页面失败:', e);
-    }
-  },
-
   openIllustrationPage() {
     try {
       const id = 'illustration';
@@ -5937,373 +5756,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-// ==================== 聊天功能 ====================
-let chatWebSocket = null;
-let currentUserName = '用户';
-let selectedServer = null;
-
-function showNetworkSelect() {
-  const networkPage = document.getElementById('network-select-page');
-  const chatPage = document.getElementById('chat-page');
-  
-  if (networkPage) networkPage.style.display = 'block';
-  if (chatPage) chatPage.style.display = 'none';
-  
-  // 开始扫描网络
-  scanNetworks();
-}
-
-function scanNetworks() {
-  const networkList = document.getElementById('networkList');
-  const scanStatus = document.querySelector('.network-scan-status');
-  
-  if (scanStatus) scanStatus.style.display = 'flex';
-  if (networkList) networkList.innerHTML = '<div class="network-scan-status"><div class="scan-animation"></div><span>正在扫描局域网...</span></div>';
-  
-  // 获取局域网IP进行扫描
-  getLocalIPs(function(localIps) {
-    const networkCandidates = [];
-    
-    // 生成可能的局域网IP范围
-    localIps.forEach(ip => {
-      const parts = ip.split('.');
-      if (parts.length === 4) {
-        const baseIP = parts.slice(0, 3).join('.');
-        // 扫描同一网段的IP
-        for (let i = 1; i <= 254; i++) {
-          if (i != parts[3]) {
-            networkCandidates.push(`${baseIP}.${i}`);
-          }
-        }
-      }
-    });
-    
-    // 添加常见地址
-    networkCandidates.push('127.0.0.1', 'localhost');
-    
-    // 开始扫描
-    const foundServers = [];
-    let scanned = 0;
-    const timeout = 5000;
-    
-    networkCandidates.slice(0, 50).forEach(ip => {
-      checkServer(ip, function(isOnline) {
-        scanned++;
-        if (isOnline) {
-          foundServers.push(ip);
-          updateNetworkList(foundServers);
-        }
-        
-        if (scanned >= Math.min(50, networkCandidates.length)) {
-          if (scanStatus) scanStatus.style.display = 'none';
-          updateNetworkList(foundServers);
-          
-          if (foundServers.length === 0) {
-            if (networkList) networkList.innerHTML = '<p style="text-align:center; color:#6b7280;">未找到可用服务器</p>';
-          }
-        }
-      }, timeout);
-    });
-  });
-}
-
-function checkServer(ip, callback, timeout) {
-  const port = 8080;
-  
-  // 使用HTTP请求检测服务器，比WebSocket更可靠
-  const xhr = new XMLHttpRequest();
-  const timer = setTimeout(() => {
-    xhr.abort();
-    callback(false);
-  }, timeout);
-  
-  xhr.open('GET', `http://${ip}:${port}/ping`, true);
-  xhr.timeout = timeout;
-  
-  xhr.onload = function() {
-    clearTimeout(timer);
-    if (xhr.status === 200) {
-      try {
-        const response = JSON.parse(xhr.responseText);
-        if (response.status === 'online') {
-          callback(true);
-          return;
-        }
-      } catch (e) {
-        // 忽略解析错误
-      }
-    }
-    callback(false);
-  };
-  
-  xhr.onerror = function() {
-    clearTimeout(timer);
-    callback(false);
-  };
-  
-  xhr.ontimeout = function() {
-    clearTimeout(timer);
-    callback(false);
-  };
-  
-  xhr.send();
-}
-
-function updateNetworkList(servers) {
-  const networkList = document.getElementById('networkList');
-  if (!networkList) return;
-  
-  if (servers.length === 0) {
-    networkList.innerHTML = '<p style="text-align:center; color:#6b7280;">未找到可用服务器</p>';
-    return;
-  }
-  
-  networkList.innerHTML = servers.map((server, index) => `
-    <div class="network-item" onclick="selectServer('${server}')">
-      <div class="network-info">
-        <div class="network-icon">🖥️</div>
-        <div class="network-details">
-          <h4>聊天服务器 ${index + 1}</h4>
-          <p>${server}:8080</p>
-        </div>
-      </div>
-      <div class="network-status">
-        <span class="network-status-dot online"></span>
-        <span>在线</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-function selectServer(server) {
-  selectedServer = server;
-  connectToServer(server);
-}
-
-function connectToServer(server) {
-  const port = parseInt(localStorage.getItem('chatServerPort')) || 8080;
-  const wsUrl = `ws://${server}:${port}`;
-  
-  // 关闭之前的连接
-  if (chatWebSocket) {
-    chatWebSocket.close();
-  }
-  
-  chatWebSocket = new WebSocket(wsUrl);
-  
-  chatWebSocket.onopen = function() {
-    console.log('连接成功:', wsUrl);
-    showChatPage();
-    initChat();
-    addChatMessage({
-      name: '系统',
-      text: `已连接到 ${server}:8080`,
-      isSystem: true,
-      time: new Date().toLocaleTimeString()
-    });
-    sendSystemMessage(`${currentUserName} 加入了聊天室`);
-  };
-  
-  chatWebSocket.onmessage = function(event) {
-    const message = JSON.parse(event.data);
-    addChatMessage(message);
-    saveChatHistory(message);
-  };
-  
-  chatWebSocket.onerror = function(error) {
-    console.error('连接错误:', error);
-    alert('连接服务器失败，请重试');
-    showNetworkSelect();
-  };
-  
-  chatWebSocket.onclose = function() {
-    addChatMessage({
-      name: '系统',
-      text: '与服务器断开连接',
-      isSystem: true,
-      time: new Date().toLocaleTimeString()
-    });
-  };
-}
-
-function connectToManualServer() {
-  const ipInput = document.getElementById('manualServerIp');
-  const serverInput = ipInput.value.trim();
-  
-  if (!serverInput) {
-    alert('请输入服务器地址');
-    return;
-  }
-  
-  // 支持多种格式: IP地址、域名、完整URL
-  let serverHost = serverInput;
-  let serverPort = 8080;
-  
-  // 如果是完整URL，提取主机和端口
-  if (serverInput.startsWith('http://') || serverInput.startsWith('https://')) {
-    const url = new URL(serverInput);
-    serverHost = url.hostname;
-    serverPort = url.port ? parseInt(url.port) : 8080;
-  } else if (serverInput.includes(':')) {
-    // 格式: host:port
-    const parts = serverInput.split(':');
-    serverHost = parts[0];
-    serverPort = parseInt(parts[1]) || 8080;
-  }
-  
-  // 验证格式（IP或域名）
-  const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-  const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?)*$/;
-  
-  if (!ipRegex.test(serverHost) && !domainRegex.test(serverHost)) {
-    alert('请输入有效的IP地址或域名');
-    return;
-  }
-  
-  // 保存端口设置
-  localStorage.setItem('chatServerPort', serverPort.toString());
-  
-  selectServer(serverHost);
-}
-
-function startLocalChat() {
-  selectedServer = '本地模式';
-  
-  // 关闭之前的连接
-  if (chatWebSocket) {
-    chatWebSocket.close();
-    chatWebSocket = null;
-  }
-  
-  showChatPage();
-  initChat();
-  addChatMessage({
-    name: '系统',
-    text: '已进入本地模式，消息仅保存在本地',
-    isSystem: true,
-    time: new Date().toLocaleTimeString()
-  });
-}
-
-function showChatPage() {
-  const networkPage = document.getElementById('network-select-page');
-  const chatPage = document.getElementById('chat-page');
-  
-  if (networkPage) networkPage.style.display = 'none';
-  if (chatPage) chatPage.style.display = 'block';
-}
-
-function initChat() {
-  currentUserName = localStorage.getItem('userProfile') ? JSON.parse(localStorage.getItem('userProfile')).name || '用户' : '用户';
-  
-  // 清空消息列表
-  const messagesContainer = document.getElementById('chatMessages');
-  if (messagesContainer) {
-    messagesContainer.innerHTML = '';
-  }
-  
-  // 加载历史消息
-  loadChatHistory();
-}
-
-function sendChatMessage() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  
-  if (!text) return;
-  
-  const message = {
-    name: currentUserName,
-    text: text,
-    isOwn: true,
-    isSystem: false,
-    time: new Date().toLocaleTimeString()
-  };
-  
-  // 添加到本地
-  addChatMessage(message);
-  saveChatHistory(message);
-  
-  // 通过WebSocket发送
-  if (chatWebSocket && chatWebSocket.readyState === WebSocket.OPEN) {
-    chatWebSocket.send(JSON.stringify(message));
-  } else {
-    // 本地模式：模拟收到自己的消息
-    const receivedMsg = { ...message, isOwn: false };
-    setTimeout(() => {
-      addChatMessage(receivedMsg);
-    }, 500);
-  }
-  
-  input.value = '';
-}
-
-function addChatMessage(message) {
-  const messagesContainer = document.getElementById('chatMessages');
-  if (!messagesContainer) return;
-  
-  const messageElement = document.createElement('div');
-  messageElement.className = `chat-message${message.isOwn ? ' own' : ''}${message.isSystem ? ' system' : ''}`;
-  
-  if (message.isSystem) {
-    messageElement.innerHTML = `
-      <div style="text-align: center; color: #9ca3af; font-size: 12px; padding: 8px;">
-        ${message.text}
-      </div>
-    `;
-  } else {
-    messageElement.innerHTML = `
-      <div class="chat-avatar">${message.name.charAt(0)}</div>
-      <div class="chat-message-content">
-        <div class="chat-message-name">${message.name}</div>
-        <div class="chat-message-text">${escapeHtml(message.text)}</div>
-        <div class="chat-message-time">${message.time}</div>
-      </div>
-    `;
-  }
-  
-  messagesContainer.appendChild(messageElement);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-function sendSystemMessage(text) {
-  const message = {
-    name: '系统',
-    text: text,
-    isSystem: true,
-    time: new Date().toLocaleTimeString()
-  };
-  
-  if (chatWebSocket && chatWebSocket.readyState === WebSocket.OPEN) {
-    chatWebSocket.send(JSON.stringify(message));
-  }
-}
-
-function saveChatHistory(message) {
-  const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
-  history.push(message);
-  
-  // 只保留最近100条消息
-  if (history.length > 100) {
-    history.shift();
-  }
-  
-  localStorage.setItem('chatHistory', JSON.stringify(history));
-}
-
-function loadChatHistory() {
-  const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
-  history.forEach(message => {
-    addChatMessage(message);
-  });
-}
-
 function getLocalIPs(callback) {
   const ips = [];
   const RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
@@ -6342,110 +5794,9 @@ function getLocalIPs(callback) {
   }, 2000);
 }
 
-// 网络状态检测函数
-function refreshNetworkInfo() {
-  // 获取网络连接类型
-  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  
-  // 检测连接类型
-  const typeElement = document.getElementById('networkType');
-  const statusElement = document.getElementById('connectionStatus');
-  const ipElement = document.getElementById('localIp');
-  
-  if (navigator.onLine) {
-    statusElement.textContent = '在线';
-    statusElement.className = 'status-value online';
-    
-    let networkType = '未知';
-    if (connection) {
-      switch (connection.effectiveType) {
-        case 'slow-2g': networkType = '2G'; break;
-        case '2g': networkType = '2G'; break;
-        case '3g': networkType = '3G'; break;
-        case '4g': networkType = '4G'; break;
-        default: networkType = 'WiFi';
-      }
-    } else {
-      networkType = 'WiFi/以太网';
-    }
-    
-    typeElement.textContent = networkType;
-    typeElement.className = 'status-value ' + (networkType.includes('WiFi') ? 'wifi' : 'cellular');
-    
-    // 获取本地IP
-    getLocalIPs(function(ips) {
-      if (ipElement) {
-        ipElement.textContent = ips[0] || '未知';
-      }
-    });
-    
-    // 测试延迟
-    testLatency();
-  } else {
-    statusElement.textContent = '离线';
-    statusElement.className = 'status-value offline';
-    typeElement.textContent = '无连接';
-    typeElement.className = 'status-value';
-    if (ipElement) ipElement.textContent = '-';
-    if (document.getElementById('networkLatency')) {
-      document.getElementById('networkLatency').textContent = '-';
-    }
-  }
-}
 
-function testLatency() {
-  const startTime = performance.now();
-  const img = new Image();
-  img.onload = img.onerror = function() {
-    const latency = Math.round(performance.now() - startTime);
-    const latencyElement = document.getElementById('networkLatency');
-    if (latencyElement) {
-      latencyElement.textContent = latency + ' ms';
-    }
-  };
-  img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==?' + Date.now();
-}
-
-function testNetworkSpeed() {
-  const startTime = performance.now();
-  const testSize = 1024 * 100; // 100KB
-  const xhr = new XMLHttpRequest();
-  
-  xhr.onload = function() {
-    const duration = (performance.now() - startTime) / 1000;
-    const speedBps = (testSize * 8) / duration;
-    const speedMbps = (speedBps / 1024 / 1024).toFixed(2);
-    
-    alert(`网络速度测试结果:\n延迟: ${Math.round(duration * 1000)} ms\n速度: ${speedMbps} Mbps`);
-  };
-  
-  xhr.onerror = function() {
-    alert('测速失败，请检查网络连接');
-  };
-  
-  // 使用一个小的随机请求来测试
-  xhr.open('GET', 'data:text/plain,' + 'x'.repeat(testSize), true);
-  xhr.send();
-}
-
-// 页面加载时自动检测网络状态
-document.addEventListener('DOMContentLoaded', function() {
-  refreshNetworkInfo();
-  
-  // 监听网络状态变化
-  window.addEventListener('online', refreshNetworkInfo);
-  window.addEventListener('offline', refreshNetworkInfo);
-});
 
 // 全局函数
-window.openChatPage = () => App.openChatPage();
-window.sendChatMessage = sendChatMessage;
-window.showNetworkSelect = showNetworkSelect;
-window.scanNetworks = scanNetworks;
-window.startLocalChat = startLocalChat;
-window.connectToManualServer = connectToManualServer;
-window.refreshNetworkInfo = refreshNetworkInfo;
-window.testNetworkSpeed = testNetworkSpeed;
 </script>
 </body>
 </html>
