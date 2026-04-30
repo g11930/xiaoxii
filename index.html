@@ -380,14 +380,14 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 .pet-display {
     position: relative;
 }
 .pet {
-    width: 60px;
-    height: 70px;
+    width: 70px;
+    height: 80px;
     position: relative;
     display: none;
 }
@@ -395,433 +395,376 @@ html, body {
     display: block;
 }
 .pet-body {
-    width: 85px;
-    height: 95px;
+    width: 90px;
+    height: 100px;
     background: 
-        radial-gradient(ellipse at 30% 25%, #fef3c7 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 45%, #fde68a 0%, transparent 55%),
-        radial-gradient(ellipse at 65% 65%, #fbbf24 0%, transparent 45%),
-        linear-gradient(135deg, #fef3c7 0%, #fde68a 15%, #fcd34d 30%, #fbbf24 50%, #f59e0b 70%, #d97706 88%, #b45309 100%);
-    border-radius: 48% 52% 45% 55% / 55% 50% 50% 45%;
+        radial-gradient(ellipse at 40% 20%, #fff9c4 0%, transparent 40%),
+        radial-gradient(ellipse at 30% 35%, #fff59d 0%, transparent 35%),
+        radial-gradient(ellipse at 60% 50%, #ffeb3b 0%, transparent 40%),
+        linear-gradient(135deg, #fff9c4 0%, #fff59d 15%, #ffe082 30%, #ffd54f 50%, #ffca28 70%, #ffc107 88%, #ff9800 100%);
+    border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%;
     position: relative;
     box-shadow: 
-        0 8px 16px rgba(0,0,0,0.25),
-        0 12px 24px rgba(0,0,0,0.12),
-        inset 0 -8px 20px rgba(0,0,0,0.15),
-        inset 0 6px 15px rgba(255,255,255,0.22),
-        inset 0 0 25px rgba(255,255,255,0.08);
-    animation: petBounce 2s ease-in-out infinite;
-    /* 不规则动物身体形状 - 更像小动物的身体 */
-    clip-path: polygon(
-        50% 2%, 68% 6%, 82% 15%, 92% 30%, 95% 48%, 93% 65%, 
-        88% 80%, 78% 90%, 62% 96%, 55% 98%, 45% 98%, 38% 96%, 
-        22% 90%, 12% 80%, 7% 65%, 5% 48%, 8% 30%, 18% 15%, 32% 6%
-    );
+        0 10px 20px rgba(255, 152, 0, 0.3),
+        0 15px 30px rgba(255, 152, 0, 0.15),
+        inset 0 -10px 25px rgba(0,0,0,0.1),
+        inset 0 8px 20px rgba(255,255,255,0.3),
+        inset 0 0 30px rgba(255,255,255,0.1);
+    animation: petBounce 2.5s ease-in-out infinite;
 }
 
-/* 毛茸茸边缘高光效果 */
+/* 身体高光效果 */
 .pet-body::before {
     content: '';
     position: absolute;
-    top: -12px;
-    left: -12px;
-    right: -12px;
-    bottom: -12px;
+    top: 5px;
+    left: 10px;
+    right: 20px;
+    height: 35px;
+    background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 60%);
     border-radius: 50%;
-    animation: furShake 0.5s ease-in-out infinite;
-    background: 
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5) 0%, transparent 50%),
-        radial-gradient(circle at 70% 60%, rgba(255,255,255,0.35) 0%, transparent 40%),
-        radial-gradient(circle at 50% 80%, rgba(255,255,255,0.25) 0%, transparent 45%);
 }
 
 /* 身体底部阴影效果 */
 .pet-body::after {
     content: '';
     position: absolute;
-    bottom: -8px;
-    left: 15%;
-    right: 15%;
-    height: 15px;
-    background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, transparent 70%);
+    bottom: -10px;
+    left: 20%;
+    right: 20%;
+    height: 20px;
+    background: radial-gradient(ellipse at center, rgba(255, 152, 0, 0.25) 0%, transparent 70%);
     border-radius: 50%;
-    filter: blur(3px);
+    filter: blur(4px);
 }
 
 /* 尾巴 */
 .pet-tail {
     position: absolute;
-    right: -15px;
-    bottom: 25%;
-    width: 30px;
-    height: 15px;
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    right: -18px;
+    bottom: 30%;
+    width: 35px;
+    height: 18px;
+    background: linear-gradient(135deg, #ffca28 0%, #ff9800 100%);
     border-radius: 50% 80% 80% 50%;
-    transform: rotate(30deg);
-    animation: tailWag 1s ease-in-out infinite;
-}
-
-.pet-tail::before {
-    content: '';
-    position: absolute;
-    top: -3px;
-    left: -5px;
-    right: -3px;
-    bottom: -3px;
-    background: 
-        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 4px, transparent 4px),
-        radial-gradient(circle at 60% 70%, rgba(255,255,255,0.2) 3px, transparent 3px);
-    border-radius: inherit;
+    transform: rotate(35deg);
+    animation: tailWag 0.8s ease-in-out infinite;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
 }
 
 @keyframes tailWag {
-    0%, 100% { transform: rotate(30deg) scaleX(1); }
-    50% { transform: rotate(45deg) scaleX(1.1); }
+    0%, 100% { transform: rotate(35deg) scaleX(1); }
+    50% { transform: rotate(50deg) scaleX(1.15); }
 }
 
 /* 前爪 */
 .pet-paw-front-left,
 .pet-paw-front-right {
     position: absolute;
-    bottom: 10px;
-    width: 18px;
-    height: 12px;
-    background: linear-gradient(to bottom, #fcd34d 0%, #f59e0b 100%);
+    bottom: 8px;
+    width: 20px;
+    height: 14px;
+    background: linear-gradient(to bottom, #ffe082 0%, #ffca28 100%);
     border-radius: 50% 50% 45% 45%;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 
+        inset 0 3px 6px rgba(255,255,255,0.4),
+        0 2px 4px rgba(0,0,0,0.1);
 }
 
 .pet-paw-front-left {
-    left: 12px;
+    left: 10px;
 }
 
 .pet-paw-front-right {
-    right: 12px;
+    right: 10px;
 }
 
-.pet-paw-front-left::before,
-.pet-paw-front-right::before {
+/* 肉垫 */
+.pet-paw-front-left::after,
+.pet-paw-front-right::after {
     content: '';
     position: absolute;
-    bottom: -3px;
-    left: 2px;
-    right: 2px;
-    height: 5px;
-    background: linear-gradient(to bottom, #d97706 0%, #b45309 100%);
-    border-radius: 0 0 50% 50%;
-}
-
-/* 外层长毛效果 */
-.pet-fur-outer {
-    position: absolute;
-    top: -25px;
-    left: -25px;
-    right: -25px;
-    bottom: -25px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 4;
-    animation: furFloat 3s ease-in-out infinite;
-}
-
-.pet-fur-outer::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-image: 
-        /* 顶部长毛 */
-        radial-gradient(ellipse at 50% -10%, rgba(253,205,77,0.85) 15%, rgba(251,191,36,0.6) 25%, transparent 45%),
-        radial-gradient(ellipse at 35% -8%, rgba(253,205,77,0.8) 12%, rgba(251,191,36,0.5) 22%, transparent 40%),
-        radial-gradient(ellipse at 65% -8%, rgba(253,205,77,0.8) 12%, rgba(251,191,36,0.5) 22%, transparent 40%),
-        radial-gradient(ellipse at 20% -5%, rgba(251,191,36,0.7) 10%, rgba(245,158,11,0.4) 20%, transparent 35%),
-        radial-gradient(ellipse at 80% -5%, rgba(251,191,36,0.7) 10%, rgba(245,158,11,0.4) 20%, transparent 35%),
-        /* 左侧长毛 */
-        radial-gradient(ellipse at -10% 50%, rgba(253,205,77,0.85) 15%, rgba(251,191,36,0.6) 25%, transparent 45%),
-        radial-gradient(ellipse at -8% 35%, rgba(253,205,77,0.8) 12%, rgba(251,191,36,0.5) 22%, transparent 40%),
-        radial-gradient(ellipse at -8% 65%, rgba(253,205,77,0.8) 12%, rgba(251,191,36,0.5) 22%, transparent 40%),
-        radial-gradient(ellipse at -5% 20%, rgba(251,191,36,0.7) 10%, rgba(245,158,11,0.4) 20%, transparent 35%),
-        radial-gradient(ellipse at -5% 80%, rgba(251,191,36,0.7) 10%, rgba(245,158,11,0.4) 20%, transparent 35%),
-        /* 右侧长毛 */
-        radial-gradient(ellipse at 110% 50%, rgba(253,205,77,0.85) 15%, rgba(251,191,36,0.6) 25%, transparent 45%),
-        radial-gradient(ellipse at 108% 35%, rgba(253,205,77,0.8) 12%, rgba(251,191,36,0.5) 22%, transparent 40%),
-        radial-gradient(ellipse at 108% 65%, rgba(253,205,77,0.8) 12%, rgba(251,191,36,0.5) 22%, transparent 40%),
-        radial-gradient(ellipse at 105% 20%, rgba(251,191,36,0.7) 10%, rgba(245,158,11,0.4) 20%, transparent 35%),
-        radial-gradient(ellipse at 105% 80%, rgba(251,191,36,0.7) 10%, rgba(245,158,11,0.4) 20%, transparent 35%),
-        /* 底部长毛 */
-        radial-gradient(ellipse at 50% 110%, rgba(245,158,11,0.85) 15%, rgba(217,119,6,0.6) 25%, transparent 45%),
-        radial-gradient(ellipse at 35% 108%, rgba(245,158,11,0.8) 12%, rgba(217,119,6,0.5) 22%, transparent 40%),
-        radial-gradient(ellipse at 65% 108%, rgba(245,158,11,0.8) 12%, rgba(217,119,6,0.5) 22%, transparent 40%),
-        /* 角落长毛 */
-        radial-gradient(ellipse at 8% 8%, rgba(253,205,77,0.7) 10%, rgba(251,191,36,0.4) 18%, transparent 30%),
-        radial-gradient(ellipse at 92% 8%, rgba(253,205,77,0.7) 10%, rgba(251,191,36,0.4) 18%, transparent 30%),
-        radial-gradient(ellipse at 8% 92%, rgba(245,158,11,0.7) 10%, rgba(217,119,6,0.4) 18%, transparent 30%),
-        radial-gradient(ellipse at 92% 92%, rgba(245,158,11,0.7) 10%, rgba(217,119,6,0.4) 18%, transparent 30%);
-}
-
-/* 中层绒毛效果 */
-.pet-fur-middle {
-    position: absolute;
-    top: -15px;
-    left: -15px;
-    right: -15px;
-    bottom: -15px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 3;
-    animation: furPulse 2s ease-in-out infinite;
-}
-
-.pet-fur-middle::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-image: 
-        radial-gradient(circle at 50% -5%, rgba(255,255,255,0.3) 8px, transparent 8px),
-        radial-gradient(circle at 30% -3%, rgba(255,255,255,0.25) 6px, transparent 6px),
-        radial-gradient(circle at 70% -3%, rgba(255,255,255,25) 6px, transparent 6px),
-        radial-gradient(circle at -5% 50%, rgba(255,255,255,0.3) 8px, transparent 8px),
-        radial-gradient(circle at -3% 30%, rgba(255,255,255,0.25) 6px, transparent 6px),
-        radial-gradient(circle at -3% 70%, rgba(255,255,255,0.25) 6px, transparent 6px),
-        radial-gradient(circle at 105% 50%, rgba(255,255,255,0.3) 8px, transparent 8px),
-        radial-gradient(circle at 103% 30%, rgba(255,255,255,0.25) 6px, transparent 6px),
-        radial-gradient(circle at 103% 70%, rgba(255,255,255,0.25) 6px, transparent 6px),
-        radial-gradient(circle at 50% 105%, rgba(245,158,11,0.3) 8px, transparent 8px),
-        radial-gradient(circle at 30% 103%, rgba(245,158,11,0.25) 6px, transparent 6px),
-        radial-gradient(circle at 70% 103%, rgba(245,158,11,0.25) 6px, transparent 6px);
-}
-
-/* 毛发刺效果 */
-.pet-fur-spikes {
-    position: absolute;
-    top: -18px;
-    left: -18px;
-    right: -18px;
-    bottom: -18px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 2;
-}
-
-.pet-fur-spikes::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-image: 
-        /* 细小毛发点 */
-        radial-gradient(circle at 20% 15%, rgba(255,255,255,0.2) 3px, transparent 3px),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.18) 3px, transparent 3px),
-        radial-gradient(circle at 15% 45%, rgba(255,255,255,0.15) 3px, transparent 3px),
-        radial-gradient(circle at 85% 50%, rgba(255,255,255,0.15) 3px, transparent 3px),
-        radial-gradient(circle at 25% 75%, rgba(255,255,255,0.18) 3px, transparent 3px),
-        radial-gradient(circle at 75% 80%, rgba(255,255,255,0.2) 3px, transparent 3px),
-        radial-gradient(circle at 45% 25%, rgba(255,255,255,0.12) 2px, transparent 2px),
-        radial-gradient(circle at 55% 65%, rgba(255,255,255,0.12) 2px, transparent 2px),
-        radial-gradient(circle at 35% 55%, rgba(255,255,255,0.1) 2px, transparent 2px),
-        radial-gradient(circle at 65% 40%, rgba(255,255,255,0.1) 2px, transparent 2px);
-    animation: furSpikeWiggle 1s ease-in-out infinite;
-}
-
-/* 毛发纹理层 */
-.pet-fur {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    overflow: hidden;
-    z-index: 2;
-}
-
-.pet-fur::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        radial-gradient(circle at 10% 20%, rgba(255,255,255,0.2) 2px, transparent 2px),
-        radial-gradient(circle at 25% 35%, rgba(255,255,255,0.15) 2px, transparent 2px),
-        radial-gradient(circle at 40% 25%, rgba(255,255,255,0.18) 2px, transparent 2px),
-        radial-gradient(circle at 55% 40%, rgba(255,255,255,0.12) 2px, transparent 2px),
-        radial-gradient(circle at 70% 30%, rgba(255,255,255,0.15) 2px, transparent 2px),
-        radial-gradient(circle at 85% 45%, rgba(255,255,255,0.1) 2px, transparent 2px),
-        radial-gradient(circle at 20% 55%, rgba(255,255,255,0.12) 2px, transparent 2px),
-        radial-gradient(circle at 35% 65%, rgba(255,255,255,0.1) 2px, transparent 2px),
-        radial-gradient(circle at 50% 55%, rgba(255,255,255,0.14) 2px, transparent 2px),
-        radial-gradient(circle at 65% 60%, rgba(255,255,255,0.11) 2px, transparent 2px),
-        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.13) 2px, transparent 2px),
-        radial-gradient(circle at 30% 75%, rgba(255,255,255,0.09) 2px, transparent 2px),
-        radial-gradient(circle at 70% 75%, rgba(255,255,255,0.1) 2px, transparent 2px),
-        radial-gradient(circle at 45% 80%, rgba(255,255,255,0.12) 2px, transparent 2px),
-        radial-gradient(circle at 60% 85%, rgba(255,255,255,0.08) 2px, transparent 2px);
-    background-size: 8px 8px;
-    animation: furWave 2s ease-in-out infinite;
-}
-.pet-face {
-    position: absolute;
-    top: 8px;
+    bottom: 2px;
     left: 50%;
     transform: translateX(-50%);
-    width: 55px;
-    height: 45px;
+    display: flex;
+    gap: 3px;
 }
+
+.pet-paw-front-left::after::before,
+.pet-paw-front-right::after::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: #ffab91;
+    border-radius: 50%;
+}
+
+/* 脸部区域 */
+.pet-face {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 50px;
+}
+
+/* 眼睛 */
 .pet-eye-left,
 .pet-eye-right {
     position: absolute;
-    top: 5px;
-    width: 12px;
-    height: 14px;
-    background: #1f2937;
+    top: 8px;
+    width: 14px;
+    height: 16px;
+    background: linear-gradient(to bottom, #2d3748 0%, #1a202c 100%);
     border-radius: 50%;
-    animation: blink 3s ease-in-out infinite;
+    animation: blink 4s ease-in-out infinite;
+    box-shadow: 
+        0 2px 4px rgba(0,0,0,0.2),
+        inset 0 2px 3px rgba(255,255,255,0.1);
 }
 .pet-eye-left {
-    left: 5px;
+    left: 6px;
 }
 .pet-eye-right {
-    right: 5px;
+    right: 6px;
 }
+
+/* 眼珠高光 */
 .pet-eye-left::after,
 .pet-eye-right::after {
     content: '';
     position: absolute;
-    top: 2px;
-    left: 3px;
-    width: 4px;
-    height: 4px;
+    top: 3px;
+    left: 4px;
+    width: 5px;
+    height: 5px;
     background: white;
     border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(255,255,255,0.8);
 }
-.pet-nose {
+
+/* 第二高光点 */
+.pet-eye-left::before,
+.pet-eye-right::before {
+    content: '';
     position: absolute;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 8px;
-    height: 6px;
-    background: #1f2937;
+    top: 5px;
+    left: 7px;
+    width: 2px;
+    height: 2px;
+    background: rgba(255,255,255,0.6);
     border-radius: 50%;
 }
-.pet-mouth {
+
+/* 鼻子 */
+.pet-nose {
     position: absolute;
-    top: 24px;
+    top: 22px;
     left: 50%;
     transform: translateX(-50%);
-    width: 20px;
-    height: 10px;
-    border: 3px solid #1f2937;
-    border-top: none;
-    border-radius: 0 0 20px 20px;
-    animation: smile 2s ease-in-out infinite;
+    width: 10px;
+    height: 7px;
+    background: linear-gradient(to bottom, #4a5568 0%, #2d3748 100%);
+    border-radius: 50% 50% 45% 45%;
+    box-shadow: 
+        inset 0 1px 2px rgba(255,255,255,0.2),
+        0 1px 3px rgba(0,0,0,0.2);
 }
+
+/* 嘴巴 */
+.pet-mouth {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 12px;
+    border: 3px solid #2d3748;
+    border-top: none;
+    border-radius: 0 0 25px 25px;
+    animation: smile 2.5s ease-in-out infinite;
+}
+
+/* 腮红 */
+.pet-blush-left,
+.pet-blush-right {
+    position: absolute;
+    top: 18px;
+    width: 16px;
+    height: 10px;
+    background: radial-gradient(ellipse at center, rgba(255, 182, 193, 0.5) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.pet-blush-left {
+    left: -4px;
+}
+.pet-blush-right {
+    right: -4px;
+}
+
+/* 胡须 */
 .pet-whisker-left,
 .pet-whisker-right {
     position: absolute;
-    top: 20px;
-    width: 15px;
+    top: 24px;
+    width: 18px;
     height: 2px;
-    background: #1f2937;
+    background: #4a5568;
+    border-radius: 1px;
 }
 .pet-whisker-left {
-    left: -10px;
-    transform: rotate(-10deg);
+    left: -12px;
+    transform: rotate(-8deg);
 }
 .pet-whisker-right {
+    right: -12px;
+    transform: rotate(8deg);
+}
+
+/* 额外胡须 */
+.pet-whisker-left-2,
+.pet-whisker-right-2 {
+    position: absolute;
+    top: 30px;
+    width: 15px;
+    height: 2px;
+    background: #4a5568;
+    border-radius: 1px;
+}
+.pet-whisker-left-2 {
+    left: -10px;
+    transform: rotate(5deg);
+}
+.pet-whisker-right-2 {
     right: -10px;
-    transform: rotate(10deg);
+    transform: rotate(-5deg);
 }
 
 /* 猫耳朵 */
 .pet-cat .pet-ear-left,
 .pet-cat .pet-ear-right {
     position: absolute;
-    top: -10px;
-    width: 18px;
-    height: 22px;
-    background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 50%, #f59e0b 100%);
+    top: -12px;
+    width: 20px;
+    height: 24px;
+    background: linear-gradient(135deg, #ffe082 0%, #ffd54f 50%, #ffca28 100%);
     border-radius: 50% 50% 30% 30%;
     box-shadow: 
-        inset 0 2px 4px rgba(255,255,255,0.3),
-        inset 0 -2px 4px rgba(0,0,0,0.1);
+        inset 0 3px 6px rgba(255,255,255,0.4),
+        inset 0 -3px 6px rgba(0,0,0,0.08);
 }
 .pet-cat .pet-ear-left {
-    left: -2px;
-    transform: rotate(-18deg) skewX(-5deg);
+    left: -4px;
+    transform: rotate(-20deg) skewX(-5deg);
 }
 .pet-cat .pet-ear-right {
-    right: -2px;
-    transform: rotate(18deg) skewX(5deg);
+    right: -4px;
+    transform: rotate(20deg) skewX(5deg);
 }
 .pet-cat .pet-ear-left::after,
 .pet-cat .pet-ear-right::after {
     content: '';
     position: absolute;
-    top: 3px;
-    left: 3px;
-    right: 3px;
-    bottom: 3px;
-    background: linear-gradient(135deg, #fda4af 0%, #fb7185 100%);
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    background: linear-gradient(135deg, #ffcdd2 0%, #f48fb1 100%);
     border-radius: 50% 50% 30% 30%;
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
 /* 狗嘴巴 */
 .pet-dog .pet-mouth {
-    width: 15px;
-    height: 8px;
-    border-radius: 0 0 10px 10px;
+    width: 18px;
+    height: 10px;
+    border-radius: 0 0 15px 15px;
 }
 
 /* 兔子耳朵 */
 .pet-rabbit .pet-ear-left,
 .pet-rabbit .pet-ear-right {
     position: absolute;
-    top: -25px;
-    width: 12px;
-    height: 30px;
-    background: #fde047;
-    border-radius: 50%;
+    top: -30px;
+    width: 14px;
+    height: 35px;
+    background: linear-gradient(to bottom, #fff9c4 0%, #fff59d 50%, #ffe082 100%);
+    border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+    animation: earWiggle 1.5s ease-in-out infinite;
 }
 .pet-rabbit .pet-ear-left {
-    left: 8px;
-    transform: rotate(-10deg);
+    left: 10px;
+    transform: rotate(-8deg);
 }
 .pet-rabbit .pet-ear-right {
-    right: 8px;
-    transform: rotate(10deg);
+    right: 10px;
+    transform: rotate(8deg);
+}
+.pet-rabbit .pet-ear-left::after,
+.pet-rabbit .pet-ear-right::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    right: 2px;
+    bottom: 5px;
+    background: linear-gradient(to bottom, #ffcdd2 0%, #f48fb1 60%, transparent 100%);
+    border-radius: inherit;
+    opacity: 0.6;
+}
+
+@keyframes earWiggle {
+    0%, 100% { transform: rotate(-8deg); }
+    50% { transform: rotate(-3deg); }
+}
+
+.pet-rabbit .pet-ear-right {
+    animation: earWiggleRight 1.5s ease-in-out infinite;
+}
+
+@keyframes earWiggleRight {
+    0%, 100% { transform: rotate(8deg); }
+    50% { transform: rotate(3deg); }
 }
 
 /* 熊 */
 .pet-bear .pet-ear-left,
 .pet-bear .pet-ear-right {
     position: absolute;
-    top: -5px;
-    width: 18px;
-    height: 18px;
-    background: #92400e;
+    top: -8px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #8b4513 0%, #654321 50%, #3d2914 100%);
     border-radius: 50%;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
 }
 .pet-bear .pet-ear-left {
-    left: -5px;
+    left: -6px;
 }
 .pet-bear .pet-ear-right {
-    right: -5px;
+    right: -6px;
 }
 .pet-bear .pet-body {
-    background: linear-gradient(135deg, #92400e 0%, #78350f 50%, #451a03 100%);
+    background: 
+        radial-gradient(ellipse at 40% 20%, #deb887 0%, transparent 40%),
+        radial-gradient(ellipse at 30% 35%, #d2691e 0%, transparent 35%),
+        linear-gradient(135deg, #cd853f 0%, #8b4513 50%, #5d3a1a 100%);
+}
+.pet-bear .pet-tail {
+    background: linear-gradient(135deg, #8b4513 0%, #5d3a1a 100%);
+}
+.pet-bear .pet-paw-front-left,
+.pet-bear .pet-paw-front-right {
+    background: linear-gradient(to bottom, #deb887 0%, #cd853f 100%);
 }
 
 /* 熊猫 */
 .pet-panda .pet-eye-left,
 .pet-panda .pet-eye-right {
-    background: white;
-    border: 2px solid #1f2937;
+    background: #1a202c;
+    border-radius: 50%;
 }
 .pet-panda .pet-eye-left::before,
 .pet-panda .pet-eye-right::before {
@@ -829,84 +772,123 @@ html, body {
     position: absolute;
     top: 3px;
     left: 3px;
-    width: 6px;
-    height: 6px;
-    background: #1f2937;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+.pet-panda .pet-eye-left::after,
+.pet-panda .pet-eye-right::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 4px;
+    height: 4px;
+    background: #1a202c;
     border-radius: 50%;
 }
 .pet-panda .pet-ear-left,
 .pet-panda .pet-ear-right {
     position: absolute;
-    top: -8px;
-    width: 16px;
-    height: 16px;
-    background: #1f2937;
+    top: -10px;
+    width: 18px;
+    height: 18px;
+    background: #1a202c;
     border-radius: 50%;
 }
 .pet-panda .pet-ear-left {
-    left: -2px;
+    left: -4px;
 }
 .pet-panda .pet-ear-right {
-    right: -2px;
+    right: -4px;
 }
 .pet-panda .pet-body {
-    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
+    background: 
+        radial-gradient(ellipse at 40% 20%, #ffffff 0%, transparent 40%),
+        linear-gradient(135deg, #fafafa 0%, #e8e8e8 50%, #d0d0d0 100%);
+}
+.pet-panda .pet-tail {
+    background: #1a202c;
+}
+.pet-panda .pet-paw-front-left,
+.pet-panda .pet-paw-front-right {
+    background: #1a202c;
 }
 
 /* 仓鼠 */
 .pet-hamster .pet-ear-left,
 .pet-hamster .pet-ear-right {
     position: absolute;
-    top: -3px;
-    width: 14px;
-    height: 14px;
-    background: #fbbf24;
+    top: -5px;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
     border-radius: 50%;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
 }
 .pet-hamster .pet-ear-left {
-    left: 0;
+    left: 2px;
 }
 .pet-hamster .pet-ear-right {
-    right: 0;
+    right: 2px;
 }
 .pet-hamster .pet-body {
-    background: linear-gradient(135deg, #fde047 0%, #fbbf24 50%, #f59e0b 100%);
+    background: 
+        radial-gradient(ellipse at 40% 20%, #fff8e1 0%, transparent 40%),
+        radial-gradient(ellipse at 30% 35%, #ffecb3 0%, transparent 35%),
+        linear-gradient(135deg, #ffeaa7 0%, #ffd93d 50%, #ff9500 100%);
     border-radius: 50%;
+}
+.pet-hamster .pet-tail {
+    background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
+}
+.pet-hamster .pet-paw-front-left,
+.pet-hamster .pet-paw-front-right {
+    background: linear-gradient(to bottom, #ffeaa7 0%, #ffd93d 100%);
 }
 .pet-hamster .pet-whisker-left,
 .pet-hamster .pet-whisker-right {
-    top: 18px;
+    top: 22px;
 }
 
 /* 宠物选择器 */
 .pet-selector {
     display: flex;
-    gap: 6px;
-    padding: 6px;
-    background: rgba(255,255,255,0.9);
-    border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 25px;
+    box-shadow: 
+        0 4px 15px rgba(0,0,0,0.1),
+        0 2px 5px rgba(0,0,0,0.05);
+    backdrop-filter: blur(10px);
 }
 .pet-option {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 18px;
     cursor: pointer;
     border-radius: 50%;
-    transition: all 0.2s ease;
-    opacity: 0.6;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.55;
+    background: rgba(255,255,255,0.8);
 }
 .pet-option:hover {
     opacity: 1;
-    transform: scale(1.2);
+    transform: scale(1.25) translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 .pet-option.active {
     opacity: 1;
-    background: rgba(251, 191, 36, 0.3);
-    box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+    background: linear-gradient(135deg, #fff9c4 0%, #ffe082 100%);
+    box-shadow: 
+        0 0 12px rgba(255, 215, 0, 0.4),
+        0 4px 10px rgba(255, 215, 0, 0.2);
+    transform: scale(1.15);
 }
 
 /* 开灯状态 */
@@ -921,65 +903,6 @@ html, body {
     0%, 100% { transform: translateY(-50%) rotate(0deg); }
     25% { transform: translateY(-50%) rotate(-10deg); }
     75% { transform: translateY(-50%) rotate(10deg); }
-}
-
-@keyframes furShake {
-    0%, 100% { transform: scale(1); }
-    25% { transform: scale(1.03) rotate(-1deg); }
-    75% { transform: scale(1.03) rotate(1deg); }
-}
-
-@keyframes furWave {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.02) rotate(1.5deg); }
-}
-
-@keyframes furPuff {
-    0%, 100% { transform: scale(1); opacity: 0.9; }
-    30% { transform: scale(1.05); opacity: 1; }
-    60% { transform: scale(0.98); opacity: 0.85; }
-    80% { transform: scale(1.02); opacity: 0.95; }
-}
-
-@keyframes furSpikeWiggle {
-    0%, 100% { 
-        transform: scale(1) rotate(0deg);
-        opacity: 0.9;
-    }
-    50% { 
-        transform: scale(1.02) rotate(0.5deg);
-        opacity: 1;
-    }
-}
-
-@keyframes furFloat {
-    0%, 100% { 
-        transform: scale(1) rotate(0deg);
-        opacity: 0.85;
-    }
-    25% { 
-        transform: scale(1.03) rotate(-1deg);
-        opacity: 0.95;
-    }
-    50% { 
-        transform: scale(1) rotate(0deg);
-        opacity: 0.88;
-    }
-    75% { 
-        transform: scale(1.03) rotate(1deg);
-        opacity: 0.95;
-    }
-}
-
-@keyframes furPulse {
-    0%, 100% { 
-        transform: scale(1);
-        opacity: 0.8;
-    }
-    50% { 
-        transform: scale(1.02);
-        opacity: 0.95;
-    }
 }
 
 @keyframes petBounce {
@@ -2900,10 +2823,6 @@ html, body {
         <div class="pet-display">
             <div class="pet pet-cat active" id="currentPet">
                 <div class="pet-body">
-                    <div class="pet-fur-outer"></div>
-                    <div class="pet-fur-middle"></div>
-                    <div class="pet-fur-spikes"></div>
-                    <div class="pet-fur"></div>
                     <div class="pet-tail"></div>
                     <div class="pet-paw-front-left"></div>
                     <div class="pet-paw-front-right"></div>
