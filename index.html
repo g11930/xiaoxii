@@ -2034,6 +2034,18 @@ html, body {
     cursor: pointer;
     transition: all 0.2s;
 }
+.btn-clear {
+    background: #f56c6c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+.btn-clear:hover {
+    background: #e64242;
+}
 .btn-save:hover {
     opacity: 0.9;
 }
@@ -2761,6 +2773,7 @@ html, body {
             <div class="settings-modal-actions">
                 <button class="btn-cancel" id="settingsCancel">取消</button>
                 <button class="btn-save" id="settingsSave">保存</button>
+                <button class="btn-clear" id="clearStorage">清除存储数据</button>
             </div>
         </div>
     </div>
@@ -2808,7 +2821,7 @@ html, body {
     <button class="menu-btn" onclick="openHomePage()">首页</button>
     <button class="menu-btn" onclick="openPage('仓储','https://www.kdocs.cn/l/cnLDizeYKJ4K')">仓储</button>
     <button class="menu-btn" onclick="openPage('专线','https://www.kdocs.cn/l/cbWVlaTOmyEe')">专线</button>
-    <button class="menu-btn" onclick="openPage('速量','https://www.kdocs.cn/l/clEuM1RGmhai')">速量</button>
+    <button class="menu-btn" onclick="openPage('速量','https://www.kdocs.cn/l/ch5xdUJYMzbH')">速量</button>
     <button class="menu-btn" onclick="openPage('泡比','https://www.kdocs.cn/l/cjZZGlQnBtmm')">泡比</button>
     <button class="menu-btn" onclick="openPage('包数','https://www.kdocs.cn/l/cbJs05zRewYZ')">包数</button>
     <button class="menu-btn" onclick="openPage('单量','https://www.kdocs.cn/l/cdiNjSnC4i2E')">单量</button>
@@ -2862,7 +2875,7 @@ html, body {
             </div>
             <div style="display: flex; gap: 16px; align-items: center;">
                 <div class="live-clock" id="liveClock">⏱️ 加载中...</div>
-                <div class="date-badge">📅 23周一 · 24周二 · 25周三</div>
+                <div class="date-badge">    </div>
             </div>
         </div>
         <div class="func-grid">
@@ -3876,6 +3889,9 @@ const App = {
       '#06b6d4': { primary: '#06b6d4', secondary: '#0891b2' }
     };
 
+    // 绑定清除存储数据按钮
+    document.getElementById('clearStorage').onclick = clearAllStorage;
+
     // 加载系统设置
     function loadSettings() {
       const saved = localStorage.getItem('systemSettings');
@@ -4039,8 +4055,17 @@ const App = {
       if (userPanel) userPanel.classList.remove('show');
     }
 
-    // 关闭系统设置模态框
-    function closeSettingsModal() {
+    // 清除所有存储数据
+function clearAllStorage() {
+    if (confirm('确定要清除所有存储数据吗？此操作不可恢复！')) {
+        localStorage.clear();
+        alert('已清除所有存储数据，页面将刷新！');
+        location.reload();
+    }
+}
+
+// 关闭系统设置模态框
+function closeSettingsModal() {
       if (settingsModal) settingsModal.style.display = 'none';
     }
 
