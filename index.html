@@ -958,8 +958,7 @@ html, body {
 
 .page iframe {
     width: 100%;
-    height: calc(100vh - 100px);
-    min-height: 700px;
+    height: calc(100vh - 48px);
     border: none;
 }
 
@@ -1059,8 +1058,7 @@ html, body {
 }
 .page iframe {
     width: 100%;
-    height: calc(100vh - 100px);
-    min-height: 700px;
+    height: calc(100vh - 48px);
     border: none;
 }
 
@@ -2962,6 +2960,63 @@ html, body {
     <div class="tabs" id="tabs"></div>
     <div class="pages" id="pages"></div>
     
+    <div id="remove-empty-rows-page" class="page" style="display:none; padding:20px; height:100%; overflow-y:auto; background:#f0f2f5;">
+      <div style="max-width: 800px; margin: 0 auto;">
+        <h2 style="color:#1f2937; margin-bottom: 20px;">🗑️ 删除Excel空白行</h2>
+        
+        <div class="drop-area" id="drop-area-empty-rows">
+          <div class="drop-area-content">
+            <div class="drop-icon">📥</div>
+            <p>点击或拖拽上传Excel文件</p>
+            <p style="font-size:12px; color:#9ca3af;">支持 .xlsx 和 .xls 格式</p>
+          </div>
+        </div>
+        
+        <input type="file" id="file-input-empty-rows" accept=".xlsx,.xls" style="display:none;">
+        
+        <div class="preview-container" id="preview-empty-rows-container" style="display:none;">
+          <h3>文件预览</h3>
+          <div id="preview-empty-rows-content"></div>
+          <div style="margin-top: 15px; display:flex; gap:10px;">
+            <button class="btn-secondary" id="cancel-empty-rows">重新选择</button>
+            <button class="btn-success" id="process-empty-rows">删除空白行</button>
+          </div>
+        </div>
+        
+        <div class="config-panel">
+          <h3>处理选项</h3>
+          <div class="config-row">
+            <label>删除方式：</label>
+            <div class="radio-group">
+              <label><input type="radio" name="delete-mode" value="all-empty" checked> 删除完全空白的行</label>
+              <label><input type="radio" name="delete-mode" value="key-empty"> 删除关键字段空白的行</label>
+            </div>
+          </div>
+          <div class="config-row">
+            <label>关键字段列（逗号分隔）：</label>
+            <input type="text" id="key-columns" placeholder="如：A,C,E" value="A">
+          </div>
+          <div class="config-row">
+            <label>保留表头行数：</label>
+            <input type="number" id="header-rows" value="1" min="0">
+          </div>
+        </div>
+        
+        <div class="progress-modal" id="progress-modal-empty-rows">
+          <div class="progress-content">
+            <div id="progress-message-empty-rows">处理中...</div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill-empty-rows"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tip">
+          💡 提示：处理后的文件将自动下载，原文件不会被修改
+        </div>
+      </div>
+    </div>
+    
     <div id="home-page" class="page" style="display:none; padding:0; height:100%; overflow-y:auto; background:#f0f2f5;">
       <div class="dashboard">
         <div class="header-card">
@@ -2994,6 +3049,7 @@ html, body {
             <div class="func-card" id="missing-data"><span class="func-emoji">📉</span><span>漏数据</span></div>
             <div class="func-card" id="cost-table"><span class="func-emoji">💰</span><span>成本表</span></div>
             <div class="func-card" id="exception-register"><span class="func-emoji">📝</span><span>异常登记</span></div>
+            <div class="func-card" id="remove-empty-rows"><span class="func-emoji">🗑️</span><span>删除空白行</span></div>
             <div class="zip-subgroup" id="zip-subgroup" style="display: none;">
                 <div class="zip-subcard" id="zip-btn1">🇦🇺 澳洲地址查询</div>
                 <div class="zip-subcard" id="zip-btn2">🇫🇷 法国邮编查询</div>
@@ -5774,6 +5830,284 @@ App.initHomePage = function() {
   }
 };
 
+// ========== 删除空白行功能 ==========
+class EmptyRowRemover {
+  constructor() {
+    this.file = null;
+    this.workbook = null;
+    this.initEvents();
+  }
+
+  initEvents() {
+    const dropArea = document.getElementById('drop-area-empty-rows');
+    const fileInput = document.getElementById('file-input-empty-rows');
+    const removeEmptyRowsBtn = document.getElementById('remove-empty-rows');
+    
+    // 删除空白行按钮点击事件
+    if (removeEmptyRowsBtn) {
+      removeEmptyRowsBtn.addEventListener('click', () => {
+        this.showPage();
+      });
+    }
+
+    // 拖拽上传
+    if (dropArea) {
+      dropArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropArea.classList.add('dragover');
+      });
+
+      dropArea.addEventListener('dragleave', () => {
+        dropArea.classList.remove('dragover');
+      });
+
+      dropArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          this.handleFile(files[0]);
+        }
+      });
+
+      // 点击上传
+      dropArea.addEventListener('click', () => {
+        fileInput.click();
+      });
+    }
+
+    // 文件选择
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          this.handleFile(e.target.files[0]);
+        }
+      });
+    }
+
+    // 取消按钮
+    const cancelBtn = document.getElementById('cancel-empty-rows');
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', () => {
+        this.reset();
+      });
+    }
+
+    // 处理按钮
+    const processBtn = document.getElementById('process-empty-rows');
+    if (processBtn) {
+      processBtn.addEventListener('click', () => {
+        this.processFile();
+      });
+    }
+  }
+
+  showPage() {
+    // 隐藏所有页面
+    document.querySelectorAll('.page').forEach(page => {
+      page.style.display = 'none';
+    });
+    
+    // 显示删除空白行页面
+    const page = document.getElementById('remove-empty-rows-page');
+    if (page) {
+      page.style.display = 'block';
+    }
+    
+    // 隐藏tabs
+    const tabs = document.getElementById('tabs');
+    if (tabs) tabs.style.display = 'none';
+    
+    // 隐藏侧边栏
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) sidebar.style.display = 'none';
+  }
+
+  handleFile(file) {
+    const validExtensions = ['.xlsx', '.xls'];
+    const fileName = file.name.toLowerCase();
+    
+    if (!validExtensions.some(ext => fileName.endsWith(ext))) {
+      alert('请上传Excel文件（.xlsx或.xls格式）');
+      return;
+    }
+
+    this.file = file;
+    this.previewFile(file);
+  }
+
+  async previewFile(file) {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      this.workbook = new ExcelJS.Workbook();
+      await this.workbook.xlsx.load(arrayBuffer);
+
+      const worksheet = this.workbook.worksheets[0];
+      const previewContent = document.getElementById('preview-empty-rows-content');
+      const previewContainer = document.getElementById('preview-empty-rows-container');
+      const dropArea = document.getElementById('drop-area-empty-rows');
+
+      let html = '<table class="preview-table">';
+      html += '<thead><tr>';
+      worksheet.getRow(1).eachCell((cell, colNum) => {
+        html += `<th>${this.getCellValue(cell)}</th>`;
+      });
+      html += '</tr></thead><tbody>';
+
+      let rowCount = 0;
+      worksheet.eachRow((row, rowNum) => {
+        if (rowNum > 1 && rowCount < 10) {
+          html += '<tr>';
+          row.eachCell((cell) => {
+            html += `<td>${this.getCellValue(cell)}</td>`;
+          });
+          html += '</tr>';
+          rowCount++;
+        }
+      });
+      html += '</tbody></table>';
+      html += `<p style="margin-top:10px; color:#6b7280;">共 ${worksheet.rowCount} 行数据</p>`;
+
+      previewContent.innerHTML = html;
+      dropArea.style.display = 'none';
+      previewContainer.style.display = 'block';
+    } catch (error) {
+      console.error('预览文件失败', error);
+      alert('预览文件失败，请尝试其他文件');
+    }
+  }
+
+  getCellValue(cell) {
+    if (!cell) return '';
+    if (cell.value === null || cell.value === undefined) return '';
+    if (typeof cell.value === 'object' && cell.value.result !== undefined) {
+      return cell.value.result;
+    }
+    return String(cell.value).trim();
+  }
+
+  async processFile() {
+    if (!this.workbook) return;
+
+    const progressModal = document.getElementById('progress-modal-empty-rows');
+    const progressMessage = document.getElementById('progress-message-empty-rows');
+    const progressFill = document.getElementById('progress-fill-empty-rows');
+
+    progressModal.style.display = 'flex';
+    progressMessage.textContent = '正在处理...';
+    progressFill.style.width = '0%';
+
+    try {
+      const deleteMode = document.querySelector('input[name="delete-mode"]:checked').value;
+      const keyColumnsInput = document.getElementById('key-columns').value;
+      const headerRows = parseInt(document.getElementById('header-rows').value) || 1;
+      
+      const keyColumns = keyColumnsInput.split(',').map(c => c.trim().toUpperCase()).filter(c => c);
+
+      let totalDeleted = 0;
+
+      progressFill.style.width = '20%';
+      progressMessage.textContent = '处理工作表...';
+
+      this.workbook.worksheets.forEach((worksheet) => {
+        const rowsToDelete = [];
+        
+        worksheet.eachRow((row, rowNum) => {
+          // 跳过表头行
+          if (rowNum <= headerRows) return;
+
+          let isEmpty = false;
+
+          if (deleteMode === 'all-empty') {
+            // 删除完全空白的行
+            isEmpty = row.cellCount === 0 || row.eachCell((cell) => {
+              return this.getCellValue(cell) === '';
+            });
+          } else {
+            // 删除关键字段空白的行
+            if (keyColumns.length > 0) {
+              isEmpty = keyColumns.some(col => {
+                const colIndex = this.columnLetterToIndex(col);
+                const cell = row.getCell(colIndex);
+                return this.getCellValue(cell) === '';
+              });
+            }
+          }
+
+          if (isEmpty) {
+            rowsToDelete.push(rowNum);
+          }
+        });
+
+        // 从后往前删除
+        for (let i = rowsToDelete.length - 1; i >= 0; i--) {
+          worksheet.spliceRows(rowsToDelete[i], 1);
+        }
+
+        totalDeleted += rowsToDelete.length;
+      });
+
+      progressFill.style.width = '70%';
+      progressMessage.textContent = '生成文件...';
+
+      const buffer = await this.workbook.xlsx.writeBuffer();
+
+      progressFill.style.width = '90%';
+      progressMessage.textContent = '准备下载...';
+
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const fileName = this.file.name.replace(/\.[^/.]+$/, '') + '_已清理.xlsx';
+      
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      link.click();
+
+      progressFill.style.width = '100%';
+      progressMessage.textContent = '完成！';
+
+      setTimeout(() => {
+        progressModal.style.display = 'none';
+        alert(`成功删除 ${totalDeleted} 行空白数据！`);
+        this.reset();
+      }, 500);
+
+    } catch (error) {
+      console.error('处理文件失败', error);
+      progressModal.style.display = 'none';
+      alert(`处理失败: ${error.message}`);
+    }
+  }
+
+  columnLetterToIndex(letter) {
+    let result = 0;
+    for (let i = 0; i < letter.length; i++) {
+      result = result * 26 + (letter.charCodeAt(i) - 'A'.charCodeAt(0) + 1);
+    }
+    return result;
+  }
+
+  reset() {
+    const previewContainer = document.getElementById('preview-empty-rows-container');
+    const dropArea = document.getElementById('drop-area-empty-rows');
+    const fileInput = document.getElementById('file-input-empty-rows');
+
+    this.file = null;
+    this.workbook = null;
+    
+    previewContainer.style.display = 'none';
+    dropArea.style.display = 'block';
+    
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+}
+
+// 初始化删除空白行功能
+document.addEventListener('DOMContentLoaded', () => {
+  new EmptyRowRemover();
+});
 
 // ========== 添加功能相关代码 ==========
 let customFunctions = [];
