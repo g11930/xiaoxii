@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -948,11 +948,19 @@ html, body {
     opacity: 0;
     transform: translateX(100%);
     transition: all 0.3s ease-out;
+    overflow: hidden;
 }
 
 .page.active {
     opacity: 1;
     transform: translateX(0);
+}
+
+.page iframe {
+    width: 100%;
+    height: calc(100vh - 100px);
+    min-height: 700px;
+    border: none;
 }
 
 /* 淡入动画 */
@@ -1044,13 +1052,15 @@ html, body {
 .page {
     height: 100%;
     display: none;
+    overflow: hidden;
 }
 .page.active {
     display: block;
 }
 .page iframe {
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 100px);
+    min-height: 700px;
     border: none;
 }
 
@@ -1221,8 +1231,9 @@ html, body {
     flex-direction: column;
     gap: 28px;
     padding: 30px 24px;
-    max-width: 1400px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 .header-card {
     background: white;
