@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
@@ -3080,6 +3080,11 @@ html, body {
                       <button class="illustration-btn clear-btn" id="clearImagesBtn" style="margin-top: 8px;">清空图片</button>
                       <input type="file" id="fileInput2" accept="image/*" multiple style="display: none;">
                   </div>
+                  <div id="image-list-container" style="max-height: 150px; overflow-y: auto; margin: 10px 0; border: 1px solid #eee; border-radius: 8px; padding: 5px;">
+                    <div id="image-list" style="min-height: 40px;">
+                      <div style="text-align: center; color: #999; padding: 10px;">暂无图片，添加后可设置位置</div>
+                    </div>
+                  </div>
                   <div id="preview-container">
                       <div class="preview-header">
                           <div class="preview-title">表格预览（ ）</div>
@@ -3096,7 +3101,7 @@ html, body {
                           <label class="radio-item"><input type="radio" name="insertMode" value="float"> 浮于单元格</label>
                       </div>
                   </div>
-                  <div class="section"><div class="section-title">起始单元格</div><input type="text" id="startCell" value="A1" placeholder="如: A1"></div>
+                  <div class="section"><div class="section-title">起始单元格</div><input type="text" id="startCell" value="C1" placeholder="如: A1"></div>
                   <div class="section"><div class="section-title">排列方向</div>
                       <div class="radio-group">
                           <label class="radio-item"><input type="radio" name="layout" value="vertical"> 按列竖排</label>
@@ -3126,6 +3131,7 @@ html, body {
                           <label class="radio-item"><input type="radio" name="addName" value="above"> 图片上方（单独行）</label>
                       </div>
                   </div>
+                  <div class="section"><div class="section-title">导出文件名</div><input type="text" id="exportFileName" value="LOT复测" placeholder="输入导出的文件名"></div>
                   <div class="btn-group">
                       <button class="start-btn" id="startInsert">开始插入</button>
                       <button class="export-btn" id="exportExcelBtn">导出Excel</button>
@@ -3148,65 +3154,69 @@ html, body {
     <div id="illustration-page" style="display:none; padding:20px; overflow-y:auto; height:100%;">
       <h2 style="margin-bottom:20px; color:#333;">图片批量插入Excel工具</h2>
       
-      <div class="drop-area" id="dropArea">
+      <div class="drop-area" id="dropAreaPage">
         <div class="drop-area-content">
           <div class="drop-icon">📁</div>
           <div>点击或拖拽图片文件到此处</div>
           <div style="font-size:12px; color:#666; margin-top:10px;">支持 JPG、PNG、GIF 等图片格式</div>
         </div>
-        <input type="file" id="fileInput" multiple accept="image/*" style="display:none;">
+        <input type="file" id="fileInputPage" multiple accept="image/*" style="display:none;">
       </div>
 
       <div class="config-panel">
         <h3>插入配置</h3>
         <div class="config-row">
           <label>起始单元格:</label>
-          <input type="text" id="startCell" value="A1" placeholder="如: A1">
+          <input type="text" id="startCellPage" value="C1" placeholder="如: A1">
         </div>
         <div class="config-row">
           <label>排列方式:</label>
           <div class="radio-group">
-            <label><input type="radio" name="layout" value="horizontal" checked> 按行横排</label>
-            <label><input type="radio" name="layout" value="vertical"> 按列竖排</label>
+            <label><input type="radio" name="layoutPage" value="horizontal" checked> 按行横排</label>
+            <label><input type="radio" name="layoutPage" value="vertical"> 按列竖排</label>
           </div>
         </div>
         <div class="config-row">
           <label>每行/列数量:</label>
-          <input type="number" id="perRow" value="4" min="1" max="10">
+          <input type="number" id="perRowPage" value="4" min="1" max="10">
         </div>
         <div class="config-row">
           <label>图片名显示:</label>
           <div class="radio-group">
-            <label><input type="radio" name="addName" value="none" checked> 不显示</label>
-            <label><input type="radio" name="addName" value="above"> 上方</label>
-            <label><input type="radio" name="addName" value="below"> 下方</label>
+            <label><input type="radio" name="addNamePage" value="none" checked> 不显示</label>
+            <label><input type="radio" name="addNamePage" value="above"> 上方</label>
+            <label><input type="radio" name="addNamePage" value="below"> 下方</label>
           </div>
         </div>
         <div class="config-row">
           <label>单元格宽度:</label>
-          <input type="number" id="cellWidth" value="3" min="1" max="20">
-          <select id="unitSelect">
+          <input type="number" id="cellWidthPage" value="3" min="1" max="20">
+          <select id="unitSelectPage">
             <option value="cm">厘米(cm)</option>
             <option value="px">像素(px)</option>
           </select>
         </div>
         <div class="config-row">
           <label>单元格高度:</label>
-          <input type="number" id="cellHeight" value="3" min="1" max="20">
+          <input type="number" id="cellHeightPage" value="3" min="1" max="20">
+        </div>
+        <div class="config-row">
+          <label>导出文件名:</label>
+          <input type="text" id="exportFileNamePage" value="LOT复测" placeholder="输入导出的文件名">
         </div>
       </div>
 
       <div class="preview-container">
         <h3>预览</h3>
-        <div id="preview-content">
+        <div id="preview-content-page">
           <div style="text-align:center; color:#999; padding:40px;">请先选择图片文件</div>
         </div>
       </div>
 
       <div style="margin:20px 0;">
-        <button class="btn-primary" id="startInsert">开始插入</button>
-        <button class="btn-secondary" id="refreshPreviewBtn">刷新预览</button>
-        <button class="btn-success" id="exportExcelBtn">导出Excel</button>
+        <button class="btn-primary" id="startInsertPage">开始插入</button>
+        <button class="btn-secondary" id="refreshPreviewBtnPage">刷新预览</button>
+        <button class="btn-success" id="exportExcelBtnPage">导出Excel</button>
       </div>
     </div>
   </div>
@@ -4435,32 +4445,72 @@ function closeSettingsModal() {
   },
 
   initIllustrationFunction() {
-    const dropArea = document.getElementById('dropArea');
-    const fileInput = document.getElementById('fileInput');
-    const startInsertBtn = document.getElementById('startInsert');
-    const refreshPreviewBtn = document.getElementById('refreshPreviewBtn');
-    const exportExcelBtn = document.getElementById('exportExcelBtn');
-    const unitSelect = document.getElementById('unitSelect');
+    this._initDropArea('dropArea2', 'fileInput2');
+    this._initDropArea('dropAreaPage', 'fileInputPage');
+    
+    this._initExportFileName();
 
-    if (dropArea) {
-      dropArea.addEventListener('click', () => fileInput?.click());
-      
-      dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropArea.classList.add('dragover');
-      });
-      
-      dropArea.addEventListener('dragleave', () => {
-        dropArea.classList.remove('dragover');
-      });
-      
-      dropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropArea.classList.remove('dragover');
-        const files = Array.from(e.dataTransfer?.files || []);
-        this.handleFiles(files);
-      });
-    }
+    this._bindClick('addImagesBtn', () => document.getElementById('fileInput2')?.click());
+    this._bindClick('clearImagesBtn', () => {
+      this.selectedFiles = [];
+      this.imageBase64List = [];
+      const previewContent = document.getElementById('preview-content');
+      if (previewContent) {
+        previewContent.innerHTML = '<div class="no-preview">暂无预览内容<br>请添加图片并点击「开始插入」生成预览</div>';
+      }
+      const stats = document.getElementById('preview-stats');
+      if (stats) stats.textContent = '已选择：0 张图片';
+      const imageList = document.getElementById('image-list');
+      if (imageList) {
+        imageList.innerHTML = '<div style="text-align: center; color: #999; padding: 10px;">暂无图片，添加后可设置位置</div>';
+      }
+    });
+
+    this._bindClick('startInsert', () => this.generatePreview('modal'));
+    this._bindClick('refreshPreviewBtn', () => this.generatePreview('modal'));
+    this._bindClick('exportExcelBtn', () => this.exportToExcelWithProgress());
+
+    this._bindClick('startInsertPage', () => this.generatePreview('page'));
+    this._bindClick('refreshPreviewBtnPage', () => this.generatePreview('page'));
+    this._bindClick('exportExcelBtnPage', () => this.exportToExcelWithProgress());
+
+    this._bindChange('unitSelectPage', (e) => { this.currentUnit = e.target.value; });
+
+    this._bindClick('unit-cm', () => {
+      this.currentUnit = 'cm';
+      const cmBtn = document.getElementById('unit-cm');
+      const pxBtn = document.getElementById('unit-px');
+      if (cmBtn) cmBtn.classList.add('active');
+      if (pxBtn) pxBtn.classList.remove('active');
+    });
+    this._bindClick('unit-px', () => {
+      this.currentUnit = 'px';
+      const cmBtn = document.getElementById('unit-cm');
+      const pxBtn = document.getElementById('unit-px');
+      if (cmBtn) cmBtn.classList.remove('active');
+      if (pxBtn) pxBtn.classList.add('active');
+    });
+  },
+
+  _initDropArea(dropAreaId, fileInputId) {
+    const dropArea = document.getElementById(dropAreaId);
+    const fileInput = document.getElementById(fileInputId);
+    if (!dropArea) return;
+
+    dropArea.addEventListener('click', () => fileInput?.click());
+    dropArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropArea.classList.add('dragover');
+    });
+    dropArea.addEventListener('dragleave', () => {
+      dropArea.classList.remove('dragover');
+    });
+    dropArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropArea.classList.remove('dragover');
+      const files = Array.from(e.dataTransfer?.files || []);
+      this.handleFiles(files);
+    });
 
     if (fileInput) {
       fileInput.addEventListener('change', (e) => {
@@ -4468,24 +4518,48 @@ function closeSettingsModal() {
         this.handleFiles(files);
       });
     }
+  },
 
-    if (startInsertBtn) {
-      startInsertBtn.addEventListener('click', () => this.generatePreview());
-    }
+  _bindClick(id, handler) {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', handler);
+  },
 
-    if (refreshPreviewBtn) {
-      refreshPreviewBtn.addEventListener('click', () => this.generatePreview());
-    }
+  _bindChange(id, handler) {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', handler);
+  },
 
-    if (exportExcelBtn) {
-      exportExcelBtn.addEventListener('click', () => this.exportToExcelWithProgress());
-    }
-
-    if (unitSelect) {
-      unitSelect.addEventListener('change', (e) => {
-        this.currentUnit = e.target.value;
-      });
-    }
+  _initExportFileName() {
+    const updateFileName = () => {
+      const now = new Date();
+      const month = now.getMonth() + 1;
+      const day = now.getDate();
+      const dateStr = `${month}.${day}`;
+      
+      const fileNameModal = document.getElementById('exportFileName');
+      const fileNamePage = document.getElementById('exportFileNamePage');
+      
+      if (fileNameModal) {
+        const currentValue = fileNameModal.value;
+        if (!currentValue || currentValue === 'LOT复测') {
+          fileNameModal.value = `${dateStr}LOT复测`;
+        } else if (!currentValue.match(/^\d+\.\d+/)) {
+          fileNameModal.value = `${dateStr}${currentValue}`;
+        }
+      }
+      
+      if (fileNamePage) {
+        const currentValue = fileNamePage.value;
+        if (!currentValue || currentValue === 'LOT复测') {
+          fileNamePage.value = `${dateStr}LOT复测`;
+        } else if (!currentValue.match(/^\d+\.\d+/)) {
+          fileNamePage.value = `${dateStr}${currentValue}`;
+        }
+      }
+    };
+    
+    updateFileName();
   },
 
   handleFiles(files) {
@@ -4502,48 +4576,117 @@ function closeSettingsModal() {
   async loadImages() {
     this.imageBase64List = [];
     
-    for (const file of this.selectedFiles) {
+    const illustrationModal = document.getElementById('illustration-modal');
+    const context = (illustrationModal && illustrationModal.classList.contains('show')) ? 'modal' : 'page';
+    const suffix = context === 'page' ? 'Page' : '';
+    const startCellValue = document.getElementById('startCell' + suffix)?.value.trim() || 'A1';
+    const startPos = this.parseCellAddress(startCellValue);
+    
+    for (let index = 0; index < this.selectedFiles.length; index++) {
+      const file = this.selectedFiles[index];
       const base64 = await this.fileToBase64(file);
+      const defaultCell = this.getCellAddress(startPos.row + index, startPos.col);
       this.imageBase64List.push({
         name: file.name,
         data: base64,
-        type: file.type
+        type: file.type,
+        cellAddress: defaultCell
       });
     }
     
-    this.generatePreview();
+    this.renderImageList();
+    this.generatePreview(context);
   },
 
-  generatePreview() {
+  renderImageList() {
+    const imageList = document.getElementById('image-list');
+    if (!imageList) return;
+    
+    if (this.imageBase64List.length === 0) {
+      imageList.innerHTML = '<div style="text-align: center; color: #999; padding: 10px;">暂无图片，添加后可设置位置</div>';
+      return;
+    }
+    
+    let html = '';
+    this.imageBase64List.forEach((imgData, index) => {
+      html += `
+        <div style="display: flex; align-items: center; padding: 5px; border-bottom: 1px solid #eee; gap: 10px;">
+          <span style="width: 24px; text-align: center; font-size: 12px; color: #666;">${index + 1}.</span>
+          <span style="flex: 1; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${imgData.name}</span>
+          <input type="text" 
+                 value="${imgData.cellAddress}" 
+                 placeholder="单元格"
+                 style="width: 60px; padding: 3px; font-size: 12px; text-align: center;"
+                 onchange="App.updateImageCellAddress(${index}, this.value)">
+          <button onclick="App.removeImage(${index})" 
+                  style="padding: 2px 6px; font-size: 12px; background: #f56c6c; color: white; border: none; border-radius: 4px; cursor: pointer;">删除</button>
+        </div>
+      `;
+    });
+    imageList.innerHTML = html;
+  },
+
+  updateImageCellAddress(index, address) {
+    if (this.imageBase64List[index]) {
+      this.imageBase64List[index].cellAddress = address.toUpperCase().trim() || this.getCellAddress(index, 0);
+    }
+  },
+
+  removeImage(index) {
+    this.imageBase64List.splice(index, 1);
+    this.selectedFiles.splice(index, 1);
+    
+    this.imageBase64List.forEach((imgData, i) => {
+      if (!imgData.cellAddress || imgData.cellAddress === this.getCellAddress(i + 1, 0)) {
+        imgData.cellAddress = this.getCellAddress(i, 0);
+      }
+    });
+    
+    this.renderImageList();
+    
+    const illustrationModal = document.getElementById('illustration-modal');
+    const context = (illustrationModal && illustrationModal.classList.contains('show')) ? 'modal' : 'page';
+    this.generatePreview(context);
+  },
+
+  generatePreview(context) {
+    context = context || 'modal';
     if (this.imageBase64List.length === 0) {
       alert('请先选择图片');
       return;
     }
 
     try {
-      const config = this.getCurrentConfig();
-      const cellSize = this.getCellSizeInPx();
-      const startPos = this.parseCellAddress(config.startCell);
-      const totalCells = Math.ceil(this.imageBase64List.length / config.perRow);
-      const rows = config.layout === 'horizontal' ? totalCells : config.perRow;
-      const cols = config.layout === 'horizontal' ? config.perRow : totalCells;
+      const config = this.getCurrentConfig(context);
+      const cellSize = this.getCellSizeInPx(context);
 
       const table = document.createElement('table');
-      let fileIndex = 0;
-      let currentRow = 0;
-      let currentCol = startPos.col;
+      table.style.borderCollapse = 'collapse';
+      table.style.border = '1px solid #ddd';
+      
+      const positions = this.imageBase64List.map((imgData, index) => {
+        const cellAddress = imgData.cellAddress || this.getCellAddress(index, 0);
+        const pos = this.parseCellAddress(cellAddress);
+        return { ...pos, imgData, index };
+      });
+      
+      const maxRow = Math.max(...positions.map(p => p.row)) + 3;
+      const maxCol = Math.max(...positions.map(p => p.col)) + 3;
 
-      for (let r = 0; r < rows; r++) {
+      for (let r = 0; r < maxRow; r++) {
         const tr = document.createElement('tr');
         
-        for (let c = 0; c < cols; c++) {
+        for (let c = 0; c < maxCol; c++) {
           const td = document.createElement('td');
           td.style.width = `${cellSize.width}px`;
           td.style.height = `${cellSize.height}px`;
           td.style.verticalAlign = 'top';
+          td.style.border = '1px solid #eee';
           
-          if (fileIndex < this.imageBase64List.length) {
-            const imgData = this.imageBase64List[fileIndex];
+          const found = positions.find(p => p.row === r && p.col === c);
+          
+          if (found) {
+            const imgData = found.imgData;
             const url = `data:${imgData.type};base64,${imgData.data}`;
             
             const cellContainer = document.createElement('div');
@@ -4579,48 +4722,50 @@ function closeSettingsModal() {
             }
             
             td.appendChild(cellContainer);
-            fileIndex++;
           } else {
-            td.style.backgroundColor = '#f8f8f8';
+            td.style.backgroundColor = '#fafafa';
             const emptyDiv = document.createElement('div');
-            emptyDiv.style.color = '#ccc';
-            emptyDiv.style.fontSize = '12px';
+            emptyDiv.style.color = '#bbb';
+            emptyDiv.style.fontSize = '11px';
             emptyDiv.style.display = 'flex';
             emptyDiv.style.alignItems = 'center';
             emptyDiv.style.justifyContent = 'center';
             emptyDiv.style.height = '100%';
-            const cellAddr = this.getCellAddress(currentRow + startPos.row, currentCol);
+            const cellAddr = this.getCellAddress(r, c);
             emptyDiv.textContent = cellAddr;
             td.appendChild(emptyDiv);
           }
           
           tr.appendChild(td);
-          currentCol++;
         }
         
         table.appendChild(tr);
-        currentRow++;
-        currentCol = startPos.col;
       }
 
-      const previewContent = document.getElementById('preview-content');
+      const previewId = context === 'page' ? 'preview-content-page' : 'preview-content';
+      const previewContent = document.getElementById(previewId);
       if (previewContent) {
         previewContent.innerHTML = '';
         previewContent.appendChild(table);
         
         const previewNote = document.createElement('div');
         previewNote.className = 'tip';
-        const size = this.getCellSizeInPx();
+        const size = this.getCellSizeInPx(context);
         const cmWidth = (size.width / this.CM_TO_PX).toFixed(2);
         const cmHeight = (size.height / this.CM_TO_PX).toFixed(2);
         
         previewNote.innerHTML = `
-          预览配置：${config.layout === 'horizontal' ? '按行横排' : '按列竖排'} |
-          每行${config.perRow}个 |
+          预览配置：自由布局 |
+          共 ${this.imageBase64List.length} 张图片 |
           单元格尺寸：${cmWidth}cm×${cmHeight}cm (${Math.round(size.width)}px×${Math.round(size.height)}px) |
           图片名：${config.addName === 'none' ? '不显示' : (config.addName === 'above' ? '上方显示' : '下方显示')}
         `;
         previewContent.appendChild(previewNote);
+      }
+
+      if (context === 'modal') {
+        const stats = document.getElementById('preview-stats');
+        if (stats) stats.textContent = `已选择：${this.imageBase64List.length} 张图片`;
       }
     } catch (error) {
       console.error('生成预览失败', error);
@@ -4628,18 +4773,21 @@ function closeSettingsModal() {
     }
   },
 
-  getCurrentConfig() {
+  getCurrentConfig(context) {
+    const suffix = context === 'page' ? 'Page' : '';
     return {
-      startCell: document.getElementById('startCell')?.value.trim() || 'A1',
-      layout: document.querySelector('input[name="layout"]:checked')?.value || 'horizontal',
-      perRow: parseInt(document.getElementById('perRow')?.value) || 4,
-      addName: document.querySelector('input[name="addName"]:checked')?.value || 'none'
+      startCell: document.getElementById('startCell' + suffix)?.value.trim() || 'A1',
+      layout: document.querySelector('input[name="layout' + suffix + '"]:checked')?.value || 'horizontal',
+      perRow: parseInt(document.getElementById('perRow' + suffix)?.value) || 4,
+      addName: document.querySelector('input[name="addName' + suffix + '"]:checked')?.value || 'none',
+      exportFileName: document.getElementById('exportFileName' + suffix)?.value.trim() || 'LOT复测'
     };
   },
 
-  getCellSizeInPx() {
-    const width = parseFloat(document.getElementById('cellWidth')?.value) || 3;
-    const height = parseFloat(document.getElementById('cellHeight')?.value) || 3;
+  getCellSizeInPx(context) {
+    const suffix = context === 'page' ? 'Page' : '';
+    const width = parseFloat(document.getElementById('cellWidth' + suffix)?.value) || 3;
+    const height = parseFloat(document.getElementById('cellHeight' + suffix)?.value) || 3;
     const unit = this.currentUnit;
     
     if (unit === 'cm') {
@@ -4711,19 +4859,23 @@ function closeSettingsModal() {
       return;
     }
 
+    const illustrationModal = document.getElementById('illustration-modal');
+    const context = (illustrationModal && illustrationModal.classList.contains('show')) ? 'modal' : 'page';
+
     const progressModal = document.getElementById('progress-modal');
     if (progressModal) progressModal.style.display = 'flex';
     this.updateProgress(0, '初始化Excel工作簿...');
 
     try {
-      const config = this.getCurrentConfig();
+      const config = this.getCurrentConfig(context);
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet('LOT复测');
       
       const perRow = config.perRow;
       const addName = config.addName;
       const layout = config.layout;
-      const cellSizePx = this.getCellSizeInPx();
+      const exportFileName = config.exportFileName || 'LOT复测';
+      const cellSizePx = this.getCellSizeInPx(context);
       const cellWidthCm = cellSizePx.width / this.CM_TO_PX;
       const cellHeightCm = cellSizePx.height / this.CM_TO_PX;
       const excelColWidth = Math.round(cellWidthCm * this.CM_TO_EXCEL_COL * 100) / 100;
@@ -4731,8 +4883,6 @@ function closeSettingsModal() {
       const nameRowHeight = 25;
       const startPos = this.parseCellAddress(config.startCell);
       
-      let currentRow = startPos.row + 1;
-      let currentCol = startPos.col + 1;
       const totalSteps = this.imageBase64List.length * 3;
       let currentStep = 0;
 
@@ -4742,17 +4892,20 @@ function closeSettingsModal() {
         currentStep++;
         this.updateProgress((currentStep / totalSteps) * 100, `处理图片 ${i+1}/${this.imageBase64List.length}`);
         
+        const cellAddress = imgData.cellAddress || config.startCell;
+        const pos = this.parseCellAddress(cellAddress);
+        const currentRow = pos.row + 1;
+        const currentCol = pos.col + 1;
+        
         worksheet.getColumn(currentCol).width = excelColWidth;
         worksheet.getRow(currentRow).height = excelRowHeight;
         
         if (addName === 'above') {
-          const nameCell = worksheet.getCell(currentRow, currentCol);
+          const nameCell = worksheet.getCell(currentRow - 1, currentCol);
           nameCell.value = imgData.name;
           nameCell.font = { size: 10 };
           nameCell.alignment = { horizontal: 'center', vertical: 'middle' };
-          worksheet.getRow(currentRow).height = nameRowHeight;
-          currentRow++;
-          worksheet.getRow(currentRow).height = excelRowHeight;
+          worksheet.getRow(currentRow - 1).height = nameRowHeight;
         }
         
         currentStep++;
@@ -4771,32 +4924,15 @@ function closeSettingsModal() {
         worksheet.addImage(imageId, imagePosition);
         
         if (addName === 'below') {
-          currentRow++;
-          const nameCell = worksheet.getCell(currentRow, currentCol);
+          const nameCell = worksheet.getCell(currentRow + 1, currentCol);
           nameCell.value = imgData.name;
           nameCell.font = { size: 10 };
           nameCell.alignment = { horizontal: 'center', vertical: 'middle' };
-          worksheet.getRow(currentRow).height = nameRowHeight;
+          worksheet.getRow(currentRow + 1).height = nameRowHeight;
         }
         
         currentStep++;
         this.updateProgress((currentStep / totalSteps) * 100, `排版完成 ${i+1}/${this.imageBase64List.length}`);
-        
-        if (layout === 'horizontal') {
-          currentCol++;
-          if ((i + 1) % perRow === 0) {
-            const moveDown = addName === 'above' || addName === 'below' ? 2 : 1;
-            currentRow += moveDown;
-            currentCol = startPos.col + 1;
-          }
-        } else {
-          const moveDown = addName === 'above' || addName === 'below' ? 2 : 1;
-          currentRow += moveDown;
-          if ((i + 1) % perRow === 0) {
-            currentCol++;
-            currentRow = startPos.row + 1;
-          }
-        }
       }
 
       this.updateProgress(90, '生成Excel文件...');
@@ -4806,11 +4942,11 @@ function closeSettingsModal() {
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       
       if (typeof saveAs !== 'undefined') {
-        saveAs(blob, `LOT复测_${cellWidthCm.toFixed(2)}x${cellHeightCm.toFixed(2)}cm.xlsx`);
+        saveAs(blob, `${exportFileName}.xlsx`);
       } else {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `LOT复测_${cellWidthCm.toFixed(2)}x${cellHeightCm.toFixed(2)}cm.xlsx`;
+        link.download = `${exportFileName}.xlsx`;
         link.click();
       }
       
@@ -5116,477 +5252,8 @@ App.initHomePage = function() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
-
-  // ========== 首页插图弹窗功能 ==========
-  const dropArea = document.getElementById('dropArea2');
-  const fileInput = document.getElementById('fileInput2');
-  const addImagesBtn = document.getElementById('addImagesBtn');
-  const clearImagesBtn = document.getElementById('clearImagesBtn');
-  const startInsertBtn = document.getElementById('startInsert');
-  const exportExcelBtn = document.getElementById('exportExcelBtn');
-  const refreshPreviewBtn = document.getElementById('refreshPreviewBtn');
-  const previewContent = document.getElementById('preview-content');
-  const previewStats = document.getElementById('preview-stats');
-  const unitCmBtn = document.getElementById('unit-cm');
-  const unitPxBtn = document.getElementById('unit-px');
-  const cellWidthInput = document.getElementById('cellWidth');
-  const cellHeightInput = document.getElementById('cellHeight');
-  const unitTip = document.getElementById('unit-tip');
-  const progressModal = document.getElementById('progress-modal');
-  const progressFill = document.getElementById('progress-fill');
-  const progressText = document.getElementById('progress-text');
-
-  let selectedFiles = [];
-  let imageBase64List = [];
-  let currentUnit = 'cm';
-  const CM_TO_PX = 28.35;
-  const CM_TO_EXCEL_COL = 3.78;
-  const CM_TO_EXCEL_ROW = 21.59;
-  const EXCEL_COORD_COEFF = 80;
-
-  if (unitCmBtn) {
-    unitCmBtn.addEventListener('click', () => {
-      currentUnit = 'cm';
-      unitCmBtn.classList.add('active');
-      if (unitPxBtn) unitPxBtn.classList.remove('active');
-      const widthPx = parseFloat(cellWidthInput.value);
-      const heightPx = parseFloat(cellHeightInput.value);
-      if (!isNaN(widthPx) && !isNaN(heightPx)) {
-        cellWidthInput.value = (widthPx / CM_TO_PX).toFixed(2);
-        cellHeightInput.value = (heightPx / CM_TO_PX).toFixed(2);
-      }
-      updateUnitTip();
-    });
-  }
-
-  if (unitPxBtn) {
-    unitPxBtn.addEventListener('click', () => {
-      currentUnit = 'px';
-      unitPxBtn.classList.add('active');
-      if (unitCmBtn) unitCmBtn.classList.remove('active');
-      const widthCm = parseFloat(cellWidthInput.value);
-      const heightCm = parseFloat(cellHeightInput.value);
-      if (!isNaN(widthCm) && !isNaN(heightCm)) {
-        cellWidthInput.value = Math.round(widthCm * CM_TO_PX);
-        cellHeightInput.value = Math.round(heightCm * CM_TO_PX);
-      }
-      updateUnitTip();
-    });
-  }
-
-  function updateUnitTip() {
-    let widthCm, heightCm, widthPx, heightPx;
-    if (currentUnit === 'cm') {
-      widthCm = parseFloat(cellWidthInput.value) || 4.12;
-      heightCm = parseFloat(cellHeightInput.value) || 4.74;
-      widthPx = Math.round(widthCm * CM_TO_PX * 10) / 10;
-      heightPx = Math.round(heightCm * CM_TO_PX * 10) / 10;
-    } else {
-      widthPx = parseFloat(cellWidthInput.value) || 116.8;
-      heightPx = parseFloat(cellHeightInput.value) || 134.4;
-      widthCm = Math.round((widthPx / CM_TO_PX) * 100) / 100;
-      heightCm = Math.round((heightPx / CM_TO_PX) * 100) / 100;
-    }
-    if (unitTip) unitTip.textContent = `当前：${widthCm}cm×${heightCm}cm ≈ ${widthPx}px×${heightPx}px`;
-  }
-
-  if (cellWidthInput) cellWidthInput.addEventListener('input', updateUnitTip);
-  if (cellHeightInput) cellHeightInput.addEventListener('input', updateUnitTip);
-
-  if (addImagesBtn) {
-    addImagesBtn.addEventListener('click', () => {
-      if (fileInput) {
-        fileInput.value = '';
-        fileInput.click();
-      }
-    });
-  }
-
-  if (clearImagesBtn) {
-    clearImagesBtn.addEventListener('click', () => {
-      selectedFiles = [];
-      imageBase64List = [];
-      updatePreviewStats();
-      if (previewContent) {
-        previewContent.innerHTML = `
-          <div class="no-preview">
-            暂无预览内容<br>请添加图片并点击「开始插入」生成预览
-          </div>
-        `;
-      }
-      alert('已清空所有选择的图片！');
-    });
-  }
-
-  if (fileInput) {
-    fileInput.addEventListener('change', async function(e) {
-      try {
-        const files = Array.from(this.files || []);
-        if (files.length === 0) return;
-        const imageFiles = files.filter(f => f.type && f.type.startsWith('image/'));
-        if (imageFiles.length === 0) {
-          alert('请选择有效的图片文件（jpg、png、gif等）！');
-          return;
-        }
-        const newFiles = [];
-        for (const file of imageFiles) {
-          const isDuplicate = selectedFiles.some(f => 
-            f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
-          );
-          if (!isDuplicate) {
-            selectedFiles.push(file);
-            newFiles.push(file);
-            const base64 = await fileToBase64(file);
-            imageBase64List.push({
-              name: file.name,
-              type: file.type,
-              data: base64
-            });
-          }
-        }
-        updatePreviewStats();
-        alert(`成功添加 ${newFiles.length} 张图片，当前共选择 ${selectedFiles.length} 张`);
-        generatePreview();
-      } catch (error) {
-        console.error('处理图片失败：', error);
-        alert('添加图片失败，请重试！');
-      }
-    });
-  }
-
-  if (dropArea) {
-    dropArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropArea.classList.add('dragover');
-    });
-
-    dropArea.addEventListener('dragleave', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      dropArea.classList.remove('dragover');
-    });
-
-    dropArea.addEventListener('drop', async (e) => {
-      try {
-        e.preventDefault();
-        e.stopPropagation();
-        dropArea.classList.remove('dragover');
-        const files = Array.from(e.dataTransfer.files || []);
-        if (files.length === 0) return;
-        const imageFiles = files.filter(f => f.type && f.type.startsWith('image/'));
-        if (imageFiles.length === 0) {
-          alert('请拖拽图片文件！');
-          return;
-        }
-        const newFiles = [];
-        for (const file of imageFiles) {
-          const isDuplicate = selectedFiles.some(f => 
-            f.name === file.name && f.size === file.size && f.lastModified === file.lastModified
-          );
-          if (!isDuplicate) {
-            selectedFiles.push(file);
-            newFiles.push(file);
-            const base64 = await fileToBase64(file);
-            imageBase64List.push({
-              name: file.name,
-              type: file.type,
-              data: base64
-            });
-          }
-        }
-        updatePreviewStats();
-        alert(`成功添加 ${newFiles.length} 张图片，当前共选择 ${selectedFiles.length} 张`);
-        generatePreview();
-      } catch (error) {
-        console.error('拖拽图片失败：', error);
-        alert('拖拽添加图片失败，请重试！');
-      }
-    });
-  }
-
-  if (startInsertBtn) startInsertBtn.addEventListener('click', generatePreview);
-  if (refreshPreviewBtn) refreshPreviewBtn.addEventListener('click', generatePreview);
-  if (exportExcelBtn) exportExcelBtn.addEventListener('click', exportToExcelWithProgress);
-
-  function updatePreviewStats() {
-    if (previewStats) previewStats.textContent = `已选择：${selectedFiles.length} 张图片`;
-  }
-
-  function getCellSizeInPx() {
-    let width, height;
-    if (currentUnit === 'cm') {
-      width = parseFloat(cellWidthInput.value) || 4.12;
-      height = parseFloat(cellHeightInput.value) || 4.74;
-      return { width: width * CM_TO_PX, height: height * CM_TO_PX };
-    } else {
-      width = parseFloat(cellWidthInput.value) || 116.8;
-      height = parseFloat(cellHeightInput.value) || 134.4;
-      return { width, height };
-    }
-  }
-
-  function generatePreview() {
-    if (selectedFiles.length === 0) {
-      alert('请先选择图片！');
-      return;
-    }
-    try {
-      const config = getCurrentConfig();
-      const table = document.createElement('table');
-      table.id = 'preview-table';
-      const perRow = config.perRow;
-      const totalImages = selectedFiles.length;
-      const totalRows = config.layout === 'horizontal' ? Math.ceil(totalImages / perRow) : perRow;
-      const totalCols = config.layout === 'horizontal' ? perRow : Math.ceil(totalImages / perRow);
-      const cellSize = getCellSizeInPx();
-      const cellWidth = cellSize.width;
-      const cellHeight = cellSize.height;
-      let fileIndex = 0;
-      const startPos = parseCellAddress(config.startCell);
-      let currentRow = startPos.row;
-      let currentCol = startPos.col;
-      for (let r = 0; r < totalRows; r++) {
-        const tr = document.createElement('tr');
-        const rowHeight = cellHeight + (config.addName !== 'none' ? 20 : 0);
-        tr.style.height = `${rowHeight}px`;
-        for (let c = 0; c < totalCols; c++) {
-          const td = document.createElement('td');
-          td.style.width = `${cellWidth}px`;
-          td.style.height = `${cellHeight}px`;
-          const cellAddr = getCellAddress(currentRow, currentCol);
-          td.setAttribute('data-cell', cellAddr);
-          if (fileIndex < totalImages) {
-            const file = selectedFiles[fileIndex];
-            const url = URL.createObjectURL(file);
-            const cellContainer = document.createElement('div');
-            cellContainer.style.display = 'flex';
-            cellContainer.style.flexDirection = 'column';
-            cellContainer.style.height = '100%';
-            if (config.addName === 'above') {
-              const nameDiv = document.createElement('div');
-              nameDiv.className = 'file-name-label';
-              nameDiv.textContent = file.name;
-              cellContainer.appendChild(nameDiv);
-            }
-            const imgWrapper = document.createElement('div');
-            imgWrapper.style.flex = 1;
-            imgWrapper.style.overflow = 'hidden';
-            const img = document.createElement('img');
-            img.src = url;
-            img.alt = file.name;
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
-            imgWrapper.appendChild(img);
-            cellContainer.appendChild(imgWrapper);
-            if (config.addName === 'below') {
-              const nameDiv = document.createElement('div');
-              nameDiv.className = 'file-name-label';
-              nameDiv.textContent = file.name;
-              cellContainer.appendChild(nameDiv);
-            }
-            td.appendChild(cellContainer);
-            fileIndex++;
-          } else {
-            td.style.backgroundColor = '#f8f8f8';
-            const emptyDiv = document.createElement('div');
-            emptyDiv.style.color = '#ccc';
-            emptyDiv.style.fontSize = '12px';
-            emptyDiv.style.display = 'flex';
-            emptyDiv.style.alignItems = 'center';
-            emptyDiv.style.justifyContent = 'center';
-            emptyDiv.style.height = '100%';
-            emptyDiv.textContent = cellAddr;
-            td.appendChild(emptyDiv);
-          }
-          tr.appendChild(td);
-          currentCol++;
-        }
-        table.appendChild(tr);
-        currentRow++;
-        currentCol = startPos.col;
-      }
-      if (previewContent) {
-        previewContent.innerHTML = '';
-        previewContent.appendChild(table);
-        const previewNote = document.createElement('div');
-        previewNote.className = 'tip';
-        const size = getCellSizeInPx();
-        const cmWidth = (size.width / CM_TO_PX).toFixed(2);
-        const cmHeight = (size.height / CM_TO_PX).toFixed(2);
-        previewNote.innerHTML = `
-          预览配置：${config.layout === 'horizontal' ? '按行横排' : '按列竖排'} | 
-          每行${config.perRow}张 | 
-          单元格尺寸${cmWidth}cm×${cmHeight}cm (${Math.round(size.width)}px×${Math.round(size.height)}px) | 
-          图片名：${config.addName === 'none' ? '不显示' : (config.addName === 'above' ? '上方显示' : '下方显示')}
-        `;
-        previewContent.appendChild(previewNote);
-      }
-    } catch (error) {
-      console.error('生成预览失败：', error);
-      alert('生成预览失败，请检查控制台！');
-    }
-  }
-
-  function getCurrentConfig() {
-    return {
-      insertMode: document.querySelector('input[name="insertMode"]:checked')?.value || 'embed',
-      startCell: document.getElementById('startCell')?.value.trim() || 'A1',
-      layout: document.querySelector('input[name="layout"]:checked')?.value || 'horizontal',
-      perRow: parseInt(document.getElementById('perRow')?.value) || 4,
-      addName: document.querySelector('input[name="addName"]:checked')?.value || 'none'
-    };
-  }
-
-  function parseCellAddress(address) {
-    address = address.toUpperCase().replace(/\s/g, '');
-    const colMatch = address.match(/[A-Z]+/);
-    const rowMatch = address.match(/\d+/);
-    let col = 0;
-    if (colMatch) {
-      const colStr = colMatch[0];
-      for (let i = 0; i < colStr.length; i++) {
-        col = col * 26 + (colStr.charCodeAt(i) - 65);
-      }
-    }
-    const row = rowMatch ? parseInt(rowMatch[0]) - 1 : 0;
-    return { row, col };
-  }
-
-  function getCellAddress(row, col) {
-    let colStr = '';
-    let c = col;
-    do {
-      colStr = String.fromCharCode(65 + (c % 26)) + colStr;
-      c = Math.floor(c / 26) - 1;
-    } while (c >= 0);
-    const rowStr = (row + 1).toString();
-    return colStr + rowStr;
-  }
-
-  function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const base64 = e.target.result.split(',')[1];
-          resolve(base64);
-        } catch (err) {
-          reject(err);
-        }
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-
-  function updateProgress(percent, text) {
-    if (progressFill) progressFill.style.width = `${percent}%`;
-    if (progressText) progressText.textContent = `${Math.round(percent)}% - ${text}`;
-  }
-
-  async function exportToExcelWithProgress() {
-    if (selectedFiles.length === 0 || imageBase64List.length === 0) {
-      alert('请先选择图片！');
-      return;
-    }
-    if (progressModal) progressModal.style.display = 'flex';
-    updateProgress(0, '初始化Excel工作簿...');
-    try {
-      const config = getCurrentConfig();
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet('LOT复测');
-      const perRow = config.perRow;
-      const addName = config.addName;
-      const layout = config.layout;
-      const cellSizePx = getCellSizeInPx();
-      const cellWidthCm = cellSizePx.width / CM_TO_PX;
-      const cellHeightCm = cellSizePx.height / CM_TO_PX;
-      const excelColWidth = Math.round(cellWidthCm * CM_TO_EXCEL_COL * 100) / 100;
-      const excelRowHeight = Math.round(cellHeightCm * CM_TO_EXCEL_ROW * 100) / 100;
-      const nameRowHeight = 25;
-      const startPos = parseCellAddress(config.startCell);
-      let currentRow = startPos.row + 1;
-      let currentCol = startPos.col + 1;
-      const totalSteps = imageBase64List.length * 3;
-      let currentStep = 0;
-      for (let i = 0; i < imageBase64List.length; i++) {
-        const imgData = imageBase64List[i];
-        currentStep++;
-        updateProgress((currentStep / totalSteps) * 100, `处理图片 ${i+1}/${imageBase64List.length}`);
-        worksheet.getColumn(currentCol).width = excelColWidth;
-        worksheet.getRow(currentRow).height = excelRowHeight;
-        if (addName === 'above') {
-          const nameCell = worksheet.getCell(currentRow, currentCol);
-          nameCell.value = imgData.name;
-          nameCell.font = { size: 10 };
-          nameCell.alignment = { horizontal: 'center', vertical: 'middle' };
-          worksheet.getRow(currentRow).height = nameRowHeight;
-          currentRow++;
-          worksheet.getRow(currentRow).height = excelRowHeight;
-        }
-        currentStep++;
-        updateProgress((currentStep / totalSteps) * 100, `插入图片 ${i+1}/${imageBase64List.length}`);
-        const imageId = workbook.addImage({
-          base64: imgData.data,
-          extension: imgData.type.split('/')[1] || 'png'
-        });
-        const imagePosition = {
-          tl: { col: currentCol - 1, row: currentRow - 1 },
-          br: { col: (currentCol - 1) + (cellSizePx.width / EXCEL_COORD_COEFF), row: (currentRow - 1) + (cellSizePx.height / EXCEL_COORD_COEFF) }
-        };
-        worksheet.addImage(imageId, imagePosition);
-        if (addName === 'below') {
-          currentRow++;
-          const nameCell = worksheet.getCell(currentRow, currentCol);
-          nameCell.value = imgData.name;
-          nameCell.font = { size: 10 };
-          nameCell.alignment = { horizontal: 'center', vertical: 'middle' };
-          worksheet.getRow(currentRow).height = nameRowHeight;
-        }
-        currentStep++;
-        updateProgress((currentStep / totalSteps) * 100, `排版完成 ${i+1}/${imageBase64List.length}`);
-        if (layout === 'horizontal') {
-          currentCol++;
-          if ((i + 1) % perRow === 0) {
-            const moveDown = addName === 'above' || addName === 'below' ? 2 : 1;
-            currentRow += moveDown;
-            currentCol = startPos.col + 1;
-          }
-        } else {
-          const moveDown = addName === 'above' || addName === 'below' ? 2 : 1;
-          currentRow += moveDown;
-          if ((i + 1) % perRow === 0) {
-            currentCol++;
-            currentRow = startPos.row + 1;
-          }
-        }
-      }
-      updateProgress(90, '生成Excel文件...');
-      const buffer = await workbook.xlsx.writeBuffer();
-      updateProgress(95, '准备下载...');
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      if (typeof saveAs !== 'undefined') {
-        saveAs(blob, `LOT复测`);
-      } else {
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `嵌入_${cellWidthCm.toFixed(2)}x${cellHeightCm.toFixed(2)}cm.xlsx`;
-        link.click();
-      }
-      updateProgress(100, '导出完成！');
-      setTimeout(() => {
-        if (progressModal) progressModal.style.display = 'none';
-        alert(`✅ 导出成功！\n共导出 ${selectedFiles.length} 张图片\n单元格尺寸：${cellWidthCm.toFixed(2)}cm × ${cellHeightCm.toFixed(2)}cm\n图片`);
-      }, 500);
-    } catch (error) {
-      console.error('导出Excel失败：', error);
-      if (progressModal) progressModal.style.display = 'none';
-      alert(`导出失败：${error.message}\n请查看控制台获取详细信息`);
-    }
-  }
 };
+
 
 // ========== 添加功能相关代码 ==========
 let customFunctions = [];
