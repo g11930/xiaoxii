@@ -937,6 +937,68 @@ html, body {
     background: #edf2f7;
     position: relative;
 }
+
+/* 页面切换动画 */
+.page {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease-out;
+}
+
+.page.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 淡入动画 */
+.animation-fade .page {
+    transform: none;
+    opacity: 0;
+}
+.animation-fade .page.active {
+    opacity: 1;
+}
+
+/* 滑动动画 */
+.animation-slide .page {
+    transform: translateX(100%);
+}
+.animation-slide .page.active {
+    transform: translateX(0);
+}
+
+/* 缩放动画 */
+.animation-scale .page {
+    transform: scale(0.8);
+}
+.animation-scale .page.active {
+    transform: scale(1);
+}
+
+/* 淡入缩放动画 */
+.animation-fade-scale .page {
+    transform: scale(0.9);
+    opacity: 0;
+}
+.animation-fade-scale .page.active {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* 翻转动画 */
+.animation-flip .page {
+    transform: rotateY(-90deg);
+    transform-origin: left;
+}
+.animation-flip .page.active {
+    transform: rotateY(0);
+}
+
 .tabs {
     display: flex;
     background: #fff;
@@ -1212,6 +1274,19 @@ html, body {
     align-items: center;
     gap: 8px;
     border: 1px solid #d9e6f7;
+}
+.home-main-btn {
+    background: linear-gradient(135deg, #4299e1, #63b3ed) !important;
+    color: white !important;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+    margin-bottom: 8px;
+}
+.home-main-btn:hover {
+    background: linear-gradient(135deg, #3182ce, #4299e1) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(66, 153, 225, 0.5);
 }
 .live-clock {
     background: #1d4e89;
@@ -2770,6 +2845,16 @@ html, body {
                     <option value="italic">斜体</option>
                 </select>
             </div>
+            <div class="form-row">
+                <label>页面切换动画</label>
+                <select id="settingsAnimation">
+                    <option value="slide">📊 滑动动画</option>
+                    <option value="fade">✨ 淡入动画</option>
+                    <option value="scale">🔍 缩放动画</option>
+                    <option value="fade-scale">🌟 淡入缩放</option>
+                    <option value="flip">🔄 翻转动画</option>
+                </select>
+            </div>
             <div class="settings-modal-actions">
                 <button class="btn-cancel" id="settingsCancel">取消</button>
                 <button class="btn-save" id="settingsSave">保存</button>
@@ -2818,7 +2903,7 @@ html, body {
 <div class="main" id="mainPage" style="display:none;">
   <div class="sidebar" id="sidebar">
     <img id="sidebarAvatarImg" src="" alt="头像" class="sidebar-avatar-img" />
-    <button class="menu-btn" onclick="openHomePage()">首页</button>
+    <button class="menu-btn home-main-btn" onclick="openHomePage()">🏠 首页</button>
     <button class="menu-btn" onclick="openPage('仓储','https://www.kdocs.cn/l/cnLDizeYKJ4K')">仓储</button>
     <button class="menu-btn" onclick="openPage('专线','https://www.kdocs.cn/l/cbWVlaTOmyEe')">专线</button>
     <button class="menu-btn" onclick="openPage('速量','https://www.kdocs.cn/l/ch5xdUJYMzbH')">速量</button>
@@ -2866,7 +2951,7 @@ html, body {
     <div class="tabs" id="tabs"></div>
     <div class="pages" id="pages"></div>
     
-    <div id="home-page" style="display:none; padding:0; height:100%; overflow-y:auto; background:#f0f2f5;">
+    <div id="home-page" class="page" style="display:none; padding:0; height:100%; overflow-y:auto; background:#f0f2f5;">
       <div class="dashboard">
         <div class="header-card">
             <div class="logo-area">
@@ -3192,7 +3277,7 @@ html, body {
       <button class="back-top" id="back-top">↑ 回到顶部</button>
     </div>
 
-    <div id="illustration-page" style="display:none; padding:20px; overflow-y:auto; height:100%;">
+    <div id="illustration-page" class="page" style="display:none; padding:20px; overflow-y:auto; height:100%;">
       <h2 style="margin-bottom:20px; color:#333;">图片批量插入Excel工具</h2>
       
       <div class="drop-area" id="dropAreaPage">
@@ -3665,7 +3750,7 @@ const App = {
 
   initMainApp() {
     this.tabs = JSON.parse(localStorage.getItem('savedTabs') || '[]');
-    this.activeId = localStorage.getItem('activeTab') || (this.tabs[0]?.id || null);
+    this.activeId = localStorage.getItem('activeTab') || this.tabs[0]?.id || 'home';
     
     this.initPages();
     this.renderTabs();
@@ -3961,6 +4046,7 @@ const App = {
         settingsColor.value = data.color || '#667eea';
         sidebarBtnColor.value = data.sidebarBtnColor || '#3c4658';
         textStyle.value = data.textStyle || 'normal';
+        settingsAnimation.value = data.animation || 'slide';
       } else {
         // 默认值
         settingsTheme.value = 'default';
@@ -3971,9 +4057,22 @@ const App = {
         settingsColor.value = '#667eea';
         sidebarBtnColor.value = '#3c4658';
         textStyle.value = 'normal';
+        settingsAnimation.value = 'slide';
       }
       // 更新预设颜色选中状态
       updateColorPresetSelection();
+    }
+
+    // 应用页面切换动画
+    function applyAnimation(animationType) {
+      const content = document.querySelector('.content');
+      if (!content) return;
+      
+      // 移除所有动画类
+      content.classList.remove('animation-fade', 'animation-slide', 'animation-scale', 'animation-fade-scale', 'animation-flip');
+      
+      // 添加选中的动画类
+      content.classList.add('animation-' + animationType);
     }
 
     // 更新预设颜色选中状态
@@ -4096,11 +4195,13 @@ const App = {
         defaultPage: settingsDefaultPage.value,
         color: settingsColor.value,
         sidebarBtnColor: sidebarBtnColor.value,
-        textStyle: textStyle.value
+        textStyle: textStyle.value,
+        animation: settingsAnimation.value
       };
       localStorage.setItem('systemSettings', JSON.stringify(data));
       applyThemeColor(settingsColor.value);
       applySidebarStyle(sidebarBtnColor.value, textStyle.value);
+      applyAnimation(settingsAnimation.value);
       closeSettingsModal();
     }
 
@@ -4174,6 +4275,10 @@ function closeSettingsModal() {
     const savedBtnColor = savedSettings ? JSON.parse(savedSettings).sidebarBtnColor : '#3c4658';
     const savedTextStyle = savedSettings ? JSON.parse(savedSettings).textStyle : 'normal';
     applySidebarStyle(savedBtnColor, savedTextStyle);
+    
+    // 初始化应用页面切换动画
+    const savedAnimation = savedSettings ? JSON.parse(savedSettings).animation : 'slide';
+    applyAnimation(savedAnimation);
 
     // 数据统计
     if (panelStatistics) {
@@ -4239,6 +4344,14 @@ function closeSettingsModal() {
     if (!tabsEl) return;
     
     tabsEl.innerHTML = '';
+
+    const homeTab = document.createElement('div');
+    homeTab.className = 'tab home-tab' + (this.activeId === 'home' ? ' active' : '');
+    homeTab.innerHTML = '🏠 首页';
+    homeTab.onclick = e => {
+      if (!e.target.classList.contains('close')) this.switchTab('home');
+    };
+    tabsEl.appendChild(homeTab);
 
     this.tabs.forEach(t => {
       const tab = document.createElement('div');
@@ -4424,39 +4537,53 @@ function closeSettingsModal() {
     });
     
     document.querySelectorAll('.tab').forEach(tab => {
-      if (tab.textContent.includes(this.tabs.find(t => t.id === id)?.name)) {
+      if (tab.textContent.includes(this.tabs.find(t => t.id === id)?.name) || (id === 'home' && tab.classList.contains('home-tab'))) {
         tab.classList.add('active');
       }
     });
 
     document.querySelectorAll('.page').forEach(page => {
+      page.classList.remove('active');
       page.style.display = 'none';
     });
     
     // 隐藏首页
     const homePage = document.getElementById('home-page');
     if (homePage) {
-      homePage.style.display = 'none';
+      if (id === 'home') {
+        homePage.style.display = 'block';
+        homePage.classList.add('active');
+      }
     }
     
     const illustrationPage = document.getElementById('illustration-page');
     if (illustrationPage) {
-      illustrationPage.style.display = id === 'illustration' ? 'block' : 'none';
+      if (id === 'illustration') {
+        illustrationPage.style.display = 'block';
+        illustrationPage.classList.add('active');
+      }
     }
     
     const chatPage = document.getElementById('chat-page');
     const networkSelectPage = document.getElementById('network-select-page');
     
     if (networkSelectPage) {
-      networkSelectPage.style.display = id === 'chat' ? 'block' : 'none';
+      if (id === 'chat') {
+        networkSelectPage.style.display = 'block';
+        networkSelectPage.classList.add('active');
+      }
     }
     
     if (chatPage) {
-      chatPage.style.display = id === 'chat' ? 'none' : 'none';
+      chatPage.style.display = 'none';
+      chatPage.classList.remove('active');
     }
     
     if (this.pageElements[id]) {
-      this.pageElements[id].style.display = id !== 'illustration' && id !== 'chat' ? 'block' : 'none';
+      if (id !== 'illustration' && id !== 'chat' && id !== 'home') {
+        this.pageElements[id].style.display = 'block';
+        this.pageElements[id].classList.add('active');
+      }
     }
   },
 
@@ -5377,6 +5504,7 @@ App.initHomePage = function() {
   renderCalendar();
 
   // ========== 功能按钮事件 ==========
+  const homeBtn = document.getElementById('homeBtn');
   const transOrderBtn = document.getElementById('trans-order');
   const warehouseBtn = document.getElementById('warehouse');
   const lineBtn = document.getElementById('line');
@@ -5409,6 +5537,13 @@ App.initHomePage = function() {
   const closeIllustration = document.getElementById('close-illustration');
   const zipBtn1 = document.getElementById('zip-btn1');
   const zipBtn2 = document.getElementById('zip-btn2');
+
+  // 首页按钮
+  if (homeBtn) {
+    homeBtn.addEventListener('click', () => {
+      openHomePage();
+    });
+  }
 
   // 转单
   if (transOrderBtn) {
