@@ -3204,6 +3204,12 @@ html, body {
           <label>导出文件名:</label>
           <input type="text" id="exportFileNamePage" value="LOT复测" placeholder="输入导出的文件名">
         </div>
+        <div class="config-row" style="justify-content: flex-start; gap: 10px; padding-top: 10px;">
+          <button class="btn-primary" id="startInsertPage">开始插入</button>
+          <button class="btn-secondary" id="refreshPreviewBtnPage">刷新预览</button>
+          <button class="btn-success" id="exportExcelBtnPage">导出Excel</button>
+          <button class="btn-danger" id="clearImagesBtnPage">清空图片</button>
+        </div>
       </div>
 
       <div class="preview-container">
@@ -3211,13 +3217,6 @@ html, body {
         <div id="preview-content-page">
           <div style="text-align:center; color:#999; padding:40px;">请先选择图片文件</div>
         </div>
-      </div>
-
-      <div style="margin:20px 0;">
-        <button class="btn-primary" id="startInsertPage">开始插入</button>
-        <button class="btn-secondary" id="refreshPreviewBtnPage">刷新预览</button>
-        <button class="btn-success" id="exportExcelBtnPage">导出Excel</button>
-        <button class="btn-danger" id="clearImagesBtnPage">清空图片</button>
       </div>
 
       <div style="margin-top:20px;">
@@ -4496,6 +4495,9 @@ function closeSettingsModal() {
     this._bindClick('startInsertPage', () => this.generatePreview('page'));
     this._bindClick('refreshPreviewBtnPage', () => this.generatePreview('page'));
     this._bindClick('exportExcelBtnPage', () => this.exportToExcelWithProgress());
+    
+    this._bindConfigChange('modal');
+    this._bindConfigChange('page');
 
     this._bindChange('unitSelectPage', (e) => { this.currentUnit = e.target.value; });
 
@@ -4551,6 +4553,34 @@ function closeSettingsModal() {
   _bindChange(id, handler) {
     const el = document.getElementById(id);
     if (el) el.addEventListener('change', handler);
+  },
+
+  _bindConfigChange(context) {
+    const suffix = context === 'page' ? 'Page' : '';
+    
+    const startCell = document.getElementById('startCell' + suffix);
+    const perRow = document.getElementById('perRow' + suffix);
+    const layoutRadios = document.querySelectorAll('input[name="layout' + suffix + '"]');
+    
+    const refresh = () => {
+      if (this.imageBase64List.length > 0) {
+        this.generatePreview(context);
+      }
+    };
+    
+    if (startCell) {
+      startCell.addEventListener('change', refresh);
+      startCell.addEventListener('keyup', refresh);
+    }
+    
+    if (perRow) {
+      perRow.addEventListener('change', refresh);
+      perRow.addEventListener('keyup', refresh);
+    }
+    
+    layoutRadios.forEach(radio => {
+      radio.addEventListener('change', refresh);
+    });
   },
 
   _initExportFileName() {
@@ -4729,6 +4759,8 @@ function closeSettingsModal() {
             cellContainer.style.height = '100%';
             cellContainer.style.display = 'flex';
             cellContainer.style.flexDirection = 'column';
+            cellContainer.style.cursor = 'pointer';
+            cellContainer.style.border = '2px solid transparent';
             
             if (config.addName === 'above') {
               const nameDiv = document.createElement('div');
@@ -4759,6 +4791,15 @@ function closeSettingsModal() {
             td.appendChild(cellContainer);
           } else {
             td.style.backgroundColor = '#fafafa';
+            td.style.cursor = 'pointer';
+            td.addEventListener('click', () => {
+              const suffix = context === 'page' ? 'Page' : '';
+              const startCellInput = document.getElementById('startCell' + suffix);
+              if (startCellInput) {
+                startCellInput.value = this.getCellAddress(r, c);
+                this.generatePreview(context);
+              }
+            });
             const emptyDiv = document.createElement('div');
             emptyDiv.style.color = '#bbb';
             emptyDiv.style.fontSize = '11px';
