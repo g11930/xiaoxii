@@ -3217,6 +3217,12 @@ html, body {
         <button class="btn-primary" id="startInsertPage">开始插入</button>
         <button class="btn-secondary" id="refreshPreviewBtnPage">刷新预览</button>
         <button class="btn-success" id="exportExcelBtnPage">导出Excel</button>
+        <button class="btn-danger" id="clearImagesBtnPage">清空图片</button>
+      </div>
+
+      <div style="margin-top:20px;">
+        <h3>图片列表（可修改位置）</h3>
+        <div id="image-list-page" style="min-height: 40px; border: 1px solid #eee; border-radius: 4px; padding: 5px;"></div>
       </div>
     </div>
   </div>
@@ -4464,6 +4470,23 @@ function closeSettingsModal() {
       if (imageList) {
         imageList.innerHTML = '<div style="text-align: center; color: #999; padding: 10px;">暂无图片，添加后可设置位置</div>';
       }
+      const imageListPage = document.getElementById('image-list-page');
+      if (imageListPage) {
+        imageListPage.innerHTML = '<div style="text-align: center; color: #999; padding: 10px;">暂无图片，添加后可设置位置</div>';
+      }
+    });
+
+    this._bindClick('clearImagesBtnPage', () => {
+      this.selectedFiles = [];
+      this.imageBase64List = [];
+      const previewContentPage = document.getElementById('preview-content-page');
+      if (previewContentPage) {
+        previewContentPage.innerHTML = '<div style="text-align:center; color:#999; padding:40px;">请先选择图片文件</div>';
+      }
+      const imageListPage = document.getElementById('image-list-page');
+      if (imageListPage) {
+        imageListPage.innerHTML = '<div style="text-align: center; color: #999; padding: 10px;">暂无图片，添加后可设置位置</div>';
+      }
     });
 
     this._bindClick('startInsert', () => this.generatePreview('modal'));
@@ -4578,19 +4601,15 @@ function closeSettingsModal() {
     
     const illustrationModal = document.getElementById('illustration-modal');
     const context = (illustrationModal && illustrationModal.classList.contains('show')) ? 'modal' : 'page';
-    const suffix = context === 'page' ? 'Page' : '';
-    const startCellValue = document.getElementById('startCell' + suffix)?.value.trim() || 'A1';
-    const startPos = this.parseCellAddress(startCellValue);
     
     for (let index = 0; index < this.selectedFiles.length; index++) {
       const file = this.selectedFiles[index];
       const base64 = await this.fileToBase64(file);
-      const defaultCell = this.getCellAddress(startPos.row + index, startPos.col);
       this.imageBase64List.push({
         name: file.name,
         data: base64,
         type: file.type,
-        cellAddress: defaultCell
+        cellAddress: null
       });
     }
     
@@ -4600,10 +4619,13 @@ function closeSettingsModal() {
 
   renderImageList() {
     const imageList = document.getElementById('image-list');
-    if (!imageList) return;
+    const imageListPage = document.getElementById('image-list-page');
+    if (!imageList && !imageListPage) return;
     
     if (this.imageBase64List.length === 0) {
-      imageList.innerHTML = '<div style="text-align: center; color: #999; padding: 10px;">暂无图片，添加后可设置位置</div>';
+      const emptyHtml = '<div style="text-align: center; color: #999; padding: 10px;">暂无图片，添加后可设置位置</div>';
+      if (imageList) imageList.innerHTML = emptyHtml;
+      if (imageListPage) imageListPage.innerHTML = emptyHtml;
       return;
     }
     
@@ -4614,7 +4636,7 @@ function closeSettingsModal() {
           <span style="width: 24px; text-align: center; font-size: 12px; color: #666;">${index + 1}.</span>
           <span style="flex: 1; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${imgData.name}</span>
           <input type="text" 
-                 value="${imgData.cellAddress}" 
+                 value="${imgData.cellAddress || ''}" 
                  placeholder="单元格"
                  style="width: 60px; padding: 3px; font-size: 12px; text-align: center;"
                  onchange="App.updateImageCellAddress(${index}, this.value)">
@@ -4623,7 +4645,8 @@ function closeSettingsModal() {
         </div>
       `;
     });
-    imageList.innerHTML = html;
+    if (imageList) imageList.innerHTML = html;
+    if (imageListPage) imageListPage.innerHTML = html;
   },
 
   updateImageCellAddress(index, address) {
@@ -4659,15 +4682,27 @@ function closeSettingsModal() {
     try {
       const config = this.getCurrentConfig(context);
       const cellSize = this.getCellSizeInPx(context);
+      const startPos = this.parseCellAddress(config.startCell);
 
       const table = document.createElement('table');
       table.style.borderCollapse = 'collapse';
       table.style.border = '1px solid #ddd';
       
       const positions = this.imageBase64List.map((imgData, index) => {
-        const cellAddress = imgData.cellAddress || this.getCellAddress(index, 0);
-        const pos = this.parseCellAddress(cellAddress);
-        return { ...pos, imgData, index };
+        if (imgData.cellAddress) {
+          const pos = this.parseCellAddress(imgData.cellAddress);
+          return { ...pos, imgData, index };
+        } else {
+          let row, col;
+          if (config.layout === 'horizontal') {
+            row = startPos.row + Math.floor(index / config.perRow);
+            col = startPos.col + (index % config.perRow);
+          } else {
+            row = startPos.row + (index % config.perRow);
+            col = startPos.col + Math.floor(index / config.perRow);
+          }
+          return { row, col, imgData, index };
+        }
       });
       
       const maxRow = Math.max(...positions.map(p => p.row)) + 3;
@@ -4755,8 +4790,8 @@ function closeSettingsModal() {
         const cmHeight = (size.height / this.CM_TO_PX).toFixed(2);
         
         previewNote.innerHTML = `
-          预览配置：自由布局 |
-          共 ${this.imageBase64List.length} 张图片 |
+          预览配置：${config.layout === 'horizontal' ? '按行横排' : '按列竖排'} |
+          每行${config.perRow}个 |
           单元格尺寸：${cmWidth}cm×${cmHeight}cm (${Math.round(size.width)}px×${Math.round(size.height)}px) |
           图片名：${config.addName === 'none' ? '不显示' : (config.addName === 'above' ? '上方显示' : '下方显示')}
         `;
@@ -4892,8 +4927,21 @@ function closeSettingsModal() {
         currentStep++;
         this.updateProgress((currentStep / totalSteps) * 100, `处理图片 ${i+1}/${this.imageBase64List.length}`);
         
-        const cellAddress = imgData.cellAddress || config.startCell;
-        const pos = this.parseCellAddress(cellAddress);
+        let pos;
+        if (imgData.cellAddress) {
+          pos = this.parseCellAddress(imgData.cellAddress);
+        } else {
+          let row, col;
+          if (config.layout === 'horizontal') {
+            row = startPos.row + Math.floor(i / config.perRow);
+            col = startPos.col + (i % config.perRow);
+          } else {
+            row = startPos.row + (i % config.perRow);
+            col = startPos.col + Math.floor(i / config.perRow);
+          }
+          pos = { row, col };
+        }
+        
         const currentRow = pos.row + 1;
         const currentCol = pos.col + 1;
         
