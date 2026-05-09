@@ -958,7 +958,8 @@ html, body {
 
 .page iframe {
     width: 100%;
-    height: calc(100vh - 48px);
+    height: calc(100vh - 100px);
+    min-height: 700px;
     border: none;
 }
 
@@ -1058,8 +1059,129 @@ html, body {
 }
 .page iframe {
     width: 100%;
-    height: calc(100vh - 48px);
+    height: calc(100vh - 100px);
+    min-height: 700px;
     border: none;
+}
+
+/* ===== 增强型文档查看器样式 ===== */
+.document-viewer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 悬浮按钮样式 */
+.floating-toolbar {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.floating-btn {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    opacity: 0.8;
+}
+
+.floating-btn:hover {
+    transform: scale(1.1);
+    opacity: 1;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.floating-btn:active {
+    transform: scale(0.95);
+}
+
+/* 悬浮菜单 */
+.floating-menu {
+    position: absolute;
+    top: 0;
+    right: 56px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    min-width: 160px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: all 0.3s ease;
+}
+
+.floating-toolbar:hover .floating-menu,
+.floating-toolbar.show-menu .floating-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.floating-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #374151;
+    transition: background 0.2s ease;
+}
+
+.floating-menu-item:hover {
+    background: #f3f4f6;
+}
+
+.floating-menu-item span:first-child {
+    font-size: 16px;
+}
+
+.viewer-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.viewer-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.viewer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 10;
 }
 
 .drop-area {
@@ -1351,58 +1473,6 @@ html, body {
 }
 .zip-subcard {
     background: #eef3fa;
-}
-
-/* 右键菜单样式 */
-.context-menu {
-    position: fixed;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    border: 1px solid #e5e7eb;
-    padding: 8px 0;
-    min-width: 180px;
-    z-index: 9999;
-    display: none;
-}
-
-.context-menu.show {
-    display: block;
-}
-
-.context-menu-item {
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #374151;
-    transition: background-color 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.context-menu-item:hover {
-    background-color: #f3f4f6;
-}
-
-.context-menu-item i {
-    font-size: 16px;
-}
-
-.context-menu-divider {
-    height: 1px;
-    background-color: #e5e7eb;
-    margin: 8px 0;
-}
-
-.context-menu-item:first-child {
-    border-radius: 10px 10px 0 0;
-}
-
-.context-menu-item:last-child {
-    border-radius: 0 0 10px 10px;
-}
-.zip-subcard {
     border-radius: 40px;
     padding: 10px 24px;
     font-size: 14px;
@@ -3294,13 +3364,6 @@ html, body {
       
       
       <div class="modal-mask" id="modal-mask"></div>
-      
-      <!-- 右键菜单 -->
-      <div class="context-menu" id="contextMenu">
-          <div class="context-menu-item" id="openInCurrent">📄 在本页面打开</div>
-          <div class="context-menu-item" id="openInNew">🌐 在新窗口打开</div>
-      </div>
-      
       <div class="func-modal" id="recheck-modal">
           <h3 class="modal-title">复测操作规范</h3>
           <div class="modal-content">每天查看杭州到货，查看复测产品单号，然后去找到这个货\n一、拍下面单\n二、拍下测量的长宽高\n三、制作表格并发出</div>
@@ -3633,6 +3696,7 @@ const App = {
   tabs: [],
   activeId: null,
   iframes: {},
+  viewers: {},
   pageElements: {},
   isSidebarCollapsed: false,
   currentUser: null,
@@ -4455,14 +4519,453 @@ function closeSettingsModal() {
         pagesEl.appendChild(page);
 
         if (!this.iframes[t.id] && t.url) {
-          const iframe = document.createElement('iframe');
-          iframe.src = t.url;
-          iframe.dataset.id = t.id;
-          this.iframes[t.id] = iframe;
-          page.appendChild(iframe);
+          // 使用增强型文档查看器替代普通iframe
+          this.createDocumentViewer(t.id, t.url, page);
         }
       }
     });
+  },
+
+  createDocumentViewer(tabId, url, container) {
+    try {
+      // 创建增强型查看器容器
+      const viewer = document.createElement('div');
+      viewer.className = 'document-viewer';
+      viewer.id = `viewer-${tabId}`;
+      viewer.dataset.tabId = tabId;
+      
+      // 创建悬浮工具栏（全局单例）
+      if (!document.querySelector('.floating-toolbar')) {
+        const floatingToolbar = document.createElement('div');
+        floatingToolbar.className = 'floating-toolbar';
+        floatingToolbar.innerHTML = `
+          <div class="floating-menu">
+            <div class="floating-menu-item" onclick="App.refreshCurrentViewer()">
+              <span>🔄</span><span>刷新</span>
+            </div>
+            <div class="floating-menu-item" onclick="App.openCurrentViewerInNewWindow()">
+              <span>↗</span><span>在新窗口打开</span>
+            </div>
+            <div class="floating-menu-item" onclick="App.toggleCurrentViewerFullscreen()">
+              <span>⛶</span><span>全屏</span>
+            </div>
+          </div>
+          <button class="floating-btn" title="文档工具">⚙️</button>
+        `;
+        document.body.appendChild(floatingToolbar);
+      }
+      
+      // 创建内容区域
+      const contentArea = document.createElement('div');
+      contentArea.className = 'viewer-content';
+      
+      // 创建iframe（作为基础层）
+      const iframe = document.createElement('iframe');
+      iframe.src = url;
+      iframe.dataset.id = tabId;
+      iframe.id = `iframe-${tabId}`;
+      iframe.className = 'viewer-iframe';
+      iframe.allow = 'clipboard-read clipboard-write camera microphone geolocation notifications payment';
+      iframe.allowFullscreen = true;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = 'none';
+      
+      // 添加加载完成事件
+      iframe.onload = () => {
+        this.onViewerLoaded(tabId, iframe);
+      };
+      
+      iframe.onerror = () => {
+        console.log('iframe加载失败:', tabId);
+      };
+      
+      contentArea.appendChild(iframe);
+      viewer.appendChild(contentArea);
+      
+      // 创建增强层
+      const overlay = document.createElement('div');
+      overlay.className = 'viewer-overlay';
+      viewer.appendChild(overlay);
+      
+      // 保存引用
+      this.iframes[tabId] = iframe;
+      this.viewers[tabId] = viewer;
+      
+      container.appendChild(viewer);
+      
+    } catch (error) {
+      console.error('创建文档查看器失败:', error);
+      this.createFallbackIframe(tabId, url, container);
+    }
+  },
+
+  createFallbackIframe(tabId, url, container) {
+    const iframe = document.createElement('iframe');
+    iframe.src = url;
+    iframe.dataset.id = tabId;
+    iframe.id = `iframe-${tabId}`;
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    this.iframes[tabId] = iframe;
+    container.appendChild(iframe);
+  },
+
+  onViewerLoaded(tabId, iframe) {
+    try {
+      // 尝试获取iframe文档
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      
+      if (iframeDoc) {
+        console.log('文档查看器加载完成:', tabId);
+        // 注入增强脚本
+        this.injectViewerEnhancements(tabId, iframeDoc);
+      } else {
+        console.log('跨域限制，使用外部窗口方案:', tabId);
+      }
+    } catch (error) {
+      console.error('查看器加载处理失败:', error);
+    }
+  },
+
+  injectViewerEnhancements(tabId, iframeDoc) {
+    try {
+      // 加载html2canvas
+      const html2canvasScript = iframeDoc.createElement('script');
+      html2canvasScript.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+      html2canvasScript.onload = () => {
+        // 注入复制增强脚本
+        const enhanceScript = iframeDoc.createElement('script');
+        enhanceScript.textContent = `
+          (function() {
+            console.log('文档查看器增强脚本已加载');
+            
+            // 增强剪贴板功能
+            function enhanceClipboard() {
+              // 监听复制事件
+              document.addEventListener('copy', function(e) {
+                const selection = window.getSelection();
+                if (selection && selection.rangeCount > 0) {
+                  const range = selection.getRangeAt(0);
+                  const container = range.commonAncestorContainer;
+                  const element = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
+                  
+                  // 如果选中的是表格，尝试复制为图片
+                  if (element.tagName === 'TABLE' || element.querySelector('table')) {
+                    try {
+                      html2canvas(element, {
+                        backgroundColor: '#ffffff',
+                        scale: window.devicePixelRatio || 2,
+                        useCORS: true,
+                        allowTaint: true
+                      }).then(function(canvas) {
+                        canvas.toBlob(function(blob) {
+                          if (blob && navigator.clipboard && navigator.clipboard.write) {
+                            const item = new ClipboardItem({ 'image/png': blob });
+                            navigator.clipboard.write([item]).then(function() {
+                              console.log('表格已复制为图片');
+                            });
+                          }
+                        }, 'image/png');
+                      });
+                    } catch (err) {
+                      console.log('图片复制失败:', err);
+                    }
+                  }
+                }
+              });
+            }
+            
+            // 右键菜单增强
+            document.addEventListener('contextmenu', function(e) {
+              setTimeout(function() {
+                const menuItems = document.querySelectorAll('[role="menuitem"], .context-menu-item');
+                menuItems.forEach(function(item) {
+                  const text = item.textContent || '';
+                  if (text.includes('复制为图片')) {
+                    item.addEventListener('click', function(ev) {
+                      ev.preventDefault();
+                      const selection = window.getSelection();
+                      if (selection && selection.rangeCount > 0) {
+                        const range = selection.getRangeAt(0);
+                        const container = range.commonAncestorContainer;
+                        const element = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
+                        
+                        html2canvas(element, { backgroundColor: '#ffffff' }).then(function(canvas) {
+                          canvas.toBlob(function(blob) {
+                            if (blob && navigator.clipboard && navigator.clipboard.write) {
+                              const item = new ClipboardItem({ 'image/png': blob });
+                              navigator.clipboard.write([item]).then(function() {
+                                alert('图片已复制到剪贴板！');
+                              }).catch(function() {
+                                // 降级下载
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = 'document-image.png';
+                                a.click();
+                              });
+                            }
+                          });
+                        });
+                      }
+                    }, { once: true });
+                  }
+                });
+              }, 50);
+            });
+            
+            enhanceClipboard();
+          })();
+        `;
+        iframeDoc.head.appendChild(enhanceScript);
+      };
+      iframeDoc.head.appendChild(html2canvasScript);
+      
+    } catch (error) {
+      console.error('注入增强脚本失败:', error);
+    }
+  },
+
+  refreshViewer(tabId) {
+    const iframe = this.iframes[tabId];
+    if (iframe) {
+      iframe.src = iframe.src;
+    }
+  },
+
+  openViewerInNewWindow(tabId) {
+    const iframe = this.iframes[tabId];
+    if (iframe && iframe.src) {
+      window.open(iframe.src, '_blank', 'width=1200,height=800,menubar=no,toolbar=no,location=yes,resizable=yes,scrollbars=yes');
+    }
+  },
+
+  toggleViewerFullscreen(tabId) {
+    const viewer = this.viewers[tabId];
+    if (viewer) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        viewer.requestFullscreen();
+      }
+    }
+  },
+
+  // 当前活动查看器操作
+  refreshCurrentViewer() {
+    this.refreshViewer(this.activeId);
+  },
+
+  openCurrentViewerInNewWindow() {
+    this.openViewerInNewWindow(this.activeId);
+  },
+
+  toggleCurrentViewerFullscreen() {
+    this.toggleViewerFullscreen(this.activeId);
+  },
+
+  onIframeLoaded(tabId) {
+    try {
+      const iframe = this.iframes[tabId];
+      if (!iframe) return;
+
+      // 尝试获取iframe的document对象
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      
+      if (iframeDoc) {
+        console.log('成功访问iframe文档:', tabId);
+        // 尝试注入增强脚本
+        this.injectEnhanceScript(tabId, iframeDoc);
+      } else {
+        console.log('无法直接访问iframe文档，启用postMessage通信方案:', tabId);
+        // 设置postMessage监听
+        this.setupPostMessageListener(tabId);
+      }
+    } catch (error) {
+      console.error('iframe加载处理失败:', error);
+    }
+  },
+
+  injectEnhanceScript(tabId, iframeDoc) {
+    try {
+      console.log('正在注入增强脚本:', tabId);
+      
+      // 注入html2canvas库
+      const html2canvasScript = iframeDoc.createElement('script');
+      html2canvasScript.src = 'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+      html2canvasScript.onload = () => {
+        console.log('html2canvas加载完成:', tabId);
+        this.injectCopyAsImageScript(tabId, iframeDoc);
+      };
+      html2canvasScript.onerror = () => {
+        console.error('html2canvas加载失败:', tabId);
+      };
+      iframeDoc.head.appendChild(html2canvasScript);
+      
+    } catch (error) {
+      console.error('注入脚本失败:', error);
+    }
+  },
+
+  injectCopyAsImageScript(tabId, iframeDoc) {
+    try {
+      const scriptContent = `
+        (function() {
+          console.log('WPS复制增强脚本已加载');
+          
+          // 增强复制功能
+          function setupCopyEnhancement() {
+            // 覆盖默认的复制行为
+            document.addEventListener('copy', function(e) {
+              const selection = window.getSelection();
+              if (selection && selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const container = range.commonAncestorContainer;
+                const element = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
+                
+                // 如果选中的是表格或复杂内容，尝试渲染为图片
+                if (element.tagName === 'TABLE' || element.querySelectorAll('table').length > 0) {
+                  try {
+                    html2canvas(element, {
+                      backgroundColor: '#ffffff',
+                      scale: window.devicePixelRatio || 2,
+                      useCORS: true,
+                      allowTaint: true
+                    }).then(function(canvas) {
+                      canvas.toBlob(function(blob) {
+                        if (blob && navigator.clipboard && navigator.clipboard.write) {
+                          const item = new ClipboardItem({ 'image/png': blob });
+                          navigator.clipboard.write([item]).then(function() {
+                            console.log('图片已复制到剪贴板');
+                          }).catch(function(err) {
+                            console.error('剪贴板写入失败:', err);
+                          });
+                        }
+                      }, 'image/png');
+                    });
+                  } catch (err) {
+                    console.log('图片复制失败，使用默认复制:', err);
+                  }
+                }
+              }
+            });
+          }
+          
+          // 监听右键菜单
+          document.addEventListener('contextmenu', function(e) {
+            setTimeout(function() {
+              // 查找复制为图片的菜单选项
+              const menus = document.querySelectorAll('.wps-context-menu-item, .context-menu-item, [role="menuitem"]');
+              menus.forEach(function(menu) {
+                const text = menu.textContent || menu.innerText || '';
+                if (text.indexOf('复制为图片') !== -1 || text.indexOf('Copy as image') !== -1) {
+                  menu.addEventListener('click', function(ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    handleCopyAsImage();
+                  }, { once: true });
+                }
+              });
+            }, 50);
+          });
+          
+          // 处理复制为图片
+          function handleCopyAsImage() {
+            const selection = window.getSelection();
+            if (!selection || selection.rangeCount === 0) {
+              return;
+            }
+            
+            const range = selection.getRangeAt(0);
+            const container = range.commonAncestorContainer;
+            const element = container.nodeType === Node.TEXT_NODE ? container.parentElement : container;
+            
+            if (window.html2canvas) {
+              html2canvas(element, {
+                backgroundColor: '#ffffff',
+                scale: window.devicePixelRatio || 2,
+                useCORS: true,
+                allowTaint: true
+              }).then(function(canvas) {
+                canvas.toBlob(function(blob) {
+                  if (blob && navigator.clipboard && navigator.clipboard.write) {
+                    const item = new ClipboardItem({ 'image/png': blob });
+                    navigator.clipboard.write([item]).then(function() {
+                      alert('图片已成功复制到剪贴板！');
+                    }).catch(function(err) {
+                      console.error('复制失败:', err);
+                      // 降级方案
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = 'wps-image.png';
+                      document.body.appendChild(a);
+                      a.click();
+                      document.body.removeChild(a);
+                      URL.revokeObjectURL(url);
+                    });
+                  }
+                }, 'image/png');
+              }).catch(function(err) {
+                console.error('渲染失败:', err);
+              });
+            }
+          }
+          
+          // 初始化
+          setupCopyEnhancement();
+          console.log('复制增强功能已启用');
+        })();
+      `;
+      
+      const scriptEl = iframeDoc.createElement('script');
+      scriptEl.textContent = scriptContent;
+      iframeDoc.head.appendChild(scriptEl);
+      
+    } catch (error) {
+      console.error('注入复制增强脚本失败:', error);
+    }
+  },
+
+  setupPostMessageListener(tabId) {
+    try {
+      window.addEventListener('message', (event) => {
+        // 验证消息来源
+        const iframe = this.iframes[tabId];
+        if (!iframe || event.source !== iframe.contentWindow) {
+          return;
+        }
+        
+        if (event.data && event.data.type === 'copyAsImage') {
+          // 处理来自iframe的复制请求
+          this.handleCopyRequest(event.data);
+        }
+      });
+    } catch (error) {
+      console.error('设置postMessage监听失败:', error);
+    }
+  },
+
+  handleCopyRequest(data) {
+    try {
+      // 如果收到图片数据，写入剪贴板
+      if (data.imageData) {
+        fetch(data.imageData)
+          .then(response => response.blob())
+          .then(blob => {
+            if (navigator.clipboard && navigator.clipboard.write) {
+              const item = new ClipboardItem({ 'image/png': blob });
+              navigator.clipboard.write([item]).then(() => {
+                console.log('图片已复制到剪贴板');
+              });
+            }
+          });
+      }
+    } catch (error) {
+      console.error('处理复制请求失败:', error);
+    }
   },
 
   renderTabs() {
@@ -5887,97 +6390,6 @@ App.initHomePage = function() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
-
-  // ========== 右键菜单功能 ==========
-  const contextMenu = document.getElementById('contextMenu');
-  const openInCurrent = document.getElementById('openInCurrent');
-  const openInNew = document.getElementById('openInNew');
-  
-  // 功能按钮URL映射
-  const funcUrls = {
-    'warehouse': { name: '仓储', url: 'https://www.kdocs.cn/l/cnLDizeYKJ4K' },
-    'line': { name: '专线', url: 'https://www.kdocs.cn/l/cbWVlaTOmyEe' },
-    'speed': { name: '速量', url: 'https://www.kdocs.cn/l/ch5xdUJYMzbH' },
-    'bubble-ratio': { name: '泡比', url: 'https://www.kdocs.cn/l/cjZZGlQnBtmm' },
-    'package-count': { name: '包数', url: 'https://www.kdocs.cn/l/cbJs05zRewYZ' },
-    'order-count': { name: '单量', url: 'https://www.kdocs.cn/l/cdiNjSnC4i2E' },
-    'person-efficiency': { name: '人效', url: 'https://www.kdocs.cn/l/coByacPZqwoP' },
-    'small-package': { name: '小包数据', url: 'https://www.kdocs.cn/l/coJEsFw0SGEz' },
-    'trans-order': { name: '转单', url: 'http://120.77.151.112:16321/module/index?mv=index' },
-    'missing-data': { name: '漏数据', url: 'https://doc.weixin.qq.com/sheet/e3_AagALQa5AHMCN52GkF71eR1GtvBBh?scode=AGMAxAeNAHY1LY1ShtATMAqQaKAPU&tab=BB08J2' },
-    'cost-table': { name: '成本表', url: 'https://doc.weixin.qq.com/sheet/e3_AQYAHgbXAKkNrDKGbk1STm236e58J?scode=AGMAxAeNAHYa2G9O85ATMAqQaKAPU&tab=oqiig0' },
-    'exception-register': { name: '异常登记', url: 'https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYP2S6hbNATMAqQaKAPU&tab=5v7cyc' },
-    'zip-search': { name: '邮政编码查询', url: null },
-    'channel-search': { name: '渠道查询', url: null },
-    'name-register': { name: '异常登记', url: null },
-    'recheck': { name: '复测', url: null },
-    'check-arrival': { name: '其他客户到货量', url: null },
-    'exception-type': { name: '异常类型', url: null },
-    'illustration': { name: '插图', url: null },
-    'remove-empty-rows': { name: '删除空白行', url: null }
-  };
-
-  let currentFuncCard = null;
-
-  // 为所有功能卡片添加右键事件
-  const funcCards = document.querySelectorAll('.func-card');
-  funcCards.forEach(card => {
-    card.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      const cardId = card.id;
-      if (funcUrls[cardId]) {
-        currentFuncCard = cardId;
-        // 显示右键菜单
-        contextMenu.style.left = e.clientX + 'px';
-        contextMenu.style.top = e.clientY + 'px';
-        contextMenu.classList.add('show');
-      }
-    });
-  });
-
-  // 点击空白处关闭右键菜单
-  document.addEventListener('click', () => {
-    contextMenu.classList.remove('show');
-    currentFuncCard = null;
-  });
-
-  // 在本页面打开
-  openInCurrent.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (currentFuncCard && funcUrls[currentFuncCard] && funcUrls[currentFuncCard].url) {
-      const item = funcUrls[currentFuncCard];
-      openPage(item.name, item.url);
-    } else if (currentFuncCard) {
-      // 没有URL的功能，触发点击事件
-      const card = document.getElementById(currentFuncCard);
-      if (card) {
-        card.click();
-      }
-    }
-    contextMenu.classList.remove('show');
-    currentFuncCard = null;
-  });
-
-  // 在新窗口打开
-  openInNew.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (currentFuncCard && funcUrls[currentFuncCard] && funcUrls[currentFuncCard].url) {
-      window.open(funcUrls[currentFuncCard].url, '_blank');
-    } else if (currentFuncCard) {
-      // 没有URL的功能，触发点击事件
-      const card = document.getElementById(currentFuncCard);
-      if (card) {
-        card.click();
-      }
-    }
-    contextMenu.classList.remove('show');
-    currentFuncCard = null;
-  });
-
-  // 右键菜单点击时不关闭
-  contextMenu.addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
 };
 
 // ========== 删除空白行功能 ==========
@@ -6258,6 +6670,163 @@ class EmptyRowRemover {
 document.addEventListener('DOMContentLoaded', () => {
   new EmptyRowRemover();
 });
+
+// ========== DOM图片复制工具类 ==========
+class ImageCopyUtil {
+  constructor() {
+    this.canvas = document.createElement('canvas');
+    this.ctx = this.canvas.getContext('2d');
+  }
+
+  /**
+   * 将DOM元素渲染为图片
+   * @param {HTMLElement} element - 要渲染的DOM元素
+   * @param {Object} options - 渲染选项
+   * @returns {Promise<HTMLCanvasElement>}
+   */
+  async renderElementToCanvas(element, options = {}) {
+    return new Promise((resolve, reject) => {
+      const defaults = {
+        backgroundColor: '#ffffff',
+        scale: window.devicePixelRatio || 1,
+        useCORS: true,
+        logging: false
+      };
+
+      const opts = { ...defaults, ...options };
+
+      if (!element || !(element instanceof HTMLElement)) {
+        reject(new Error('无效的DOM元素'));
+        return;
+      }
+
+      html2canvas(element, {
+        backgroundColor: opts.backgroundColor,
+        scale: opts.scale,
+        useCORS: opts.useCORS,
+        logging: opts.logging,
+        allowTaint: true
+      }).then(canvas => {
+        resolve(canvas);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
+
+  /**
+   * 将Canvas编码为图片数据
+   * @param {HTMLCanvasElement} canvas - Canvas元素
+   * @param {string} format - 图片格式 (png, jpeg, webp)
+   * @param {number} quality - 图片质量 (0-1)
+   * @returns {string} Base64编码的图片数据
+   */
+  encodeCanvasToImage(canvas, format = 'png', quality = 0.92) {
+    const mimeType = `image/${format}`;
+    return canvas.toDataURL(mimeType, quality);
+  }
+
+  /**
+   * 将Canvas转换为Blob
+   * @param {HTMLCanvasElement} canvas - Canvas元素
+   * @param {string} format - 图片格式
+   * @param {number} quality - 图片质量
+   * @returns {Promise<Blob>}
+   */
+  async canvasToBlob(canvas, format = 'png', quality = 0.92) {
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(blob => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error('无法转换为Blob'));
+        }
+      }, `image/${format}`, quality);
+    });
+  }
+
+  /**
+   * 将图片写入剪贴板（使用Clipboard API）
+   * @param {HTMLCanvasElement|Blob|string} imageSource - 图片源
+   * @returns {Promise<void>}
+   */
+  async copyImageToClipboard(imageSource) {
+    let blob;
+
+    if (imageSource instanceof HTMLCanvasElement) {
+      blob = await this.canvasToBlob(imageSource);
+    } else if (imageSource instanceof Blob) {
+      blob = imageSource;
+    } else if (typeof imageSource === 'string') {
+      // Base64 或 URL
+      const response = await fetch(imageSource);
+      blob = await response.blob();
+    } else {
+      throw new Error('不支持的图片源类型');
+    }
+
+    // 创建ClipboardItem，支持多种格式
+    const clipboardData = {
+      'image/png': blob
+    };
+
+    // 如果是PNG以外的格式，也添加对应格式
+    if (blob.type !== 'image/png') {
+      clipboardData[blob.type] = blob;
+    }
+
+    const item = new ClipboardItem(clipboardData);
+    await navigator.clipboard.write([item]);
+  }
+
+  /**
+   * 完整流程：选中DOM -> 渲染为图片 -> 复制到剪贴板
+   * @param {HTMLElement} element - 要复制的DOM元素
+   * @param {Object} options - 选项
+   * @returns {Promise<void>}
+   */
+  async copyElementAsImage(element, options = {}) {
+    // 1. DOM渲染能力 - 将选中的内容渲染为图片
+    const canvas = await this.renderElementToCanvas(element, options);
+    
+    // 2. 图片编码能力 - 将渲染结果编码为图片格式
+    const imageData = this.encodeCanvasToImage(canvas, options.format || 'png', options.quality || 0.92);
+    
+    // 3. 特殊剪贴板格式 - 将图片数据写入剪贴板
+    await this.copyImageToClipboard(canvas);
+    
+    return { canvas, imageData };
+  }
+
+  /**
+   * 检查浏览器是否支持图片剪贴板功能
+   * @returns {boolean}
+   */
+  isSupported() {
+    return navigator.clipboard && 
+           window.ClipboardItem && 
+           navigator.clipboard.write &&
+           window.isSecureContext;
+  }
+
+  /**
+   * 获取浏览器支持信息
+   * @returns {Object}
+   */
+  getSupportInfo() {
+    return {
+      clipboardAPI: !!navigator.clipboard,
+      clipboardItem: !!window.ClipboardItem,
+      clipboardWrite: !!navigator.clipboard.write,
+      secureContext: window.isSecureContext,
+      html2canvas: !!window.html2canvas,
+      fullySupported: this.isSupported() && !!window.html2canvas
+    };
+  }
+}
+
+// 创建全局实例
+window.ImageCopyUtil = new ImageCopyUtil();
 
 // ========== 添加功能相关代码 ==========
 let customFunctions = [];
