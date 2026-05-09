@@ -1351,6 +1351,58 @@ html, body {
 }
 .zip-subcard {
     background: #eef3fa;
+}
+
+/* 右键菜单样式 */
+.context-menu {
+    position: fixed;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    border: 1px solid #e5e7eb;
+    padding: 8px 0;
+    min-width: 180px;
+    z-index: 9999;
+    display: none;
+}
+
+.context-menu.show {
+    display: block;
+}
+
+.context-menu-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #374151;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.context-menu-item:hover {
+    background-color: #f3f4f6;
+}
+
+.context-menu-item i {
+    font-size: 16px;
+}
+
+.context-menu-divider {
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 8px 0;
+}
+
+.context-menu-item:first-child {
+    border-radius: 10px 10px 0 0;
+}
+
+.context-menu-item:last-child {
+    border-radius: 0 0 10px 10px;
+}
+.zip-subcard {
     border-radius: 40px;
     padding: 10px 24px;
     font-size: 14px;
@@ -3242,6 +3294,13 @@ html, body {
       
       
       <div class="modal-mask" id="modal-mask"></div>
+      
+      <!-- 右键菜单 -->
+      <div class="context-menu" id="contextMenu">
+          <div class="context-menu-item" id="openInCurrent">📄 在本页面打开</div>
+          <div class="context-menu-item" id="openInNew">🌐 在新窗口打开</div>
+      </div>
+      
       <div class="func-modal" id="recheck-modal">
           <h3 class="modal-title">复测操作规范</h3>
           <div class="modal-content">每天查看杭州到货，查看复测产品单号，然后去找到这个货\n一、拍下面单\n二、拍下测量的长宽高\n三、制作表格并发出</div>
@@ -5828,6 +5887,97 @@ App.initHomePage = function() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
+
+  // ========== 右键菜单功能 ==========
+  const contextMenu = document.getElementById('contextMenu');
+  const openInCurrent = document.getElementById('openInCurrent');
+  const openInNew = document.getElementById('openInNew');
+  
+  // 功能按钮URL映射
+  const funcUrls = {
+    'warehouse': { name: '仓储', url: 'https://www.kdocs.cn/l/cnLDizeYKJ4K' },
+    'line': { name: '专线', url: 'https://www.kdocs.cn/l/cbWVlaTOmyEe' },
+    'speed': { name: '速量', url: 'https://www.kdocs.cn/l/ch5xdUJYMzbH' },
+    'bubble-ratio': { name: '泡比', url: 'https://www.kdocs.cn/l/cjZZGlQnBtmm' },
+    'package-count': { name: '包数', url: 'https://www.kdocs.cn/l/cbJs05zRewYZ' },
+    'order-count': { name: '单量', url: 'https://www.kdocs.cn/l/cdiNjSnC4i2E' },
+    'person-efficiency': { name: '人效', url: 'https://www.kdocs.cn/l/coByacPZqwoP' },
+    'small-package': { name: '小包数据', url: 'https://www.kdocs.cn/l/coJEsFw0SGEz' },
+    'trans-order': { name: '转单', url: 'http://120.77.151.112:16321/module/index?mv=index' },
+    'missing-data': { name: '漏数据', url: 'https://doc.weixin.qq.com/sheet/e3_AagALQa5AHMCN52GkF71eR1GtvBBh?scode=AGMAxAeNAHY1LY1ShtATMAqQaKAPU&tab=BB08J2' },
+    'cost-table': { name: '成本表', url: 'https://doc.weixin.qq.com/sheet/e3_AQYAHgbXAKkNrDKGbk1STm236e58J?scode=AGMAxAeNAHYa2G9O85ATMAqQaKAPU&tab=oqiig0' },
+    'exception-register': { name: '异常登记', url: 'https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYP2S6hbNATMAqQaKAPU&tab=5v7cyc' },
+    'zip-search': { name: '邮政编码查询', url: null },
+    'channel-search': { name: '渠道查询', url: null },
+    'name-register': { name: '异常登记', url: null },
+    'recheck': { name: '复测', url: null },
+    'check-arrival': { name: '其他客户到货量', url: null },
+    'exception-type': { name: '异常类型', url: null },
+    'illustration': { name: '插图', url: null },
+    'remove-empty-rows': { name: '删除空白行', url: null }
+  };
+
+  let currentFuncCard = null;
+
+  // 为所有功能卡片添加右键事件
+  const funcCards = document.querySelectorAll('.func-card');
+  funcCards.forEach(card => {
+    card.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      const cardId = card.id;
+      if (funcUrls[cardId]) {
+        currentFuncCard = cardId;
+        // 显示右键菜单
+        contextMenu.style.left = e.clientX + 'px';
+        contextMenu.style.top = e.clientY + 'px';
+        contextMenu.classList.add('show');
+      }
+    });
+  });
+
+  // 点击空白处关闭右键菜单
+  document.addEventListener('click', () => {
+    contextMenu.classList.remove('show');
+    currentFuncCard = null;
+  });
+
+  // 在本页面打开
+  openInCurrent.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (currentFuncCard && funcUrls[currentFuncCard] && funcUrls[currentFuncCard].url) {
+      const item = funcUrls[currentFuncCard];
+      openPage(item.name, item.url);
+    } else if (currentFuncCard) {
+      // 没有URL的功能，触发点击事件
+      const card = document.getElementById(currentFuncCard);
+      if (card) {
+        card.click();
+      }
+    }
+    contextMenu.classList.remove('show');
+    currentFuncCard = null;
+  });
+
+  // 在新窗口打开
+  openInNew.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (currentFuncCard && funcUrls[currentFuncCard] && funcUrls[currentFuncCard].url) {
+      window.open(funcUrls[currentFuncCard].url, '_blank');
+    } else if (currentFuncCard) {
+      // 没有URL的功能，触发点击事件
+      const card = document.getElementById(currentFuncCard);
+      if (card) {
+        card.click();
+      }
+    }
+    contextMenu.classList.remove('show');
+    currentFuncCard = null;
+  });
+
+  // 右键菜单点击时不关闭
+  contextMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
 };
 
 // ========== 删除空白行功能 ==========
