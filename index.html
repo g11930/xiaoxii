@@ -1050,7 +1050,11 @@ html, body {
     overflow: hidden;
 }
 .page {
-    height: 100%;
+    position: absolute;
+    top: 48px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: none;
     overflow: hidden;
 }
@@ -1059,22 +1063,21 @@ html, body {
 }
 .page iframe {
     width: 100%;
-    height: calc(100vh - 100px);
-    min-height: 700px;
+    height: 100%;
     border: none;
 }
 
 /* ===== 增强型文档查看器样式 ===== */
 .document-viewer {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
     background: #ffffff;
-    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* 悬浮按钮样式 */
@@ -1170,7 +1173,7 @@ html, body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 48px);
     border: none;
 }
 
