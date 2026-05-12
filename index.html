@@ -1326,26 +1326,61 @@ html, body {
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    backdrop-filter: blur(5px);
 }
 .progress-content {
     background: #fff;
-    padding: 40px;
-    border-radius: 8px;
+    padding: 40px 50px;
+    border-radius: 16px;
     text-align: center;
-    min-width: 300px;
+    min-width: 400px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.progress-bar-container {
+    position: relative;
+    height: 12px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 20px 0;
 }
 .progress-bar {
-    height: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    height: 100%;
+    border-radius: 6px;
     overflow: hidden;
-    margin: 15px 0;
 }
 .progress-fill {
     height: 100%;
-    background: #4299e1;
     width: 0%;
-    transition: width 0.2s;
+    background: linear-gradient(90deg, #4299e1, #667eea);
+    background-size: 200% 100%;
+    transition: width 0.15s ease-out;
+    position: relative;
+}
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+.progress-text {
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+}
+.progress-percent {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4299e1;
+    margin-bottom: 10px;
 }
 
 /* ===== 首页仪表板样式 ===== */
@@ -3156,6 +3191,7 @@ html, body {
         </div>
         <div class="func-grid">
             <div class="func-card" id="warehouse"><span class="func-emoji">🏭</span><span>仓储</span></div>
+            <div class="func-card" id="daily-storage"><span class="func-emoji">📦</span><span>每日留仓数量</span></div>
             <div class="func-card" id="line"><span class="func-emoji">🚀</span><span>专线</span></div>
             <div class="func-card" id="speed"><span class="func-emoji">⚡</span><span>速量</span></div>
             <div class="func-card" id="bubble-ratio"><span class="func-emoji">📊</span><span>泡比</span></div>
@@ -3459,13 +3495,6 @@ html, body {
           </div>
           <button class="close-modal" id="close-illustration" style="margin-top:15px;">关闭</button>
       </div>
-      <div id="progress-modal">
-          <div class="progress-container">
-              <div class="progress-title">正在导出Excel文件...</div>
-              <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-              <div class="progress-text" id="progress-text">0% - 准备中...</div>
-          </div>
-      </div>
       <button class="back-top" id="back-top">↑ 回到顶部</button>
     </div>
 
@@ -3547,11 +3576,14 @@ html, body {
 
 <div class="progress-modal" id="progress-modal">
   <div class="progress-content">
-    <h3>正在导出Excel...</h3>
-    <div class="progress-bar">
-      <div class="progress-fill" id="progress-fill"></div>
+    <h3 style="margin: 0 0 15px 0; font-size: 18px; color: #333;">正在导出Excel...</h3>
+    <div class="progress-percent" id="progress-percent">0%</div>
+    <div class="progress-bar-container">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
     </div>
-    <div id="progress-text">0% - 准备中...</div>
+    <div class="progress-text" id="progress-text">准备中...</div>
   </div>
 </div>
 
@@ -5788,10 +5820,13 @@ function closeSettingsModal() {
 
   getCurrentConfig(context) {
     const suffix = context === 'page' ? 'Page' : '';
+    const perRowInput = document.getElementById('perRow' + suffix);
+    const perRowValue = perRowInput ? parseInt(perRowInput.value) : NaN;
+    
     return {
       startCell: document.getElementById('startCell' + suffix)?.value.trim() || 'A1',
       layout: document.querySelector('input[name="layout' + suffix + '"]:checked')?.value || 'horizontal',
-      perRow: parseInt(document.getElementById('perRow' + suffix)?.value) || 4,
+      perRow: isNaN(perRowValue) ? 4 : perRowValue,
       addName: document.querySelector('input[name="addName' + suffix + '"]:checked')?.value || 'none',
       exportFileName: document.getElementById('exportFileName' + suffix)?.value.trim() || 'LOT复测'
     };
@@ -5861,9 +5896,17 @@ function closeSettingsModal() {
   updateProgress(percent, text) {
     const progressFill = document.getElementById('progress-fill');
     const progressText = document.getElementById('progress-text');
+    const progressPercent = document.getElementById('progress-percent');
     
-    if (progressFill) progressFill.style.width = `${percent}%`;
-    if (progressText) progressText.textContent = `${Math.round(percent)}% - ${text}`;
+    if (progressFill) {
+      progressFill.style.width = `${Math.max(0, Math.min(100, percent))}%`;
+    }
+    if (progressPercent) {
+      progressPercent.textContent = `${Math.round(percent)}%`;
+    }
+    if (progressText) {
+      progressText.textContent = text;
+    }
   },
 
   async exportToExcelWithProgress() {
@@ -5878,6 +5921,8 @@ function closeSettingsModal() {
     const progressModal = document.getElementById('progress-modal');
     if (progressModal) progressModal.style.display = 'flex';
     this.updateProgress(0, '初始化Excel工作簿...');
+
+    await new Promise(resolve => setTimeout(resolve, 100));
 
     try {
       const config = this.getCurrentConfig(context);
@@ -5904,6 +5949,7 @@ function closeSettingsModal() {
         
         currentStep++;
         this.updateProgress((currentStep / totalSteps) * 100, `处理图片 ${i+1}/${this.imageBase64List.length}`);
+        await new Promise(resolve => requestAnimationFrame(resolve));
         
         let pos;
         if (imgData.cellAddress) {
@@ -5936,6 +5982,7 @@ function closeSettingsModal() {
         
         currentStep++;
         this.updateProgress((currentStep / totalSteps) * 100, `插入图片 ${i+1}/${this.imageBase64List.length}`);
+        await new Promise(resolve => requestAnimationFrame(resolve));
         
         const imageId = workbook.addImage({
           base64: imgData.data,
@@ -5960,6 +6007,7 @@ function closeSettingsModal() {
         
         currentStep++;
         this.updateProgress((currentStep / totalSteps) * 100, `排版完成 ${i+1}/${this.imageBase64List.length}`);
+        await new Promise(resolve => requestAnimationFrame(resolve));
       }
 
       this.updateProgress(90, '生成Excel文件...');
@@ -6139,6 +6187,7 @@ App.initHomePage = function() {
   const homeBtn = document.getElementById('homeBtn');
   const transOrderBtn = document.getElementById('trans-order');
   const warehouseBtn = document.getElementById('warehouse');
+  const dailyStorageBtn = document.getElementById('daily-storage');
   const lineBtn = document.getElementById('line');
   const speedBtn = document.getElementById('speed');
   const bubbleRatioBtn = document.getElementById('bubble-ratio');
@@ -6189,6 +6238,14 @@ App.initHomePage = function() {
   if (warehouseBtn) {
     warehouseBtn.addEventListener('click', () => {
       openPage('仓储', 'https://www.kdocs.cn/l/cnLDizeYKJ4K');
+      if (zipSubgroup) zipSubgroup.style.display = 'none';
+    });
+  }
+
+  // 每日留仓数量
+  if (dailyStorageBtn) {
+    dailyStorageBtn.addEventListener('click', () => {
+      openPage('每日留仓数量', 'https://www.kdocs.cn/l/clrDVXP1277F');
       if (zipSubgroup) zipSubgroup.style.display = 'none';
     });
   }
