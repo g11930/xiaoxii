@@ -1015,13 +1015,24 @@ html, body {
 }
 .tab {
     padding: 12px 24px;
-    cursor: pointer;
+    cursor: grab;
     color: #64748b;
     font-size: 14px;
     position: relative;
     white-space: nowrap;
     border-bottom: 2px solid transparent;
     transition: all 0.2s;
+    user-select: none;
+}
+.tab.dragging {
+    cursor: grabbing;
+    opacity: 0.6;
+    transform: scale(1.05);
+    background: #e8f4fd;
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+}
+.tab.drag-over {
+    border-left: 3px solid #4299e1;
 }
 .tab:hover {
     background: #f1f5f9;
@@ -3081,6 +3092,9 @@ html, body {
     <button class="menu-btn" onclick="openPage('单量','https://www.kdocs.cn/l/cdiNjSnC4i2E')">单量</button>
     <button class="menu-btn" onclick="openPage('人效','https://www.kdocs.cn/l/coByacPZqwoP')">人效</button>
     <button class="menu-btn" onclick="openPage('小包数据汇总','https://www.kdocs.cn/l/coJEsFw0SGEz')">小包数据</button>
+    <button class="menu-btn" onclick="openPage('车辆','http://uc.dlysjg.td.gd.gov.cn/#/user_login')">车辆</button>
+    <button class="menu-btn" onclick="openPage('出库单','https://www.kdocs.cn/l/caRQJ7Gz4GYG')">出库单</button>
+    <button class="menu-btn" onclick="openPage('小包数据汇总夜','https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001')">小包数据汇总夜</button>
     <button class="menu-btn" onclick="openIllustrationPage()">插图</button>
     <button class="menu-btn add-function-btn" id="addFunctionBtn">+ 添加功能</button>
     <button class="menu-btn" style="background:#f56c6c;margin-top:20px;" onclick="App.logout()">退出登录</button>
@@ -3211,6 +3225,9 @@ html, body {
             <div class="func-card" id="cost-table"><span class="func-emoji">💰</span><span>成本表</span></div>
             <div class="func-card" id="exception-register"><span class="func-emoji">📝</span><span>异常登记</span></div>
             <div class="func-card" id="remove-empty-rows"><span class="func-emoji">🗑️</span><span>删除空白行</span></div>
+            <div class="func-card" id="vehicle"><span class="func-emoji">🚗</span><span>车辆</span></div>
+            <div class="func-card" id="outbound-order"><span class="func-emoji">📤</span><span>出库单</span></div>
+            <div class="func-card" id="small-package-night"><span class="func-emoji">🌙</span><span>小包数据汇总夜</span></div>
             <div class="zip-subgroup" id="zip-subgroup" style="display: none;">
                 <div class="zip-subcard" id="zip-btn1">🇦🇺 澳洲地址查询</div>
                 <div class="zip-subcard" id="zip-btn2">🇫🇷 法国邮编查询</div>
@@ -3975,6 +3992,15 @@ const App = {
 
   initMainApp() {
     this.tabs = JSON.parse(localStorage.getItem('savedTabs') || '[]');
+    
+    if (this.tabs.length === 0) {
+      this.tabs = [
+        { id: '车辆', name: '车辆', url: 'http://uc.dlysjg.td.gd.gov.cn/#/user_login' },
+        { id: '出库单', name: '出库单', url: 'https://www.kdocs.cn/l/caRQJ7Gz4GYG' },
+        { id: '小包数据汇总夜', name: '小包数据汇总夜', url: 'https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001' }
+      ];
+    }
+    
     this.activeId = localStorage.getItem('activeTab') || this.tabs[0]?.id || 'home';
     
     this.initPages();
@@ -5017,15 +5043,84 @@ function closeSettingsModal() {
     };
     tabsEl.appendChild(homeTab);
 
-    this.tabs.forEach(t => {
+    this.tabs.forEach((t, index) => {
       const tab = document.createElement('div');
       tab.className = 'tab ' + (t.id === this.activeId ? 'active' : '');
       tab.innerHTML = t.name + '<span class="close" onclick="event.stopPropagation(); App.closeTab(event, \'' + t.id + '\')">×</span>';
       tab.onclick = e => {
         if (!e.target.classList.contains('close')) this.switchTab(t.id);
       };
+      tab.setAttribute('data-tab-index', index);
+      tab.setAttribute('data-tab-id', t.id);
+      tab.draggable = true;
+      
+      tab.addEventListener('dragstart', (e) => this.handleDragStart(e, tab));
+      tab.addEventListener('dragover', (e) => this.handleDragOver(e));
+      tab.addEventListener('drop', (e) => this.handleDrop(e, tab));
+      tab.addEventListener('dragend', (e) => this.handleDragEnd(e));
+      
       tabsEl.appendChild(tab);
     });
+  },
+
+  handleDragStart(e, tab) {
+    if (e.target.classList.contains('close')) {
+      e.preventDefault();
+      return;
+    }
+    
+    const tabIndex = parseInt(tab.dataset.tabIndex);
+    e.dataTransfer.setData('text/plain', tabIndex.toString());
+    e.dataTransfer.effectAllowed = 'move';
+    tab.classList.add('dragging');
+  },
+
+  handleDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    
+    const tabsEl = document.getElementById('tabs');
+    const allTabs = tabsEl.querySelectorAll('.tab:not(.home-tab)');
+    allTabs.forEach(t => t.classList.remove('drag-over'));
+    
+    const target = e.target.closest('.tab');
+    if (target && !target.classList.contains('home-tab')) {
+      target.classList.add('drag-over');
+    }
+  },
+
+  handleDrop(e, tab) {
+    e.preventDefault();
+    
+    const tabsEl = document.getElementById('tabs');
+    const allTabs = tabsEl.querySelectorAll('.tab:not(.home-tab)');
+    allTabs.forEach(t => t.classList.remove('drag-over'));
+    
+    const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+    const toIndex = parseInt(tab.dataset.tabIndex);
+    
+    if (fromIndex !== toIndex) {
+      this.reorderTabs(fromIndex, toIndex);
+    }
+  },
+
+  handleDragEnd(e) {
+    const tabsEl = document.getElementById('tabs');
+    const allTabs = tabsEl.querySelectorAll('.tab:not(.home-tab)');
+    allTabs.forEach(t => {
+      t.classList.remove('dragging');
+      t.classList.remove('drag-over');
+    });
+  },
+
+  reorderTabs(fromIndex, toIndex) {
+    if (fromIndex === toIndex) return;
+    
+    const [removed] = this.tabs.splice(fromIndex, 1);
+    this.tabs.splice(toIndex, 0, removed);
+    
+    this.saveTabs();
+    this.renderTabs();
   },
 
   initDragPet() {
@@ -6205,6 +6300,9 @@ App.initHomePage = function() {
   const costTableBtn = document.getElementById('cost-table');
   const exceptionRegisterBtn = document.getElementById('exception-register');
   const illustrationBtn = document.getElementById('illustration');
+  const vehicleBtn = document.getElementById('vehicle');
+  const outboundOrderBtn = document.getElementById('outbound-order');
+  const smallPackageNightBtn = document.getElementById('small-package-night');
   const zipSubgroup = document.getElementById('zip-subgroup');
   const backTop = document.getElementById('back-top');
   const modalMask = document.getElementById('modal-mask');
@@ -6377,9 +6475,35 @@ App.initHomePage = function() {
   // 插图
   if (illustrationBtn) {
     illustrationBtn.addEventListener('click', () => {
-      if (modalMask) modalMask.classList.add('show');
-      if (illustrationModal) illustrationModal.classList.add('show');
+      openIllustrationPage();
       if (zipSubgroup) zipSubgroup.style.display = 'none';
+    });
+  }
+
+  // 车辆
+  if (vehicleBtn) {
+    vehicleBtn.addEventListener('click', () => {
+      App.openPage('车辆', 'http://uc.dlysjg.td.gd.gov.cn/#/user_login');
+      if (zipSubgroup) zipSubgroup.style.display = 'none';
+      closeAllModal();
+    });
+  }
+
+  // 出库单
+  if (outboundOrderBtn) {
+    outboundOrderBtn.addEventListener('click', () => {
+      App.openPage('出库单', 'https://www.kdocs.cn/l/caRQJ7Gz4GYG');
+      if (zipSubgroup) zipSubgroup.style.display = 'none';
+      closeAllModal();
+    });
+  }
+
+  // 小包数据汇总夜
+  if (smallPackageNightBtn) {
+    smallPackageNightBtn.addEventListener('click', () => {
+      App.openPage('小包数据汇总夜', 'https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001');
+      if (zipSubgroup) zipSubgroup.style.display = 'none';
+      closeAllModal();
     });
   }
 
