@@ -358,8 +358,8 @@ html, body {
     position: fixed;
     left: 20px;
     bottom: 10px;
-    width: 70px;
-    height: 100px;
+    width: 80px;
+    height: 60px;
     background: transparent;
     cursor: grab;
     z-index: 9999;
@@ -375,7 +375,7 @@ html, body {
     cursor: grabbing;
     transform: scale(1.05);
 }
-/* 电子宠物样式 */
+/* 电子宠物样式 - 只有蟑螂 */
 .pet-container {
     display: flex;
     flex-direction: column;
@@ -386,549 +386,162 @@ html, body {
     position: relative;
 }
 .pet {
-    width: 70px;
-    height: 80px;
+    width: 50px;
+    height: 30px;
     position: relative;
+}
+
+/* 蟑螂样式 - 按照用户提供的样子，缩小尺寸 */
+.pet-cockroach {
+    width: 80px;
+    height: 50px;
+    position: relative;
+    transform: rotate(-160deg);
+}
+
+/* 蟑螂头部 */
+.pet-cockroach .pet-head {
+    position: absolute;
+    right: 0;
+    top: 19px;
+    width: 14px;
+    height: 13px;
+    background: radial-gradient(circle at 30% 40%, #7a5334, #3a2412);
+    border-radius: 50%;
+    z-index: 3;
+}
+
+/* 蟑螂身体 */
+.pet-cockroach .pet-body {
+    position: absolute;
+    right: 16px;
+    top: 11px;
+    width: 52px;
+    height: 22px;
+    background: linear-gradient(90deg, #1a0f05, #4b3018, #1a0f05);
+    border-radius: 50% 20% 20% 50%;
+    box-shadow: inset 0 0 0 1px #5a3a1f;
+    z-index: 2;
+}
+
+/* 蟑螂左触角 */
+.pet-cockroach .pet-antenna-left {
+    position: absolute;
+    height: 1.5px;
+    background: #333;
+    right: 0;
+    top: 18px;
+    width: 35px;
+    transform-origin: right center;
+    transform: rotate(-25deg);
+    z-index: 4;
+}
+
+/* 蟑螂右触角 */
+.pet-cockroach .pet-antenna-right {
+    position: absolute;
+    height: 1.5px;
+    background: #333;
+    right: 0;
+    top: 23px;
+    width: 35px;
+    transform-origin: right center;
+    transform: rotate(10deg);
+    z-index: 4;
+}
+
+/* 蟑螂腿部 */
+.pet-cockroach .pet-leg-left1 {
+    position: absolute;
+    height: 0.6px;
+    background: #222;
+    top: 13px;
+    left: 12px;
+    width: 28px;
+    transform-origin: left center;
+    transform: rotate(-55deg);
+    animation: legMove1 0.08s ease-in-out infinite;
+}
+
+.pet-cockroach .pet-leg-left2 {
+    position: absolute;
+    height: 0.6px;
+    background: #222;
+    top: 22px;
+    left: 12px;
+    width: 24px;
+    transform-origin: left center;
+    transform: rotate(-20deg);
+    animation: legMove2 0.08s ease-in-out infinite;
+}
+
+.pet-cockroach .pet-leg-left3 {
+    position: absolute;
+    height: 0.6px;
+    background: #222;
+    top: 30px;
+    left: 14px;
+    width: 22px;
+    transform-origin: left center;
+    transform: rotate(10deg);
+    animation: legMove3 0.08s ease-in-out infinite;
+}
+
+.pet-cockroach .pet-leg-right1 {
+    position: absolute;
+    height: 0.6px;
+    background: #222;
+    top: 16px;
+    left: 54px;
+    width: 18px;
+    transform-origin: left center;
+    transform: rotate(55deg);
+    animation: legMove4 0.08s ease-in-out infinite 0.04s;
+}
+
+.pet-cockroach .pet-leg-right2 {
+    position: absolute;
+    height: 0.6px;
+    background: #222;
+    top: 25px;
+    left: 56px;
+    width: 16px;
+    transform-origin: left center;
+    transform: rotate(85deg);
+    animation: legMove5 0.08s ease-in-out infinite 0.04s;
+}
+
+.pet-cockroach .pet-leg-right3 {
     display: none;
 }
-.pet.active {
-    display: block;
-}
-.pet-body {
-    width: 90px;
-    height: 100px;
-    background: 
-        radial-gradient(ellipse at 40% 20%, #fff9c4 0%, transparent 40%),
-        radial-gradient(ellipse at 30% 35%, #fff59d 0%, transparent 35%),
-        radial-gradient(ellipse at 60% 50%, #ffeb3b 0%, transparent 40%),
-        linear-gradient(135deg, #fff9c4 0%, #fff59d 15%, #ffe082 30%, #ffd54f 50%, #ffca28 70%, #ffc107 88%, #ff9800 100%);
-    border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%;
-    position: relative;
-    box-shadow: 
-        0 10px 20px rgba(255, 152, 0, 0.3),
-        0 15px 30px rgba(255, 152, 0, 0.15),
-        inset 0 -10px 25px rgba(0,0,0,0.1),
-        inset 0 8px 20px rgba(255,255,255,0.3),
-        inset 0 0 30px rgba(255,255,255,0.1);
-    animation: petBounce 2.5s ease-in-out infinite;
+
+/* 腿部爬行动画 */
+@keyframes legMove1 {
+    0%, 100% { transform: rotate(-55deg); }
+    50% { transform: rotate(-65deg); }
 }
 
-/* 身体高光效果 */
-.pet-body::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 10px;
-    right: 20px;
-    height: 35px;
-    background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 60%);
-    border-radius: 50%;
+@keyframes legMove2 {
+    0%, 100% { transform: rotate(-25deg); }
+    50% { transform: rotate(-15deg); }
 }
 
-/* 身体底部阴影效果 */
-.pet-body::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 20%;
-    right: 20%;
-    height: 20px;
-    background: radial-gradient(ellipse at center, rgba(255, 152, 0, 0.25) 0%, transparent 70%);
-    border-radius: 50%;
-    filter: blur(4px);
+@keyframes legMove3 {
+    0%, 100% { transform: rotate(10deg); }
+    50% { transform: rotate(20deg); }
 }
 
-/* 尾巴 */
-.pet-tail {
-    position: absolute;
-    right: -18px;
-    bottom: 30%;
-    width: 35px;
-    height: 18px;
-    background: linear-gradient(135deg, #ffca28 0%, #ff9800 100%);
-    border-radius: 50% 80% 80% 50%;
-    transform: rotate(35deg);
-    animation: tailWag 0.8s ease-in-out infinite;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
+@keyframes legMove4 {
+    0%, 100% { transform: rotate(60deg); }
+    50% { transform: rotate(70deg); }
 }
 
-@keyframes tailWag {
-    0%, 100% { transform: rotate(35deg) scaleX(1); }
-    50% { transform: rotate(50deg) scaleX(1.15); }
+@keyframes legMove5 {
+    0%, 100% { transform: rotate(90deg); }
+    50% { transform: rotate(80deg); }
 }
 
-/* 前爪 */
-.pet-paw-front-left,
-.pet-paw-front-right {
-    position: absolute;
-    bottom: 8px;
-    width: 20px;
-    height: 14px;
-    background: linear-gradient(to bottom, #ffe082 0%, #ffca28 100%);
-    border-radius: 50% 50% 45% 45%;
-    box-shadow: 
-        inset 0 3px 6px rgba(255,255,255,0.4),
-        0 2px 4px rgba(0,0,0,0.1);
-}
 
-.pet-paw-front-left {
-    left: 10px;
-}
-
-.pet-paw-front-right {
-    right: 10px;
-}
-
-/* 肉垫 */
-.pet-paw-front-left::after,
-.pet-paw-front-right::after {
-    content: '';
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 3px;
-}
-
-.pet-paw-front-left::after::before,
-.pet-paw-front-right::after::before {
-    content: '';
-    width: 4px;
-    height: 4px;
-    background: #ffab91;
-    border-radius: 50%;
-}
-
-/* 脸部区域 */
-.pet-face {
-    position: absolute;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 50px;
-}
-
-/* 眼睛 */
-.pet-eye-left,
-.pet-eye-right {
-    position: absolute;
-    top: 8px;
-    width: 14px;
-    height: 16px;
-    background: linear-gradient(to bottom, #2d3748 0%, #1a202c 100%);
-    border-radius: 50%;
-    animation: blink 4s ease-in-out infinite;
-    box-shadow: 
-        0 2px 4px rgba(0,0,0,0.2),
-        inset 0 2px 3px rgba(255,255,255,0.1);
-}
-.pet-eye-left {
-    left: 6px;
-}
-.pet-eye-right {
-    right: 6px;
-}
-
-/* 眼珠高光 */
-.pet-eye-left::after,
-.pet-eye-right::after {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 4px;
-    width: 5px;
-    height: 5px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 1px 2px rgba(255,255,255,0.8);
-}
-
-/* 第二高光点 */
-.pet-eye-left::before,
-.pet-eye-right::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 7px;
-    width: 2px;
-    height: 2px;
-    background: rgba(255,255,255,0.6);
-    border-radius: 50%;
-}
-
-/* 鼻子 */
-.pet-nose {
-    position: absolute;
-    top: 22px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 7px;
-    background: linear-gradient(to bottom, #4a5568 0%, #2d3748 100%);
-    border-radius: 50% 50% 45% 45%;
-    box-shadow: 
-        inset 0 1px 2px rgba(255,255,255,0.2),
-        0 1px 3px rgba(0,0,0,0.2);
-}
-
-/* 嘴巴 */
-.pet-mouth {
-    position: absolute;
-    top: 28px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 22px;
-    height: 12px;
-    border: 3px solid #2d3748;
-    border-top: none;
-    border-radius: 0 0 25px 25px;
-    animation: smile 2.5s ease-in-out infinite;
-}
-
-/* 腮红 */
-.pet-blush-left,
-.pet-blush-right {
-    position: absolute;
-    top: 18px;
-    width: 16px;
-    height: 10px;
-    background: radial-gradient(ellipse at center, rgba(255, 182, 193, 0.5) 0%, transparent 70%);
-    border-radius: 50%;
-}
-.pet-blush-left {
-    left: -4px;
-}
-.pet-blush-right {
-    right: -4px;
-}
-
-/* 胡须 */
-.pet-whisker-left,
-.pet-whisker-right {
-    position: absolute;
-    top: 24px;
-    width: 18px;
-    height: 2px;
-    background: #4a5568;
-    border-radius: 1px;
-}
-.pet-whisker-left {
-    left: -12px;
-    transform: rotate(-8deg);
-}
-.pet-whisker-right {
-    right: -12px;
-    transform: rotate(8deg);
-}
-
-/* 额外胡须 */
-.pet-whisker-left-2,
-.pet-whisker-right-2 {
-    position: absolute;
-    top: 30px;
-    width: 15px;
-    height: 2px;
-    background: #4a5568;
-    border-radius: 1px;
-}
-.pet-whisker-left-2 {
-    left: -10px;
-    transform: rotate(5deg);
-}
-.pet-whisker-right-2 {
-    right: -10px;
-    transform: rotate(-5deg);
-}
-
-/* 猫耳朵 */
-.pet-cat .pet-ear-left,
-.pet-cat .pet-ear-right {
-    position: absolute;
-    top: -12px;
-    width: 20px;
-    height: 24px;
-    background: linear-gradient(135deg, #ffe082 0%, #ffd54f 50%, #ffca28 100%);
-    border-radius: 50% 50% 30% 30%;
-    box-shadow: 
-        inset 0 3px 6px rgba(255,255,255,0.4),
-        inset 0 -3px 6px rgba(0,0,0,0.08);
-}
-.pet-cat .pet-ear-left {
-    left: -4px;
-    transform: rotate(-20deg) skewX(-5deg);
-}
-.pet-cat .pet-ear-right {
-    right: -4px;
-    transform: rotate(20deg) skewX(5deg);
-}
-.pet-cat .pet-ear-left::after,
-.pet-cat .pet-ear-right::after {
-    content: '';
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    right: 4px;
-    bottom: 4px;
-    background: linear-gradient(135deg, #ffcdd2 0%, #f48fb1 100%);
-    border-radius: 50% 50% 30% 30%;
-    opacity: 0.8;
-}
-
-/* 狗嘴巴 */
-.pet-dog .pet-mouth {
-    width: 18px;
-    height: 10px;
-    border-radius: 0 0 15px 15px;
-}
-
-/* 兔子耳朵 */
-.pet-rabbit .pet-ear-left,
-.pet-rabbit .pet-ear-right {
-    position: absolute;
-    top: -30px;
-    width: 14px;
-    height: 35px;
-    background: linear-gradient(to bottom, #fff9c4 0%, #fff59d 50%, #ffe082 100%);
-    border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
-    animation: earWiggle 1.5s ease-in-out infinite;
-}
-.pet-rabbit .pet-ear-left {
-    left: 10px;
-    transform: rotate(-8deg);
-}
-.pet-rabbit .pet-ear-right {
-    right: 10px;
-    transform: rotate(8deg);
-}
-.pet-rabbit .pet-ear-left::after,
-.pet-rabbit .pet-ear-right::after {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 2px;
-    right: 2px;
-    bottom: 5px;
-    background: linear-gradient(to bottom, #ffcdd2 0%, #f48fb1 60%, transparent 100%);
-    border-radius: inherit;
-    opacity: 0.6;
-}
-
-@keyframes earWiggle {
-    0%, 100% { transform: rotate(-8deg); }
-    50% { transform: rotate(-3deg); }
-}
-
-.pet-rabbit .pet-ear-right {
-    animation: earWiggleRight 1.5s ease-in-out infinite;
-}
-
-@keyframes earWiggleRight {
-    0%, 100% { transform: rotate(8deg); }
-    50% { transform: rotate(3deg); }
-}
-
-/* 熊 */
-.pet-bear .pet-ear-left,
-.pet-bear .pet-ear-right {
-    position: absolute;
-    top: -8px;
-    width: 20px;
-    height: 20px;
-    background: linear-gradient(135deg, #8b4513 0%, #654321 50%, #3d2914 100%);
-    border-radius: 50%;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
-}
-.pet-bear .pet-ear-left {
-    left: -6px;
-}
-.pet-bear .pet-ear-right {
-    right: -6px;
-}
-.pet-bear .pet-body {
-    background: 
-        radial-gradient(ellipse at 40% 20%, #deb887 0%, transparent 40%),
-        radial-gradient(ellipse at 30% 35%, #d2691e 0%, transparent 35%),
-        linear-gradient(135deg, #cd853f 0%, #8b4513 50%, #5d3a1a 100%);
-}
-.pet-bear .pet-tail {
-    background: linear-gradient(135deg, #8b4513 0%, #5d3a1a 100%);
-}
-.pet-bear .pet-paw-front-left,
-.pet-bear .pet-paw-front-right {
-    background: linear-gradient(to bottom, #deb887 0%, #cd853f 100%);
-}
-
-/* 熊猫 */
-.pet-panda .pet-eye-left,
-.pet-panda .pet-eye-right {
-    background: #1a202c;
-    border-radius: 50%;
-}
-.pet-panda .pet-eye-left::before,
-.pet-panda .pet-eye-right::before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 8px;
-    height: 8px;
-    background: white;
-    border-radius: 50%;
-}
-.pet-panda .pet-eye-left::after,
-.pet-panda .pet-eye-right::after {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 4px;
-    height: 4px;
-    background: #1a202c;
-    border-radius: 50%;
-}
-.pet-panda .pet-ear-left,
-.pet-panda .pet-ear-right {
-    position: absolute;
-    top: -10px;
-    width: 18px;
-    height: 18px;
-    background: #1a202c;
-    border-radius: 50%;
-}
-.pet-panda .pet-ear-left {
-    left: -4px;
-}
-.pet-panda .pet-ear-right {
-    right: -4px;
-}
-.pet-panda .pet-body {
-    background: 
-        radial-gradient(ellipse at 40% 20%, #ffffff 0%, transparent 40%),
-        linear-gradient(135deg, #fafafa 0%, #e8e8e8 50%, #d0d0d0 100%);
-}
-.pet-panda .pet-tail {
-    background: #1a202c;
-}
-.pet-panda .pet-paw-front-left,
-.pet-panda .pet-paw-front-right {
-    background: #1a202c;
-}
-
-/* 仓鼠 */
-.pet-hamster .pet-ear-left,
-.pet-hamster .pet-ear-right {
-    position: absolute;
-    top: -5px;
-    width: 16px;
-    height: 16px;
-    background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
-    border-radius: 50%;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
-}
-.pet-hamster .pet-ear-left {
-    left: 2px;
-}
-.pet-hamster .pet-ear-right {
-    right: 2px;
-}
-.pet-hamster .pet-body {
-    background: 
-        radial-gradient(ellipse at 40% 20%, #fff8e1 0%, transparent 40%),
-        radial-gradient(ellipse at 30% 35%, #ffecb3 0%, transparent 35%),
-        linear-gradient(135deg, #ffeaa7 0%, #ffd93d 50%, #ff9500 100%);
-    border-radius: 50%;
-}
-.pet-hamster .pet-tail {
-    background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
-}
-.pet-hamster .pet-paw-front-left,
-.pet-hamster .pet-paw-front-right {
-    background: linear-gradient(to bottom, #ffeaa7 0%, #ffd93d 100%);
-}
-.pet-hamster .pet-whisker-left,
-.pet-hamster .pet-whisker-right {
-    top: 22px;
-}
-
-/* 宠物选择器 */
-.pet-selector {
-    display: flex;
-    gap: 8px;
-    padding: 8px 12px;
-    background: rgba(255,255,255,0.95);
-    border-radius: 25px;
-    box-shadow: 
-        0 4px 15px rgba(0,0,0,0.1),
-        0 2px 5px rgba(0,0,0,0.05);
-    backdrop-filter: blur(10px);
-}
-.pet-option {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0.55;
-    background: rgba(255,255,255,0.8);
-}
-.pet-option:hover {
-    opacity: 1;
-    transform: scale(1.25) translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-.pet-option.active {
-    opacity: 1;
-    background: linear-gradient(135deg, #fff9c4 0%, #ffe082 100%);
-    box-shadow: 
-        0 0 12px rgba(255, 215, 0, 0.4),
-        0 4px 10px rgba(255, 215, 0, 0.2);
-    transform: scale(1.15);
-}
-
-/* 开灯状态 */
-.toggle-btn.on .pet-body {
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 0 0 40px rgba(251, 191, 36, 0.4), 0 4px 8px rgba(0,0,0,0.2);
-}
-.toggle-btn.on .pet-mouth {
-    animation: smileOpen 2s ease-in-out infinite;
-}
-
-@keyframes swing {
-    0%, 100% { transform: translateY(-50%) rotate(0deg); }
-    25% { transform: translateY(-50%) rotate(-10deg); }
-    75% { transform: translateY(-50%) rotate(10deg); }
-}
-
-@keyframes petBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-@keyframes blink {
-    0%, 90%, 100% { transform: scaleY(1); }
-    95% { transform: scaleY(0.1); }
-}
-
-@keyframes smile {
-    0%, 100% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.1); }
-}
-
-@keyframes smileOpen {
-    0%, 100% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.15); }
-}
-
-@keyframes sparkle {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.3); opacity: 0.8; }
-}
 
 .content {
     flex: 1;
@@ -3102,31 +2715,19 @@ html, body {
   <div class="toggle-btn" id="toggleBtn">
     <div class="pet-container">
         <div class="pet-display">
-            <div class="pet pet-cat active" id="currentPet">
+            <div class="pet pet-cockroach" id="cockroachPet">
+                <div class="pet-head"></div>
                 <div class="pet-body">
-                    <div class="pet-tail"></div>
-                    <div class="pet-paw-front-left"></div>
-                    <div class="pet-paw-front-right"></div>
-                    <div class="pet-face">
-                        <div class="pet-ear-left"></div>
-                        <div class="pet-ear-right"></div>
-                        <div class="pet-eye-left"></div>
-                        <div class="pet-eye-right"></div>
-                        <div class="pet-nose"></div>
-                        <div class="pet-mouth"></div>
-                        <div class="pet-whisker-left"></div>
-                        <div class="pet-whisker-right"></div>
-                    </div>
+                    <div class="pet-antenna-left"></div>
+                    <div class="pet-antenna-right"></div>
                 </div>
+                <div class="pet-leg-left1"></div>
+                <div class="pet-leg-left2"></div>
+                <div class="pet-leg-left3"></div>
+                <div class="pet-leg-right1"></div>
+                <div class="pet-leg-right2"></div>
+                <div class="pet-leg-right3"></div>
             </div>
-        </div>
-        <div class="pet-selector" id="petSelector">
-            <div class="pet-option active" data-pet="cat">🐱</div>
-            <div class="pet-option" data-pet="dog">🐶</div>
-            <div class="pet-option" data-pet="rabbit">🐰</div>
-            <div class="pet-option" data-pet="bear">🐻</div>
-            <div class="pet-option" data-pet="panda">🐼</div>
-            <div class="pet-option" data-pet="hamster">🐹</div>
         </div>
     </div>
 </div>
@@ -4016,6 +3617,180 @@ const App = {
     }
   },
 
+  initDragPet() {
+    const toggleBtn = document.getElementById('toggleBtn');
+    const cockroachPet = document.getElementById('cockroachPet');
+    
+    // 拖拽功能
+    let isDragging = false;
+    let offsetX, offsetY;
+    let currentX = 100;
+    let currentY = 200;
+    
+    toggleBtn.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      offsetX = e.clientX - toggleBtn.offsetLeft;
+      offsetY = e.clientY - toggleBtn.offsetTop;
+      toggleBtn.style.cursor = 'grabbing';
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      
+      let newX = e.clientX - offsetX;
+      let newY = e.clientY - offsetY;
+      
+      // 限制在窗口内
+      const maxX = window.innerWidth - toggleBtn.offsetWidth;
+      const maxY = window.innerHeight - toggleBtn.offsetHeight;
+      
+      newX = Math.max(0, Math.min(newX, maxX));
+      newY = Math.max(0, Math.min(newY, maxY));
+      
+      toggleBtn.style.left = newX + 'px';
+      toggleBtn.style.top = newY + 'px';
+      toggleBtn.style.right = 'auto';
+      toggleBtn.style.bottom = 'auto';
+      
+      currentX = newX;
+      currentY = newY;
+    });
+    
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      if (toggleBtn) {
+        toggleBtn.style.cursor = 'grab';
+      }
+    });
+    
+    // 初始化位置
+    if (toggleBtn) {
+      toggleBtn.style.left = currentX + 'px';
+      toggleBtn.style.top = currentY + 'px';
+      toggleBtn.style.right = 'auto';
+      toggleBtn.style.bottom = 'auto';
+    }
+    
+    // 添加日志：打印触角渲染坐标
+    setTimeout(() => {
+      const antennaLeft = document.querySelector('.pet-antenna-left');
+      const antennaRight = document.querySelector('.pet-antenna-right');
+      const head = document.querySelector('.pet-head');
+      const body = document.querySelector('.pet-body');
+      
+      console.log('=== 蟑螂组件坐标日志 ===');
+      if (head) {
+        const headRect = head.getBoundingClientRect();
+        console.log('头部位置:', `left=${head.style.left || 'auto'}`, `right=${head.style.right || 'auto'}`, 
+                    `top=${head.style.top || 'auto'}`, `width=${head.style.width}`, `height=${head.style.height}`);
+        console.log('头部实际渲染位置:', headRect);
+      }
+      if (body) {
+        const bodyRect = body.getBoundingClientRect();
+        console.log('身体位置:', `left=${body.style.left || 'auto'}`, `right=${body.style.right || 'auto'}`, 
+                    `top=${body.style.top || 'auto'}`, `width=${body.style.width}`, `height=${body.style.height}`);
+        console.log('身体实际渲染位置:', bodyRect);
+      }
+      if (antennaLeft) {
+        const leftRect = antennaLeft.getBoundingClientRect();
+        console.log('左触角位置:', `left=${antennaLeft.style.left || 'auto'}`, `right=${antennaLeft.style.right || 'auto'}`, 
+                    `top=${antennaLeft.style.top || 'auto'}`, `width=${antennaLeft.style.width}`, 
+                    `transform=${antennaLeft.style.transform}`);
+        console.log('左触角实际渲染位置:', leftRect);
+      }
+      if (antennaRight) {
+        const rightRect = antennaRight.getBoundingClientRect();
+        console.log('右触角位置:', `left=${antennaRight.style.left || 'auto'}`, `right=${antennaRight.style.right || 'auto'}`, 
+                    `top=${antennaRight.style.top || 'auto'}`, `width=${antennaRight.style.width}`, 
+                    `transform=${antennaRight.style.transform}`);
+        console.log('右触角实际渲染位置:', rightRect);
+      }
+      console.log('=== 日志结束 ===');
+    }, 100);
+    
+    // 开始蟑螂移动
+    this.startCockroachMovement();
+  },
+  
+  cockroachInterval: null,
+  cockroachTargetX: 100,
+  cockroachTargetY: 200,
+  isCockroachMoving: false,
+  
+  startCockroachMovement() {
+    if (this.cockroachInterval) return;
+    
+    const toggleBtn = document.getElementById('toggleBtn');
+    const cockroachPet = document.getElementById('cockroachPet');
+    
+    if (!toggleBtn || !cockroachPet) return;
+    
+    this.isCockroachMoving = true;
+    
+    this.cockroachInterval = setInterval(() => {
+      if (!this.isCockroachMoving) return;
+      
+      // 随机生成新的目标位置
+      const padding = 100;
+      const maxX = window.innerWidth - toggleBtn.offsetWidth - padding;
+      const maxY = window.innerHeight - toggleBtn.offsetHeight - padding;
+      
+      this.cockroachTargetX = padding + Math.random() * (maxX - padding);
+      this.cockroachTargetY = padding + Math.random() * (maxY - padding);
+      
+      this.animateCockroach();
+    }, 2000 + Math.random() * 2000); // 每2-4秒移动一次
+  },
+  
+  animateCockroach() {
+    const toggleBtn = document.getElementById('toggleBtn');
+    if (!toggleBtn) return;
+    
+    const startX = parseInt(toggleBtn.style.left) || 100;
+    const startY = parseInt(toggleBtn.style.top) || 200;
+    
+    const duration = 800 + Math.random() * 400; // 800-1200ms
+    const startTime = Date.now();
+    
+    const animate = () => {
+      if (!this.isCockroachMoving) return;
+      
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // 使用缓动函数让移动更自然
+      const easeProgress = this.easeInOutCubic(progress);
+      
+      const currentX = startX + (this.cockroachTargetX - startX) * easeProgress;
+      const currentY = startY + (this.cockroachTargetY - startY) * easeProgress;
+      
+      toggleBtn.style.left = currentX + 'px';
+      toggleBtn.style.top = currentY + 'px';
+      
+      // 计算移动方向并旋转蟑螂
+      const cockroachPet = document.getElementById('cockroachPet');
+      if (cockroachPet) {
+        const angle = Math.atan2(
+          this.cockroachTargetY - startY,
+          this.cockroachTargetX - startX
+        ) * (180 / Math.PI);
+        cockroachPet.style.transform = `rotate(${angle}deg)`;
+      }
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    
+    animate();
+  },
+  
+  easeInOutCubic(t) {
+    return t < 0.5
+      ? 4 * t * t * t
+      : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  },
+  
   initUserPanel() {
     // 用户头像点击事件
     const sidebarAvatarImg = document.getElementById('sidebarAvatarImg');
@@ -5123,91 +4898,6 @@ function closeSettingsModal() {
     this.renderTabs();
   },
 
-  initDragPet() {
-    const toggleBtn = document.getElementById('toggleBtn');
-    const petSelector = document.getElementById('petSelector');
-    if (!toggleBtn) return;
-    
-    let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
-    
-    const handleMouseDown = (e) => {
-      isDragging = true;
-      const rect = toggleBtn.getBoundingClientRect();
-      offsetX = e.clientX - rect.left;
-      offsetY = e.clientY - rect.top;
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      e.preventDefault();
-    };
-    
-    const handleMouseMove = (e) => {
-      if (!isDragging) return;
-      
-      let newX = e.clientX - offsetX;
-      let newY = e.clientY - offsetY;
-      
-      const maxX = window.innerWidth - toggleBtn.offsetWidth;
-      const maxY = window.innerHeight - toggleBtn.offsetHeight;
-      
-      newX = Math.max(0, Math.min(newX, maxX));
-      newY = Math.max(0, Math.min(newY, maxY));
-      
-      toggleBtn.style.left = newX + 'px';
-      toggleBtn.style.top = newY + 'px';
-      toggleBtn.style.bottom = 'auto';
-    };
-    
-    const handleMouseUp = () => {
-      isDragging = false;
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-    
-    const handlePetSelect = (e) => {
-      const option = e.target.closest('.pet-option');
-      if (!option) return;
-      
-      const petType = option.dataset.pet;
-      const currentPet = document.getElementById('currentPet');
-      const options = petSelector.querySelectorAll('.pet-option');
-      
-      options.forEach(opt => opt.classList.remove('active'));
-      option.classList.add('active');
-      
-      if (currentPet) {
-        currentPet.className = `pet pet-${petType} active`;
-      }
-      
-      localStorage.setItem('selectedPet', petType);
-    };
-    
-    const loadSavedPet = () => {
-      const savedPet = localStorage.getItem('selectedPet') || 'cat';
-      const currentPet = document.getElementById('currentPet');
-      const options = petSelector.querySelectorAll('.pet-option');
-      
-      options.forEach(opt => {
-        opt.classList.remove('active');
-        if (opt.dataset.pet === savedPet) {
-          opt.classList.add('active');
-        }
-      });
-      
-      if (currentPet) {
-        currentPet.className = `pet pet-${savedPet} active`;
-      }
-    };
-    
-    toggleBtn.addEventListener('mousedown', handleMouseDown);
-    
-    if (petSelector) {
-      petSelector.addEventListener('click', handlePetSelect);
-      loadSavedPet();
-    }
-  },
-  
   toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('toggleBtn');
