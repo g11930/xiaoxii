@@ -12,16 +12,72 @@
     font-family: "Microsoft YaHei", sans-serif;
 }
 html, body {
-    height: 100%;
-    overflow: hidden;
+  height: 100%;
+  overflow: hidden;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    width: 100vw;
     height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    overflow: hidden;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #0a0a0a 100%);
+    cursor: pointer;
+}
+
+/* 时空隧道CSS */
+.tunnel-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+.tunnel-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, #fff 0%, #00ffff 50%, transparent 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00ffff;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.enter-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 255, 255, 0.95) 0%, rgba(138, 43, 226, 0.95) 50%, #000 100%);
+    z-index: 9999;
+    pointer-events: none;
+    animation: tunnelEnter 1.5s ease-out forwards;
+}
+
+@keyframes tunnelEnter {
+    0% { 
+        opacity: 0; 
+        transform: scale(0.3); 
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale(1.2); 
+    }
+    100% { 
+        opacity: 0; 
+        transform: scale(2.5); 
+    }
 }
 .login-box {
     background: white;
@@ -358,8 +414,8 @@ html, body {
     position: fixed;
     left: 20px;
     bottom: 10px;
-    width: 80px;
-    height: 60px;
+    width: 70px;
+    height: 100px;
     background: transparent;
     cursor: grab;
     z-index: 9999;
@@ -375,7 +431,7 @@ html, body {
     cursor: grabbing;
     transform: scale(1.05);
 }
-/* 电子宠物样式 - 只有蟑螂 */
+/* 电子宠物样式 */
 .pet-container {
     display: flex;
     flex-direction: column;
@@ -386,162 +442,781 @@ html, body {
     position: relative;
 }
 .pet {
-    width: 50px;
-    height: 30px;
+    width: 70px;
+    height: 80px;
     position: relative;
+    display: none;
+}
+.pet.active {
+    display: block;
+}
+.pet-body {
+    width: 90px;
+    height: 100px;
+    background: 
+        radial-gradient(ellipse at 40% 20%, #fff9c4 0%, transparent 40%),
+        radial-gradient(ellipse at 30% 35%, #fff59d 0%, transparent 35%),
+        radial-gradient(ellipse at 60% 50%, #ffeb3b 0%, transparent 40%),
+        linear-gradient(135deg, #fff9c4 0%, #fff59d 15%, #ffe082 30%, #ffd54f 50%, #ffca28 70%, #ffc107 88%, #ff9800 100%);
+    border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%;
+    position: relative;
+    box-shadow: 
+        0 10px 20px rgba(255, 152, 0, 0.3),
+        0 15px 30px rgba(255, 152, 0, 0.15),
+        inset 0 -10px 25px rgba(0,0,0,0.1),
+        inset 0 8px 20px rgba(255,255,255,0.3),
+        inset 0 0 30px rgba(255,255,255,0.1);
+    animation: petBounce 2.5s ease-in-out infinite;
 }
 
-/* 蟑螂样式 - 按照用户提供的样子，缩小尺寸 */
-.pet-cockroach {
+/* 身体高光效果 */
+.pet-body::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    right: 20px;
+    height: 35px;
+    background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 60%);
+    border-radius: 50%;
+}
+
+/* 身体底部阴影效果 */
+.pet-body::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 20%;
+    right: 20%;
+    height: 20px;
+    background: radial-gradient(ellipse at center, rgba(255, 152, 0, 0.25) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(4px);
+}
+
+/* 苍蝇样式 */
+.pet-fly {
     width: 80px;
     height: 50px;
     position: relative;
-    transform: rotate(-160deg);
+    transition: transform 0.1s ease-out;
 }
 
-/* 蟑螂头部 */
-.pet-cockroach .pet-head {
+/* 苍蝇身体容器 */
+.fly-body {
+    width: 80px;
+    height: 50px;
+    position: relative;
+}
+
+/* 苍蝇头部 */
+.fly-head {
     position: absolute;
     right: 0;
-    top: 19px;
-    width: 14px;
-    height: 13px;
-    background: radial-gradient(circle at 30% 40%, #7a5334, #3a2412);
+    top: 15px;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle at 40% 40%, #4a4a4a, #1a1a1a);
     border-radius: 50%;
     z-index: 3;
 }
 
-/* 蟑螂身体 */
-.pet-cockroach .pet-body {
+/* 苍蝇眼睛 */
+.fly-eye {
     position: absolute;
-    right: 16px;
-    top: 11px;
-    width: 52px;
-    height: 22px;
-    background: linear-gradient(90deg, #1a0f05, #4b3018, #1a0f05);
-    border-radius: 50% 20% 20% 50%;
-    box-shadow: inset 0 0 0 1px #5a3a1f;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle at 40% 40%, #ff3333, #cc0000);
+    border-radius: 50%;
+    box-shadow: inset 2px 2px 3px rgba(255, 255, 255, 0.3);
+}
+
+.fly-eye-left {
+    right: 2px;
+    top: 2px;
+}
+
+.fly-eye-right {
+    right: 2px;
+    bottom: 2px;
+}
+
+/* 苍蝇触角 */
+.fly-antenna {
+    position: absolute;
+    width: 1px;
+    height: 8px;
+    background: #333;
+    right: -2px;
+}
+
+.fly-antenna-left {
+    top: 10px;
+    transform: rotate(-30deg);
+}
+
+.fly-antenna-right {
+    bottom: 10px;
+    transform: rotate(30deg);
+}
+
+.fly-antenna-left::after,
+.fly-antenna-right::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: -2px;
+    width: 4px;
+    height: 4px;
+    background: #333;
+    border-radius: 50%;
+}
+
+/* 苍蝇胸部 */
+.fly-thorax {
+    position: absolute;
+    right: 18px;
+    top: 12px;
+    width: 18px;
+    height: 26px;
+    background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 50%, #2a2a2a 100%);
+    border-radius: 50% 50% 40% 40%;
+    box-shadow: inset -2px -2px 5px rgba(0,0,0,0.5);
+}
+
+/* 苍蝇腹部 */
+.fly-abdomen {
+    position: absolute;
+    right: 32px;
+    top: 18px;
+    width: 30px;
+    height: 18px;
+    background: linear-gradient(90deg, #2a2a2a 0%, #3a3a3a 30%, #2a2a2a 70%, #1a1a1a 100%);
+    border-radius: 50% 30% 30% 50%;
+    box-shadow: inset -2px -2px 5px rgba(0,0,0,0.5);
+}
+
+/* 苍蝇腹部条纹 */
+.fly-abdomen::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 5px;
+    right: 8px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+.fly-abdomen::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 12px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+}
+
+/* 苍蝇翅膀 */
+.fly-wing {
+    position: absolute;
+    width: 30px;
+    height: 20px;
+    background: rgba(200, 200, 220, 0.4);
+    border-radius: 50% 50% 50% 50%;
+    box-shadow: 
+        inset 0 0 10px rgba(255, 255, 255, 0.3),
+        0 0 5px rgba(100, 100, 120, 0.2);
+    z-index: 1;
+    animation: wingBuzz 0.05s ease-in-out infinite;
+}
+
+.fly-wing-left {
+    right: 15px;
+    top: -8px;
+    transform-origin: bottom center;
+}
+
+.fly-wing-right {
+    right: 15px;
+    bottom: -8px;
+    transform-origin: top center;
+}
+
+@keyframes wingBuzz {
+    0%, 100% { transform: rotate(-20deg) scale(1); }
+    50% { transform: rotate(-40deg) scale(1.05); }
+}
+
+.fly-wing-right {
+    animation: wingBuzzRight 0.05s ease-in-out infinite;
+}
+
+@keyframes wingBuzzRight {
+    0%, 100% { transform: rotate(20deg) scale(1); }
+    50% { transform: rotate(40deg) scale(1.05); }
+}
+
+/* 苍蝇腿 */
+.fly-leg {
+    position: absolute;
+    width: 1px;
+    height: 10px;
+    background: #333;
+    transform-origin: top center;
     z-index: 2;
 }
 
-/* 蟑螂左触角 */
-.pet-cockroach .pet-antenna-left {
-    position: absolute;
-    height: 1.5px;
-    background: #333;
-    right: 0;
-    top: 18px;
-    width: 35px;
-    transform-origin: right center;
-    transform: rotate(-25deg);
-    z-index: 4;
+.fly-leg1 {
+    right: 22px;
+    top: 20px;
+    transform: rotate(-50deg);
+    animation: legMove1 0.15s ease-in-out infinite;
 }
 
-/* 蟑螂右触角 */
-.pet-cockroach .pet-antenna-right {
-    position: absolute;
-    height: 1.5px;
-    background: #333;
-    right: 0;
-    top: 23px;
-    width: 35px;
-    transform-origin: right center;
-    transform: rotate(10deg);
-    z-index: 4;
+.fly-leg2 {
+    right: 25px;
+    top: 28px;
+    transform: rotate(-70deg);
+    animation: legMove2 0.15s ease-in-out infinite;
 }
 
-/* 蟑螂腿部 */
-.pet-cockroach .pet-leg-left1 {
-    position: absolute;
-    height: 0.6px;
-    background: #222;
-    top: 13px;
-    left: 12px;
-    width: 28px;
-    transform-origin: left center;
-    transform: rotate(-55deg);
-    animation: legMove1 0.08s ease-in-out infinite;
+.fly-leg3 {
+    right: 28px;
+    top: 36px;
+    transform: rotate(-90deg);
+    animation: legMove3 0.15s ease-in-out infinite;
 }
 
-.pet-cockroach .pet-leg-left2 {
-    position: absolute;
-    height: 0.6px;
-    background: #222;
-    top: 22px;
-    left: 12px;
-    width: 24px;
-    transform-origin: left center;
-    transform: rotate(-20deg);
-    animation: legMove2 0.08s ease-in-out infinite;
+.fly-leg4 {
+    right: 22px;
+    top: 20px;
+    transform: rotate(50deg);
+    animation: legMove1 0.15s ease-in-out infinite 0.075s;
 }
 
-.pet-cockroach .pet-leg-left3 {
-    position: absolute;
-    height: 0.6px;
-    background: #222;
-    top: 30px;
-    left: 14px;
-    width: 22px;
-    transform-origin: left center;
-    transform: rotate(10deg);
-    animation: legMove3 0.08s ease-in-out infinite;
+.fly-leg5 {
+    right: 25px;
+    top: 28px;
+    transform: rotate(70deg);
+    animation: legMove2 0.15s ease-in-out infinite 0.075s;
 }
 
-.pet-cockroach .pet-leg-right1 {
-    position: absolute;
-    height: 0.6px;
-    background: #222;
-    top: 16px;
-    left: 54px;
-    width: 18px;
-    transform-origin: left center;
-    transform: rotate(55deg);
-    animation: legMove4 0.08s ease-in-out infinite 0.04s;
+.fly-leg6 {
+    right: 28px;
+    top: 36px;
+    transform: rotate(90deg);
+    animation: legMove3 0.15s ease-in-out infinite 0.075s;
 }
 
-.pet-cockroach .pet-leg-right2 {
-    position: absolute;
-    height: 0.6px;
-    background: #222;
-    top: 25px;
-    left: 56px;
-    width: 16px;
-    transform-origin: left center;
-    transform: rotate(85deg);
-    animation: legMove5 0.08s ease-in-out infinite 0.04s;
-}
-
-.pet-cockroach .pet-leg-right3 {
-    display: none;
-}
-
-/* 腿部爬行动画 */
 @keyframes legMove1 {
-    0%, 100% { transform: rotate(-55deg); }
-    50% { transform: rotate(-65deg); }
+    0%, 100% { transform: rotate(-50deg); }
+    50% { transform: rotate(-60deg); }
 }
 
 @keyframes legMove2 {
-    0%, 100% { transform: rotate(-25deg); }
-    50% { transform: rotate(-15deg); }
+    0%, 100% { transform: rotate(-70deg); }
+    50% { transform: rotate(-80deg); }
 }
 
 @keyframes legMove3 {
-    0%, 100% { transform: rotate(10deg); }
-    50% { transform: rotate(20deg); }
+    0%, 100% { transform: rotate(-90deg); }
+    50% { transform: rotate(-100deg); }
 }
 
-@keyframes legMove4 {
-    0%, 100% { transform: rotate(60deg); }
-    50% { transform: rotate(70deg); }
+/* 尾巴 */
+.pet-tail {
+    position: absolute;
+    right: -18px;
+    bottom: 30%;
+    width: 35px;
+    height: 18px;
+    background: linear-gradient(135deg, #ffca28 0%, #ff9800 100%);
+    border-radius: 50% 80% 80% 50%;
+    transform: rotate(35deg);
+    animation: tailWag 0.8s ease-in-out infinite;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
 }
 
-@keyframes legMove5 {
-    0%, 100% { transform: rotate(90deg); }
-    50% { transform: rotate(80deg); }
+@keyframes tailWag {
+    0%, 100% { transform: rotate(35deg) scaleX(1); }
+    50% { transform: rotate(50deg) scaleX(1.15); }
 }
 
+/* 前爪 */
+.pet-paw-front-left,
+.pet-paw-front-right {
+    position: absolute;
+    bottom: 8px;
+    width: 20px;
+    height: 14px;
+    background: linear-gradient(to bottom, #ffe082 0%, #ffca28 100%);
+    border-radius: 50% 50% 45% 45%;
+    box-shadow: 
+        inset 0 3px 6px rgba(255,255,255,0.4),
+        0 2px 4px rgba(0,0,0,0.1);
+}
 
+.pet-paw-front-left {
+    left: 10px;
+}
+
+.pet-paw-front-right {
+    right: 10px;
+}
+
+/* 肉垫 */
+.pet-paw-front-left::after,
+.pet-paw-front-right::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 3px;
+}
+
+.pet-paw-front-left::after::before,
+.pet-paw-front-right::after::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: #ffab91;
+    border-radius: 50%;
+}
+
+/* 脸部区域 */
+.pet-face {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 50px;
+}
+
+/* 眼睛 */
+.pet-eye-left,
+.pet-eye-right {
+    position: absolute;
+    top: 8px;
+    width: 14px;
+    height: 16px;
+    background: linear-gradient(to bottom, #2d3748 0%, #1a202c 100%);
+    border-radius: 50%;
+    animation: blink 4s ease-in-out infinite;
+    box-shadow: 
+        0 2px 4px rgba(0,0,0,0.2),
+        inset 0 2px 3px rgba(255,255,255,0.1);
+}
+.pet-eye-left {
+    left: 6px;
+}
+.pet-eye-right {
+    right: 6px;
+}
+
+/* 眼珠高光 */
+.pet-eye-left::after,
+.pet-eye-right::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 4px;
+    width: 5px;
+    height: 5px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(255,255,255,0.8);
+}
+
+/* 第二高光点 */
+.pet-eye-left::before,
+.pet-eye-right::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    width: 2px;
+    height: 2px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+}
+
+/* 鼻子 */
+.pet-nose {
+    position: absolute;
+    top: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 7px;
+    background: linear-gradient(to bottom, #4a5568 0%, #2d3748 100%);
+    border-radius: 50% 50% 45% 45%;
+    box-shadow: 
+        inset 0 1px 2px rgba(255,255,255,0.2),
+        0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* 嘴巴 */
+.pet-mouth {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 12px;
+    border: 3px solid #2d3748;
+    border-top: none;
+    border-radius: 0 0 25px 25px;
+    animation: smile 2.5s ease-in-out infinite;
+}
+
+/* 腮红 */
+.pet-blush-left,
+.pet-blush-right {
+    position: absolute;
+    top: 18px;
+    width: 16px;
+    height: 10px;
+    background: radial-gradient(ellipse at center, rgba(255, 182, 193, 0.5) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.pet-blush-left {
+    left: -4px;
+}
+.pet-blush-right {
+    right: -4px;
+}
+
+/* 胡须 */
+.pet-whisker-left,
+.pet-whisker-right {
+    position: absolute;
+    top: 24px;
+    width: 18px;
+    height: 2px;
+    background: #4a5568;
+    border-radius: 1px;
+}
+.pet-whisker-left {
+    left: -12px;
+    transform: rotate(-8deg);
+}
+.pet-whisker-right {
+    right: -12px;
+    transform: rotate(8deg);
+}
+
+/* 额外胡须 */
+.pet-whisker-left-2,
+.pet-whisker-right-2 {
+    position: absolute;
+    top: 30px;
+    width: 15px;
+    height: 2px;
+    background: #4a5568;
+    border-radius: 1px;
+}
+.pet-whisker-left-2 {
+    left: -10px;
+    transform: rotate(5deg);
+}
+.pet-whisker-right-2 {
+    right: -10px;
+    transform: rotate(-5deg);
+}
+
+/* 猫耳朵 */
+.pet-cat .pet-ear-left,
+.pet-cat .pet-ear-right {
+    position: absolute;
+    top: -12px;
+    width: 20px;
+    height: 24px;
+    background: linear-gradient(135deg, #ffe082 0%, #ffd54f 50%, #ffca28 100%);
+    border-radius: 50% 50% 30% 30%;
+    box-shadow: 
+        inset 0 3px 6px rgba(255,255,255,0.4),
+        inset 0 -3px 6px rgba(0,0,0,0.08);
+}
+.pet-cat .pet-ear-left {
+    left: -4px;
+    transform: rotate(-20deg) skewX(-5deg);
+}
+.pet-cat .pet-ear-right {
+    right: -4px;
+    transform: rotate(20deg) skewX(5deg);
+}
+.pet-cat .pet-ear-left::after,
+.pet-cat .pet-ear-right::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    background: linear-gradient(135deg, #ffcdd2 0%, #f48fb1 100%);
+    border-radius: 50% 50% 30% 30%;
+    opacity: 0.8;
+}
+
+/* 狗嘴巴 */
+.pet-dog .pet-mouth {
+    width: 18px;
+    height: 10px;
+    border-radius: 0 0 15px 15px;
+}
+
+/* 兔子耳朵 */
+.pet-rabbit .pet-ear-left,
+.pet-rabbit .pet-ear-right {
+    position: absolute;
+    top: -30px;
+    width: 14px;
+    height: 35px;
+    background: linear-gradient(to bottom, #fff9c4 0%, #fff59d 50%, #ffe082 100%);
+    border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+    animation: earWiggle 1.5s ease-in-out infinite;
+}
+.pet-rabbit .pet-ear-left {
+    left: 10px;
+    transform: rotate(-8deg);
+}
+.pet-rabbit .pet-ear-right {
+    right: 10px;
+    transform: rotate(8deg);
+}
+.pet-rabbit .pet-ear-left::after,
+.pet-rabbit .pet-ear-right::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    right: 2px;
+    bottom: 5px;
+    background: linear-gradient(to bottom, #ffcdd2 0%, #f48fb1 60%, transparent 100%);
+    border-radius: inherit;
+    opacity: 0.6;
+}
+
+@keyframes earWiggle {
+    0%, 100% { transform: rotate(-8deg); }
+    50% { transform: rotate(-3deg); }
+}
+
+.pet-rabbit .pet-ear-right {
+    animation: earWiggleRight 1.5s ease-in-out infinite;
+}
+
+@keyframes earWiggleRight {
+    0%, 100% { transform: rotate(8deg); }
+    50% { transform: rotate(3deg); }
+}
+
+/* 熊 */
+.pet-bear .pet-ear-left,
+.pet-bear .pet-ear-right {
+    position: absolute;
+    top: -8px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #8b4513 0%, #654321 50%, #3d2914 100%);
+    border-radius: 50%;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
+}
+.pet-bear .pet-ear-left {
+    left: -6px;
+}
+.pet-bear .pet-ear-right {
+    right: -6px;
+}
+.pet-bear .pet-body {
+    background: 
+        radial-gradient(ellipse at 40% 20%, #deb887 0%, transparent 40%),
+        radial-gradient(ellipse at 30% 35%, #d2691e 0%, transparent 35%),
+        linear-gradient(135deg, #cd853f 0%, #8b4513 50%, #5d3a1a 100%);
+}
+.pet-bear .pet-tail {
+    background: linear-gradient(135deg, #8b4513 0%, #5d3a1a 100%);
+}
+.pet-bear .pet-paw-front-left,
+.pet-bear .pet-paw-front-right {
+    background: linear-gradient(to bottom, #deb887 0%, #cd853f 100%);
+}
+
+/* 熊猫 */
+.pet-panda .pet-eye-left,
+.pet-panda .pet-eye-right {
+    background: #1a202c;
+    border-radius: 50%;
+}
+.pet-panda .pet-eye-left::before,
+.pet-panda .pet-eye-right::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+.pet-panda .pet-eye-left::after,
+.pet-panda .pet-eye-right::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 4px;
+    height: 4px;
+    background: #1a202c;
+    border-radius: 50%;
+}
+.pet-panda .pet-ear-left,
+.pet-panda .pet-ear-right {
+    position: absolute;
+    top: -10px;
+    width: 18px;
+    height: 18px;
+    background: #1a202c;
+    border-radius: 50%;
+}
+.pet-panda .pet-ear-left {
+    left: -4px;
+}
+.pet-panda .pet-ear-right {
+    right: -4px;
+}
+.pet-panda .pet-body {
+    background: 
+        radial-gradient(ellipse at 40% 20%, #ffffff 0%, transparent 40%),
+        linear-gradient(135deg, #fafafa 0%, #e8e8e8 50%, #d0d0d0 100%);
+}
+.pet-panda .pet-tail {
+    background: #1a202c;
+}
+.pet-panda .pet-paw-front-left,
+.pet-panda .pet-paw-front-right {
+    background: #1a202c;
+}
+
+/* 仓鼠 */
+.pet-hamster .pet-ear-left,
+.pet-hamster .pet-ear-right {
+    position: absolute;
+    top: -5px;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
+    border-radius: 50%;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
+}
+.pet-hamster .pet-ear-left {
+    left: 2px;
+}
+.pet-hamster .pet-ear-right {
+    right: 2px;
+}
+.pet-hamster .pet-body {
+    background: 
+        radial-gradient(ellipse at 40% 20%, #fff8e1 0%, transparent 40%),
+        radial-gradient(ellipse at 30% 35%, #ffecb3 0%, transparent 35%),
+        linear-gradient(135deg, #ffeaa7 0%, #ffd93d 50%, #ff9500 100%);
+    border-radius: 50%;
+}
+.pet-hamster .pet-tail {
+    background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
+}
+.pet-hamster .pet-paw-front-left,
+.pet-hamster .pet-paw-front-right {
+    background: linear-gradient(to bottom, #ffeaa7 0%, #ffd93d 100%);
+}
+.pet-hamster .pet-whisker-left,
+.pet-hamster .pet-whisker-right {
+    top: 22px;
+}
+
+/* 宠物选择器 */
+.pet-selector {
+    display: flex;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 25px;
+    box-shadow: 
+        0 4px 15px rgba(0,0,0,0.1),
+        0 2px 5px rgba(0,0,0,0.05);
+    backdrop-filter: blur(10px);
+}
+.pet-option {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.55;
+    background: rgba(255,255,255,0.8);
+}
+.pet-option:hover {
+    opacity: 1;
+    transform: scale(1.25) translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.pet-option.active {
+    opacity: 1;
+    background: linear-gradient(135deg, #fff9c4 0%, #ffe082 100%);
+    box-shadow: 
+        0 0 12px rgba(255, 215, 0, 0.4),
+        0 4px 10px rgba(255, 215, 0, 0.2);
+    transform: scale(1.15);
+}
+
+/* 开灯状态 */
+.toggle-btn.on .pet-body {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 0 0 40px rgba(251, 191, 36, 0.4), 0 4px 8px rgba(0,0,0,0.2);
+}
+.toggle-btn.on .pet-mouth {
+    animation: smileOpen 2s ease-in-out infinite;
+}
+
+@keyframes swing {
+    0%, 100% { transform: translateY(-50%) rotate(0deg); }
+    25% { transform: translateY(-50%) rotate(-10deg); }
+    75% { transform: translateY(-50%) rotate(10deg); }
+}
+
+@keyframes petBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes blink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+}
+
+@keyframes smile {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.1); }
+}
+
+@keyframes smileOpen {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.15); }
+}
+
+@keyframes sparkle {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.8; }
+}
 
 .content {
     flex: 1;
@@ -625,17 +1300,33 @@ html, body {
     background: #fff;
     border-bottom: 1px solid #e2e8f0;
     overflow-x: auto;
+    position: relative;
 }
+
+.tabs-progress-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    transition: width 0.05s, background 0.1s;
+    background: linear-gradient(90deg, #00ff00, #88ff00, #ffff00, #ff8800, #ff0000);
+    z-index: 0;
+    opacity: 0.3;
+}
+
 .tab {
-    padding: 12px 24px;
+    padding: 8px 24px;
     cursor: grab;
     color: #64748b;
     font-size: 14px;
     position: relative;
+    z-index: 1;
     white-space: nowrap;
     border-bottom: 2px solid transparent;
-    transition: all 0.2s;
+    transition: all 0.15s;
     user-select: none;
+    transform-origin: center bottom;
 }
 .tab.dragging {
     cursor: grabbing;
@@ -2455,13 +3146,7 @@ html, body {
 <body>
 
 <div id="loginPage" class="login-container">
-    <div class="login-box">
-        <div class="login-title">冬瓜开发</div>
-        <div class="login-subtitle">请选择登录账号</div>
-        <div class="account-list" id="accountList"></div>
-        <button class="login-btn" id="loginBtn" disabled>请先选择账号</button>
-        <button class="login-btn admin-btn" id="adminBtn">超级管理</button>
-    </div>
+    <div class="tunnel-container" id="tunnelContainer"></div>
 </div>
 
 <div id="noticePopup" class="notice-popup" style="display:none;">
@@ -2715,24 +3400,41 @@ html, body {
   <div class="toggle-btn" id="toggleBtn">
     <div class="pet-container">
         <div class="pet-display">
-            <div class="pet pet-cockroach" id="cockroachPet">
-                <div class="pet-head"></div>
-                <div class="pet-body">
-                    <div class="pet-antenna-left"></div>
-                    <div class="pet-antenna-right"></div>
+            <div class="pet pet-fly active" id="currentPet">
+                <!-- 苍蝇身体 -->
+                <div class="fly-body">
+                    <!-- 头部 -->
+                    <div class="fly-head">
+                        <!-- 大眼睛 -->
+                        <div class="fly-eye fly-eye-left"></div>
+                        <div class="fly-eye fly-eye-right"></div>
+                        <!-- 触角 -->
+                        <div class="fly-antenna fly-antenna-left"></div>
+                        <div class="fly-antenna fly-antenna-right"></div>
+                    </div>
+                    <!-- 胸部 -->
+                    <div class="fly-thorax"></div>
+                    <!-- 腹部 -->
+                    <div class="fly-abdomen"></div>
+                    <!-- 翅膀 -->
+                    <div class="fly-wing fly-wing-left"></div>
+                    <div class="fly-wing fly-wing-right"></div>
+                    <!-- 腿 -->
+                    <div class="fly-leg fly-leg1"></div>
+                    <div class="fly-leg fly-leg2"></div>
+                    <div class="fly-leg fly-leg3"></div>
+                    <div class="fly-leg fly-leg4"></div>
+                    <div class="fly-leg fly-leg5"></div>
+                    <div class="fly-leg fly-leg6"></div>
                 </div>
-                <div class="pet-leg-left1"></div>
-                <div class="pet-leg-left2"></div>
-                <div class="pet-leg-left3"></div>
-                <div class="pet-leg-right1"></div>
-                <div class="pet-leg-right2"></div>
-                <div class="pet-leg-right3"></div>
             </div>
         </div>
     </div>
 </div>
   <div class="content">
-    <div class="tabs" id="tabs"></div>
+    <div class="tabs" id="tabs">
+      <div class="tabs-progress-bg" id="tabs-progress-bg"></div>
+    </div>
     <div class="pages" id="pages"></div>
     
     <div id="remove-empty-rows-page" class="page" style="display:none; padding:20px; height:100%; overflow-y:auto; background:#f0f2f5;">
@@ -3366,8 +4068,212 @@ const App = {
   init() {
     this.loadAccounts();
     this.loadNotice();
-    this.renderAccountList();
-    this.bindLoginEvents();
+    this.initTunnel();
+  },
+  
+  initTunnel() {
+    // 创建时空隧道
+    this.createTunnel();
+    
+    // 开始隧道动画
+    this.startTunnelAnimation();
+    
+    // 点击进入主页面
+    const loginPage = document.getElementById('loginPage');
+    loginPage.onclick = () => this.enterThroughTunnel();
+  },
+  
+  createTunnel() {
+    const container = document.getElementById('tunnelContainer');
+    container.innerHTML = '';
+    
+    // 存储元素引用，避免每帧查询
+    this.tunnelElements = {
+      particles: []
+    };
+    
+    // 创建更多粒子，满屏都是
+    for (let i = 0; i < 500; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'tunnel-particle';
+      
+      // 随机位置，覆盖全屏
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 0 + Math.random() * 1200; // 更远的距离
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance;
+      const z = -Math.random() * 6000;
+      
+      // 随机大小和颜色
+      const size = 1.5 + Math.random() * 5;
+      const hue = Math.random() * 360;
+      
+      particle.style.left = `calc(50% + ${x}px)`;
+      particle.style.top = `calc(50% + ${y}px)`;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.background = `radial-gradient(circle, #fff 0%, hsl(${hue}, 100%, 60%) 50%, transparent 100%)`;
+      particle.style.boxShadow = `0 0 ${size*3}px hsl(${hue}, 100%, 60%)`;
+      particle.dataset.z = z;
+      particle.dataset.angle = angle;
+      particle.dataset.distance = distance;
+      particle.dataset.hue = hue;
+      particle.dataset.speed = 2 + Math.random() * 8; // 随机速度
+      
+      container.appendChild(particle);
+      this.tunnelElements.particles.push(particle);
+    }
+  },
+  
+  startTunnelAnimation() {
+    let startTime = Date.now();
+    
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const container = document.getElementById('tunnelContainer');
+      
+      if (!container || !this.tunnelElements) return;
+      
+      // 更新粒子
+      this.tunnelElements.particles.forEach(particle => {
+        let z = parseFloat(particle.dataset.z);
+        const speed = parseFloat(particle.dataset.speed);
+        z += speed;
+        if (z > 600) {
+          z = -5000;
+        }
+        particle.dataset.z = z;
+        
+        const scale = Math.max(0.1, 1 - Math.abs(z) / 5000);
+        const opacity = Math.max(0.2, 1 - Math.abs(z) / 5000);
+        particle.style.transform = `translateZ(${z}px) scale(${scale})`;
+        particle.style.opacity = opacity;
+      });
+      
+      requestAnimationFrame(animate);
+    };
+    
+    animate();
+  },
+  
+  enterThroughTunnel() {
+    // 先准备主页面，确保内容加载好
+    const mainPage = document.getElementById('mainPage');
+    mainPage.style.display = 'flex';
+    mainPage.style.opacity = '0';
+    
+    // 添加进入过渡动画
+    const transition = document.createElement('div');
+    transition.className = 'enter-transition';
+    document.body.appendChild(transition);
+    
+    // 自动登录第一个账号
+    const accounts = this.getAccounts();
+    if (accounts && accounts.length > 0) {
+      this.currentUser = accounts[0];
+      this.isAdmin = accounts[0].role === '管理员';
+    } else {
+      this.currentUser = { name: '访客', role: '用户' };
+      this.isAdmin = false;
+    }
+    
+    // 先初始化应用
+    this.checkNotice();
+    this.initMainApp();
+    this.initHomePage();
+    
+    // 等待过渡动画完成
+    setTimeout(() => {
+      const loginPage = document.getElementById('loginPage');
+      loginPage.style.display = 'none';
+      transition.remove();
+      
+      // 现在创建一个满屏粒子爆炸效果
+      const burstContainer = document.createElement('div');
+      burstContainer.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        pointer-events: none;
+      `;
+      
+      // 创建爆炸粒子数据
+      const particlesData = [];
+      for (let i = 0; i < 400; i++) {
+        const angle = (i / 400) * Math.PI * 2 + Math.random() * 0.8;
+        const distance = 50 + Math.random() * 1200;
+        const size = 2 + Math.random() * 6;
+        const hue = Math.random() * 360;
+        const delay = Math.random() * 150;
+        
+        particlesData.push({ angle, distance, size, hue, delay });
+      }
+      
+      // 设置一个统一的关键帧样式
+      const style = document.createElement('style');
+      let keyframesContent = '';
+      particlesData.forEach((p, i) => {
+        keyframesContent += `
+          @keyframes burstParticle${i} {
+            0% {
+              transform: translate(-50%, -50%) scale(0);
+              opacity: 1;
+            }
+            20% {
+              transform: translate(-50%, -50%) scale(1.5);
+              opacity: 1;
+            }
+            100% {
+              transform: translate(calc(-50% + ${Math.cos(p.angle) * p.distance}px), calc(-50% + ${Math.sin(p.angle) * p.distance}px)) scale(0.2);
+              opacity: 0;
+            }
+          }
+        `;
+      });
+      style.textContent = keyframesContent;
+      document.head.appendChild(style);
+      
+      // 创建粒子元素
+      particlesData.forEach((p, i) => {
+        const burstParticle = document.createElement('div');
+        burstParticle.style.cssText = `
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: ${p.size}px;
+          height: ${p.size}px;
+          background: radial-gradient(circle, #fff 0%, hsl(${p.hue}, 100%, 60%) 50%, transparent 100%);
+          border-radius: 50%;
+          box-shadow: 0 0 ${p.size*5}px hsl(${p.hue}, 100%, 60%);
+          transform: translate(-50%, -50%) scale(0);
+          opacity: 1;
+          animation: burstParticle${i} 1.5s ease-out ${p.delay}ms forwards;
+        `;
+        burstContainer.appendChild(burstParticle);
+      });
+      
+      document.body.appendChild(burstContainer);
+      
+      // 平滑显示主页面
+      let startOpacity = 0;
+      const fadeIn = () => {
+        startOpacity += 0.06;
+        if (startOpacity <= 1) {
+          mainPage.style.opacity = startOpacity;
+          requestAnimationFrame(fadeIn);
+        }
+      };
+      fadeIn();
+      
+      // 清理
+      setTimeout(() => {
+        burstContainer.remove();
+        style.remove();
+      }, 2000);
+    }, 1500);
   },
 
   loadAccounts() {
@@ -3577,18 +4483,11 @@ const App = {
   },
 
   logout() {
-    if (confirm('确定要退出登录吗？')) {
-      this.currentUser = null;
-      this.isAdmin = false;
-      this.selectedAccountIndex = undefined;
-      document.getElementById('loginPage').style.display = 'flex';
-      document.getElementById('mainPage').style.display = 'none';
-      document.getElementById('loginBtn').disabled = true;
-      document.getElementById('loginBtn').textContent = '请先选择账号';
-      document.querySelectorAll('.account-item').forEach(item => {
-        item.classList.remove('selected');
-      });
-    }
+    this.currentUser = null;
+    this.isAdmin = false;
+    this.selectedAccountIndex = undefined;
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('mainPage').style.display = 'none';
   },
 
   initMainApp() {
@@ -3617,180 +4516,6 @@ const App = {
     }
   },
 
-  initDragPet() {
-    const toggleBtn = document.getElementById('toggleBtn');
-    const cockroachPet = document.getElementById('cockroachPet');
-    
-    // 拖拽功能
-    let isDragging = false;
-    let offsetX, offsetY;
-    let currentX = 100;
-    let currentY = 200;
-    
-    toggleBtn.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      offsetX = e.clientX - toggleBtn.offsetLeft;
-      offsetY = e.clientY - toggleBtn.offsetTop;
-      toggleBtn.style.cursor = 'grabbing';
-    });
-    
-    document.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      
-      let newX = e.clientX - offsetX;
-      let newY = e.clientY - offsetY;
-      
-      // 限制在窗口内
-      const maxX = window.innerWidth - toggleBtn.offsetWidth;
-      const maxY = window.innerHeight - toggleBtn.offsetHeight;
-      
-      newX = Math.max(0, Math.min(newX, maxX));
-      newY = Math.max(0, Math.min(newY, maxY));
-      
-      toggleBtn.style.left = newX + 'px';
-      toggleBtn.style.top = newY + 'px';
-      toggleBtn.style.right = 'auto';
-      toggleBtn.style.bottom = 'auto';
-      
-      currentX = newX;
-      currentY = newY;
-    });
-    
-    document.addEventListener('mouseup', () => {
-      isDragging = false;
-      if (toggleBtn) {
-        toggleBtn.style.cursor = 'grab';
-      }
-    });
-    
-    // 初始化位置
-    if (toggleBtn) {
-      toggleBtn.style.left = currentX + 'px';
-      toggleBtn.style.top = currentY + 'px';
-      toggleBtn.style.right = 'auto';
-      toggleBtn.style.bottom = 'auto';
-    }
-    
-    // 添加日志：打印触角渲染坐标
-    setTimeout(() => {
-      const antennaLeft = document.querySelector('.pet-antenna-left');
-      const antennaRight = document.querySelector('.pet-antenna-right');
-      const head = document.querySelector('.pet-head');
-      const body = document.querySelector('.pet-body');
-      
-      console.log('=== 蟑螂组件坐标日志 ===');
-      if (head) {
-        const headRect = head.getBoundingClientRect();
-        console.log('头部位置:', `left=${head.style.left || 'auto'}`, `right=${head.style.right || 'auto'}`, 
-                    `top=${head.style.top || 'auto'}`, `width=${head.style.width}`, `height=${head.style.height}`);
-        console.log('头部实际渲染位置:', headRect);
-      }
-      if (body) {
-        const bodyRect = body.getBoundingClientRect();
-        console.log('身体位置:', `left=${body.style.left || 'auto'}`, `right=${body.style.right || 'auto'}`, 
-                    `top=${body.style.top || 'auto'}`, `width=${body.style.width}`, `height=${body.style.height}`);
-        console.log('身体实际渲染位置:', bodyRect);
-      }
-      if (antennaLeft) {
-        const leftRect = antennaLeft.getBoundingClientRect();
-        console.log('左触角位置:', `left=${antennaLeft.style.left || 'auto'}`, `right=${antennaLeft.style.right || 'auto'}`, 
-                    `top=${antennaLeft.style.top || 'auto'}`, `width=${antennaLeft.style.width}`, 
-                    `transform=${antennaLeft.style.transform}`);
-        console.log('左触角实际渲染位置:', leftRect);
-      }
-      if (antennaRight) {
-        const rightRect = antennaRight.getBoundingClientRect();
-        console.log('右触角位置:', `left=${antennaRight.style.left || 'auto'}`, `right=${antennaRight.style.right || 'auto'}`, 
-                    `top=${antennaRight.style.top || 'auto'}`, `width=${antennaRight.style.width}`, 
-                    `transform=${antennaRight.style.transform}`);
-        console.log('右触角实际渲染位置:', rightRect);
-      }
-      console.log('=== 日志结束 ===');
-    }, 100);
-    
-    // 开始蟑螂移动
-    this.startCockroachMovement();
-  },
-  
-  cockroachInterval: null,
-  cockroachTargetX: 100,
-  cockroachTargetY: 200,
-  isCockroachMoving: false,
-  
-  startCockroachMovement() {
-    if (this.cockroachInterval) return;
-    
-    const toggleBtn = document.getElementById('toggleBtn');
-    const cockroachPet = document.getElementById('cockroachPet');
-    
-    if (!toggleBtn || !cockroachPet) return;
-    
-    this.isCockroachMoving = true;
-    
-    this.cockroachInterval = setInterval(() => {
-      if (!this.isCockroachMoving) return;
-      
-      // 随机生成新的目标位置
-      const padding = 100;
-      const maxX = window.innerWidth - toggleBtn.offsetWidth - padding;
-      const maxY = window.innerHeight - toggleBtn.offsetHeight - padding;
-      
-      this.cockroachTargetX = padding + Math.random() * (maxX - padding);
-      this.cockroachTargetY = padding + Math.random() * (maxY - padding);
-      
-      this.animateCockroach();
-    }, 2000 + Math.random() * 2000); // 每2-4秒移动一次
-  },
-  
-  animateCockroach() {
-    const toggleBtn = document.getElementById('toggleBtn');
-    if (!toggleBtn) return;
-    
-    const startX = parseInt(toggleBtn.style.left) || 100;
-    const startY = parseInt(toggleBtn.style.top) || 200;
-    
-    const duration = 800 + Math.random() * 400; // 800-1200ms
-    const startTime = Date.now();
-    
-    const animate = () => {
-      if (!this.isCockroachMoving) return;
-      
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      // 使用缓动函数让移动更自然
-      const easeProgress = this.easeInOutCubic(progress);
-      
-      const currentX = startX + (this.cockroachTargetX - startX) * easeProgress;
-      const currentY = startY + (this.cockroachTargetY - startY) * easeProgress;
-      
-      toggleBtn.style.left = currentX + 'px';
-      toggleBtn.style.top = currentY + 'px';
-      
-      // 计算移动方向并旋转蟑螂
-      const cockroachPet = document.getElementById('cockroachPet');
-      if (cockroachPet) {
-        const angle = Math.atan2(
-          this.cockroachTargetY - startY,
-          this.cockroachTargetX - startX
-        ) * (180 / Math.PI);
-        cockroachPet.style.transform = `rotate(${angle}deg)`;
-      }
-      
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-    
-    animate();
-  },
-  
-  easeInOutCubic(t) {
-    return t < 0.5
-      ? 4 * t * t * t
-      : 1 - Math.pow(-2 * t + 2, 3) / 2;
-  },
-  
   initUserPanel() {
     // 用户头像点击事件
     const sidebarAvatarImg = document.getElementById('sidebarAvatarImg');
@@ -4385,6 +5110,9 @@ function closeSettingsModal() {
             <div class="floating-menu-item" onclick="App.toggleCurrentViewerFullscreen()">
               <span>⛶</span><span>全屏</span>
             </div>
+            <div class="floating-menu-item" onclick="App.requestMicrophonePermission()">
+              <span>🎤</span><span>申请麦克风权限</span>
+            </div>
           </div>
           <button class="floating-btn" title="文档工具">⚙️</button>
         `;
@@ -4602,6 +5330,55 @@ function closeSettingsModal() {
     this.toggleViewerFullscreen(this.activeId);
   },
 
+  async requestMicrophonePermission() {
+    try {
+      console.log('正在请求麦克风权限...');
+      
+      // 先检查浏览器是否支持
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('您的浏览器不支持麦克风访问功能！');
+        return;
+      }
+
+      // 请求麦克风权限
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: true 
+      });
+
+      // 权限申请成功
+      console.log('麦克风权限申请成功！');
+      
+      // 保存权限状态 - 使用与 animateTabBar 一致的键名
+      localStorage.setItem('microphonePermission', 'granted');
+      
+      alert('✅ 麦克风权限申请成功！');
+
+      // 停止stream（不需要保持连接）
+      stream.getTracks().forEach(track => track.stop());
+
+      // 重新初始化标签栏动画，确保麦克风能正常工作
+      this.animateTabBar();
+
+    } catch (error) {
+      console.error('麦克风权限申请失败:', error);
+      
+      let errorMsg = '❌ 麦克风权限申请失败！';
+      
+      if (error.name === 'NotAllowedError') {
+        errorMsg += '\n\n原因：您拒绝了麦克风权限请求。\n请在浏览器设置中允许此网站使用麦克风。';
+        localStorage.setItem('microphonePermission', 'denied');
+      } else if (error.name === 'NotFoundError') {
+        errorMsg += '\n\n原因：未找到可用的麦克风设备。';
+      } else if (error.name === 'NotReadableError') {
+        errorMsg += '\n\n原因：麦克风被其他应用占用或无法访问。';
+      } else {
+        errorMsg += '\n\n错误详情：' + error.message;
+      }
+      
+      alert(errorMsg);
+    }
+  },
+
   onIframeLoaded(tabId) {
     try {
       const iframe = this.iframes[tabId];
@@ -4808,7 +5585,12 @@ function closeSettingsModal() {
     const tabsEl = document.getElementById('tabs');
     if (!tabsEl) return;
     
+    // 保存进度条背景元素
+    const progressBg = tabsEl.querySelector('#tabs-progress-bg');
     tabsEl.innerHTML = '';
+    if (progressBg) {
+      tabsEl.appendChild(progressBg);
+    }
 
     const homeTab = document.createElement('div');
     homeTab.className = 'tab home-tab' + (this.activeId === 'home' ? ' active' : '');
@@ -4821,7 +5603,7 @@ function closeSettingsModal() {
     this.tabs.forEach((t, index) => {
       const tab = document.createElement('div');
       tab.className = 'tab ' + (t.id === this.activeId ? 'active' : '');
-      tab.innerHTML = t.name + '<span class="close" onclick="event.stopPropagation(); App.closeTab(event, \'' + t.id + '\')">×</span>';
+      tab.innerHTML = `${t.name}<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '${t.id}')">×</span>`;
       tab.onclick = e => {
         if (!e.target.classList.contains('close')) this.switchTab(t.id);
       };
@@ -4836,6 +5618,159 @@ function closeSettingsModal() {
       
       tabsEl.appendChild(tab);
     });
+    
+    // 只在第一次初始化标签栏动画，避免重复创建
+    if (!this.tabBarAnimationInitialized) {
+      this.animateTabBar();
+      this.tabBarAnimationInitialized = true;
+    }
+  },
+  
+  animateTabBar() {
+    // 如果已经有动画在运行，先停止旧的动画
+    if (this.tabBarAnimationId) {
+      cancelAnimationFrame(this.tabBarAnimationId);
+      this.tabBarAnimationId = null;
+    }
+    
+    let audioLevel = 0;
+    let audioContext = null;
+    let analyser = null;
+    let microphone = null;
+    let dataArray = null;
+    
+    // 保存this引用
+    const self = this;
+    
+    // 初始化麦克风
+    const initMicrophone = async () => {
+      // 先检查localStorage中的权限状态
+      const savedPermission = localStorage.getItem('microphonePermission');
+      
+      // 如果之前已经拒绝过，直接返回
+      if (savedPermission === 'denied') {
+        console.log('之前已拒绝麦克风权限');
+        return;
+      }
+      
+      try {
+        // 查询麦克风权限状态
+        let permissionStatus = null;
+        if (navigator.permissions && navigator.permissions.query) {
+          try {
+            permissionStatus = await navigator.permissions.query({ name: 'microphone' });
+            console.log('麦克风权限状态:', permissionStatus.state);
+          } catch (err) {
+            console.log('无法查询权限状态:', err);
+          }
+        }
+        
+        // 如果权限状态是denied，保存并返回
+        if (permissionStatus && permissionStatus.state === 'denied') {
+          localStorage.setItem('microphonePermission', 'denied');
+          console.log('麦克风权限已被拒绝');
+          return;
+        }
+        
+        // 请求麦克风
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: { 
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          } 
+        });
+        
+        // 权限获取成功
+        localStorage.setItem('microphonePermission', 'granted');
+        
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        microphone = audioContext.createMediaStreamSource(stream);
+        microphone.connect(analyser);
+        
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
+        console.log('麦克风已激活');
+      } catch (error) {
+        console.log('麦克风访问失败:', error);
+        // 如果是权限错误，保存拒绝状态
+        if (error.name === 'NotAllowedError') {
+          localStorage.setItem('microphonePermission', 'denied');
+        }
+      }
+    };
+    
+    const tabsEl = document.getElementById('tabs');
+    const progressBg = document.getElementById('tabs-progress-bg');
+    
+    const animate = () => {
+      // 获取音频音量
+      if (analyser && dataArray) {
+        analyser.getByteFrequencyData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+          sum += dataArray[i];
+        }
+        audioLevel = sum / dataArray.length / 255;
+      }
+      
+      const level = Math.min(audioLevel * 3, 1); // 增强效果，最大1
+      
+      // 让整个标签栏容器跳动
+      if (tabsEl) {
+        const scale = 1 + level * 0.03;
+        const translateY = -level * 5;
+        tabsEl.style.transform = `translateY(${translateY}px) scale(${scale})`;
+      }
+      
+      // 进度条背景根据音量变化，使用HSL颜色空间实现60个断点的平滑过渡
+      if (progressBg) {
+        const width = level * 100;
+        progressBg.style.width = `${width}%`;
+        
+        // 生成60个断点的渐变
+        const gradientStops = [];
+        for (let i = 0; i <= 60; i++) {
+          const t = i / 60;
+          let stopHue;
+          if (t <= 0.5) {
+            // 绿色(120) -> 黄色(60)
+            stopHue = 120 - (t * 2 * 60);
+          } else {
+            // 黄色(60) -> 红色(0)
+            stopHue = 60 - ((t - 0.5) * 2 * 60);
+          }
+          const stopSat = 85 + t * 15;
+          const stopLight = 55 + t * 25;
+          gradientStops.push(`hsl(${stopHue}, ${stopSat}%, ${stopLight}%)`);
+        }
+        
+        progressBg.style.background = `linear-gradient(90deg, ${gradientStops.join(', ')})`;
+        
+        // 根据音量调整透明度
+        progressBg.style.opacity = 0.2 + level * 0.3;
+      }
+      
+      self.tabBarAnimationId = requestAnimationFrame(animate);
+    };
+    
+    // 初始化麦克风
+    initMicrophone();
+    
+    // 开始动画
+    animate();
+    
+    // 清理函数 - 保存到this上以便外部调用
+    this.cleanupTabBarAnimation = () => {
+      if (self.tabBarAnimationId) {
+        cancelAnimationFrame(self.tabBarAnimationId);
+        self.tabBarAnimationId = null;
+      }
+      if (audioContext) {
+        audioContext.close();
+      }
+    };
   },
 
   handleDragStart(e, tab) {
@@ -4898,6 +5833,196 @@ function closeSettingsModal() {
     this.renderTabs();
   },
 
+  initDragPet() {
+    const toggleBtn = document.getElementById('toggleBtn');
+    if (!toggleBtn) return;
+    
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+    let mouseX = 0;
+    let mouseY = 0;
+    let isFollowingMouse = false;
+    let followMouseInterval = null;
+    
+    // 记录鼠标位置
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    
+    const handleMouseDown = (e) => {
+      isDragging = true;
+      const rect = toggleBtn.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      e.preventDefault();
+    };
+    
+    const handleMouseMove = (e) => {
+      if (!isDragging) return;
+      
+      let newX = e.clientX - offsetX;
+      let newY = e.clientY - offsetY;
+      
+      const maxX = window.innerWidth - toggleBtn.offsetWidth;
+      const maxY = window.innerHeight - toggleBtn.offsetHeight;
+      
+      newX = Math.max(0, Math.min(newX, maxX));
+      newY = Math.max(0, Math.min(newY, maxY));
+      
+      toggleBtn.style.left = newX + 'px';
+      toggleBtn.style.top = newY + 'px';
+      toggleBtn.style.bottom = 'auto';
+    };
+    
+    const handleMouseUp = () => {
+      isDragging = false;
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+    
+    toggleBtn.addEventListener('mousedown', handleMouseDown);
+    
+    // 开始苍蝇自动移动
+    this.startFlyMovement(toggleBtn, () => mouseX, () => mouseY, (val) => isFollowingMouse = val);
+  },
+  
+  flyInterval: null,
+  flyTargetX: 100,
+  flyTargetY: 200,
+  isFlyMoving: false,
+  flyCurrentRotation: 0,
+  
+  startFlyMovement(toggleBtn, getMouseX, getMouseY, setFollowing) {
+    if (this.flyInterval) return;
+    
+    if (!toggleBtn) return;
+    
+    this.isFlyMoving = true;
+    
+    // 初始化位置
+    toggleBtn.style.left = '100px';
+    toggleBtn.style.top = '200px';
+    toggleBtn.style.right = 'auto';
+    toggleBtn.style.bottom = 'auto';
+    
+    let isFollowingMouse = false;
+    let followAnimationFrame = null;
+    
+    const stopFollowing = () => {
+      isFollowingMouse = false;
+      setFollowing(false);
+      if (followAnimationFrame) {
+        cancelAnimationFrame(followAnimationFrame);
+        followAnimationFrame = null;
+      }
+      decideNextMove();
+    };
+    
+    const followMouse = () => {
+      if (!isFollowingMouse) return;
+      
+      const targetX = getMouseX() - 40;
+      const targetY = getMouseY() - 25;
+      const currentX = parseFloat(toggleBtn.style.left) || 100;
+      const currentY = parseFloat(toggleBtn.style.top) || 200;
+      
+      // 缓慢靠近鼠标
+      const newX = currentX + (targetX - currentX) * 0.05;
+      const newY = currentY + (targetY - currentY) * 0.05;
+      
+      toggleBtn.style.left = newX + 'px';
+      toggleBtn.style.top = newY + 'px';
+      
+      // 让苍蝇朝向鼠标 - 头朝前面
+      const angle = Math.atan2(targetY - currentY, targetX - currentX) * 180 / Math.PI;
+      this.flyCurrentRotation = angle;
+      
+      const flyPet = toggleBtn.querySelector('.pet-fly');
+      if (flyPet) {
+        flyPet.style.transform = `rotate(${this.flyCurrentRotation}deg)`;
+      }
+      
+      followAnimationFrame = requestAnimationFrame(followMouse);
+    };
+    
+    const decideNextMove = () => {
+      if (!this.isFlyMoving) return;
+      
+      // 30%几率跟随鼠标，70%几率随机移动
+      if (Math.random() < 0.3) {
+        isFollowingMouse = true;
+        setFollowing(true);
+        followMouse();
+        
+        // 跟随鼠标一段时间后停止
+        setTimeout(stopFollowing, 3000 + Math.random() * 2000); // 跟随3-5秒
+      } else {
+        isFollowingMouse = false;
+        setFollowing(false);
+        // 随机生成新的目标位置
+        const padding = 50;
+        const maxX = window.innerWidth - toggleBtn.offsetWidth - padding;
+        const maxY = window.innerHeight - toggleBtn.offsetHeight - padding;
+        
+        this.flyTargetX = Math.random() * maxX + padding / 2;
+        this.flyTargetY = Math.random() * maxY + padding / 2;
+        
+        // 平滑移动到新位置
+        this.moveFlySmoothly(toggleBtn, this.flyTargetX, this.flyTargetY, decideNextMove);
+      }
+    };
+    
+    // 开始第一次移动
+    setTimeout(decideNextMove, 1000);
+  },
+  
+  moveFlySmoothly(toggleBtn, targetX, targetY, callback) {
+    const currentX = parseFloat(toggleBtn.style.left) || 100;
+    const currentY = parseFloat(toggleBtn.style.top) || 200;
+    
+    // 计算朝向目标的角度 - 苍蝇默认朝右，所以直接使用这个角度
+    const angle = Math.atan2(targetY - currentY, targetX - currentX) * 180 / Math.PI;
+    this.flyCurrentRotation = angle;
+    
+    const duration = 3000 + Math.random() * 3000; // 3-6秒移动时间
+    const startTime = Date.now();
+    
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // 缓动效果 - 更平滑的慢进慢出
+      const easeInOut = progress < 0.5 
+        ? 2 * progress * progress 
+        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+      
+      const newX = currentX + (targetX - currentX) * easeInOut;
+      const newY = currentY + (targetY - currentY) * easeInOut;
+      
+      toggleBtn.style.left = newX + 'px';
+      toggleBtn.style.top = newY + 'px';
+      
+      // 应用旋转，让苍蝇朝向移动方向
+      const flyPet = toggleBtn.querySelector('.pet-fly');
+      if (flyPet) {
+        flyPet.style.transform = `rotate(${this.flyCurrentRotation}deg)`;
+      }
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else if (callback) {
+        // 移动完成后，等待一段时间再决定下一次移动
+        setTimeout(callback, 1000 + Math.random() * 2000);
+      }
+    };
+    
+    animate();
+  },
+  
   toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const toggleBtn = document.getElementById('toggleBtn');
@@ -5832,19 +6957,6 @@ window.openIllustrationPage = () => App.openIllustrationPage();
 window.toggleSidebar = () => App.toggleSidebar();
 window.closeTab = (e, id) => App.closeTab(e, id);
 window.switchTab = (id) => App.switchTab(id);
-
-const loginBtn = document.getElementById('loginBtn');
-if (loginBtn) {
-  loginBtn.addEventListener('click', function() {
-    if (App.selectedAccountIndex !== undefined) {
-      App.doLogin();
-      setTimeout(() => {
-        App.initMainApp();
-        App.initHomePage();
-      }, 100);
-    }
-  });
-}
 
 function openHomePage() {
   const homePage = document.getElementById('home-page');
