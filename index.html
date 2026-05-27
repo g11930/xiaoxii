@@ -27,12 +27,178 @@ html, body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #0a0a0a 100%);
+    background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a2a 100%);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* 时空隧道CSS */
+/* 星星容器 */
+.stars-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: rotateStars 120s linear infinite;
+}
+
+@keyframes rotateStars {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* 星星层 - 不同速度旋转 */
+.stars-layer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+}
+
+.stars-layer.slow {
+    animation: rotateSlow 200s linear infinite;
+}
+
+.stars-layer.medium {
+    animation: rotateMedium 100s linear infinite reverse;
+}
+
+.stars-layer.fast {
+    animation: rotateFast 60s linear infinite;
+}
+
+@keyframes rotateSlow {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes rotateMedium {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes rotateFast {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 星星 */
+.star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 2s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* 流星 */
+.meteor {
+    position: absolute;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+    border-radius: 1px;
+    animation: meteorFall 3s linear infinite;
+}
+
+@keyframes meteorFall {
+    0% {
+        transform: translateX(0) translateY(0) rotate(-45deg);
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(500px) translateY(500px) rotate(-45deg);
+        opacity: 0;
+    }
+}
+
+/* 星云效果 */
+.nebula {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.2;
+    animation: nebulaFloat 30s ease-in-out infinite;
+}
+
+@keyframes nebulaFloat {
+    0%, 100% {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(180deg) scale(1.1);
+    }
+}
+
+/* 点击提示 */
+.login-hint {
+    position: absolute;
+    bottom: 60px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    text-align: center;
+    opacity: 0;
+    animation: hintFadeIn 0.8s ease-out 2.5s forwards;
+}
+
+@keyframes hintFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* 进入过渡动画 */
+.enter-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(0, 0, 0, 0.9) 50%, #000 100%);
+    z-index: 9999;
+    pointer-events: none;
+    animation: fadeOut 1s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* 时空隧道CSS (备用) */
 .tunnel-container {
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -51,33 +217,6 @@ html, body {
     box-shadow: 0 0 10px #00ffff;
     transform-style: preserve-3d;
     will-change: transform;
-}
-
-.enter-transition {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(0, 255, 255, 0.95) 0%, rgba(138, 43, 226, 0.95) 50%, #000 100%);
-    z-index: 9999;
-    pointer-events: none;
-    animation: tunnelEnter 1.5s ease-out forwards;
-}
-
-@keyframes tunnelEnter {
-    0% { 
-        opacity: 0; 
-        transform: scale(0.3); 
-    }
-    50% { 
-        opacity: 1; 
-        transform: scale(1.2); 
-    }
-    100% { 
-        opacity: 0; 
-        transform: scale(2.5); 
-    }
 }
 .login-box {
     background: white;
@@ -410,6 +549,67 @@ html, body {
     background: #4299e1;
 }
 
+/* 悬浮横幅 - 磨砂玻璃效果 */
+.floating-banner {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    z-index: 10000;
+    cursor: move;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.floating-banner:hover {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.floating-banner.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-20px);
+}
+
+.floating-banner-text {
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.floating-banner-close {
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: #666;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.floating-banner-close:hover {
+    background: rgba(239, 68, 68, 0.8);
+    color: #fff;
+}
+
 .toggle-btn {
     position: fixed;
     left: 20px;
@@ -494,236 +694,198 @@ html, body {
     filter: blur(4px);
 }
 
-/* 苍蝇样式 */
+/* 蚂蚁样式 */
 .pet-fly {
-    width: 80px;
-    height: 50px;
+    width: 70px;
+    height: 40px;
     position: relative;
     transition: transform 0.1s ease-out;
 }
 
-/* 苍蝇身体容器 */
+/* 蚂蚁身体容器 */
 .fly-body {
-    width: 80px;
-    height: 50px;
+    width: 70px;
+    height: 40px;
     position: relative;
 }
 
-/* 苍蝇头部 */
+/* 蚂蚁头部 */
 .fly-head {
     position: absolute;
     right: 0;
-    top: 15px;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle at 40% 40%, #4a4a4a, #1a1a1a);
+    top: 12px;
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle at 40% 40%, #3a3a3a, #1a1a1a);
     border-radius: 50%;
     z-index: 3;
 }
 
-/* 苍蝇眼睛 */
+/* 蚂蚁眼睛 */
 .fly-eye {
     position: absolute;
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle at 40% 40%, #ff3333, #cc0000);
+    width: 4px;
+    height: 4px;
+    background: #fff;
     border-radius: 50%;
-    box-shadow: inset 2px 2px 3px rgba(255, 255, 255, 0.3);
+    box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .fly-eye-left {
-    right: 2px;
-    top: 2px;
+    right: 3px;
+    top: 4px;
 }
 
 .fly-eye-right {
-    right: 2px;
-    bottom: 2px;
+    right: 3px;
+    bottom: 4px;
 }
 
-/* 苍蝇触角 */
+/* 蚂蚁触角 */
 .fly-antenna {
     position: absolute;
     width: 1px;
-    height: 8px;
+    height: 12px;
     background: #333;
     right: -2px;
 }
 
 .fly-antenna-left {
-    top: 10px;
-    transform: rotate(-30deg);
+    top: 6px;
+    transform: rotate(-40deg);
+    transform-origin: bottom center;
 }
 
 .fly-antenna-right {
-    bottom: 10px;
-    transform: rotate(30deg);
+    bottom: 6px;
+    transform: rotate(40deg);
+    transform-origin: top center;
 }
 
 .fly-antenna-left::after,
 .fly-antenna-right::after {
     content: '';
     position: absolute;
-    top: -3px;
+    top: -2px;
     right: -2px;
-    width: 4px;
-    height: 4px;
+    width: 3px;
+    height: 3px;
     background: #333;
     border-radius: 50%;
 }
 
-/* 苍蝇胸部 */
+/* 蚂蚁胸部 */
 .fly-thorax {
     position: absolute;
-    right: 18px;
-    top: 12px;
-    width: 18px;
-    height: 26px;
-    background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 50%, #2a2a2a 100%);
-    border-radius: 50% 50% 40% 40%;
-    box-shadow: inset -2px -2px 5px rgba(0,0,0,0.5);
+    right: 16px;
+    top: 14px;
+    width: 14px;
+    height: 16px;
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #2a2a2a 100%);
+    border-radius: 40% 40% 35% 35%;
+    box-shadow: inset -1px -1px 3px rgba(0,0,0,0.5);
 }
 
-/* 苍蝇腹部 */
+/* 蚂蚁腹部 */
 .fly-abdomen {
     position: absolute;
-    right: 32px;
-    top: 18px;
-    width: 30px;
-    height: 18px;
+    right: 28px;
+    top: 16px;
+    width: 28px;
+    height: 14px;
     background: linear-gradient(90deg, #2a2a2a 0%, #3a3a3a 30%, #2a2a2a 70%, #1a1a1a 100%);
-    border-radius: 50% 30% 30% 50%;
-    box-shadow: inset -2px -2px 5px rgba(0,0,0,0.5);
+    border-radius: 45% 35% 35% 45%;
+    box-shadow: inset -1px -1px 3px rgba(0,0,0,0.5);
 }
 
-/* 苍蝇腹部条纹 */
+/* 蚂蚁腹部条纹 */
 .fly-abdomen::before {
     content: '';
     position: absolute;
     top: 3px;
     left: 5px;
-    right: 8px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.2);
+    right: 6px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 50%;
 }
 
 .fly-abdomen::after {
     content: '';
     position: absolute;
-    top: 8px;
-    left: 8px;
-    right: 12px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.15);
+    top: 7px;
+    left: 6px;
+    right: 8px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
 }
 
-/* 苍蝇翅膀 */
-.fly-wing {
-    position: absolute;
-    width: 30px;
-    height: 20px;
-    background: rgba(200, 200, 220, 0.4);
-    border-radius: 50% 50% 50% 50%;
-    box-shadow: 
-        inset 0 0 10px rgba(255, 255, 255, 0.3),
-        0 0 5px rgba(100, 100, 120, 0.2);
-    z-index: 1;
-    animation: wingBuzz 0.05s ease-in-out infinite;
-}
-
-.fly-wing-left {
-    right: 15px;
-    top: -8px;
-    transform-origin: bottom center;
-}
-
-.fly-wing-right {
-    right: 15px;
-    bottom: -8px;
-    transform-origin: top center;
-}
-
-@keyframes wingBuzz {
-    0%, 100% { transform: rotate(-20deg) scale(1); }
-    50% { transform: rotate(-40deg) scale(1.05); }
-}
-
-.fly-wing-right {
-    animation: wingBuzzRight 0.05s ease-in-out infinite;
-}
-
-@keyframes wingBuzzRight {
-    0%, 100% { transform: rotate(20deg) scale(1); }
-    50% { transform: rotate(40deg) scale(1.05); }
-}
-
-/* 苍蝇腿 */
+/* 蚂蚁腿 */
 .fly-leg {
     position: absolute;
     width: 1px;
-    height: 10px;
+    height: 8px;
     background: #333;
     transform-origin: top center;
     z-index: 2;
 }
 
 .fly-leg1 {
-    right: 22px;
-    top: 20px;
-    transform: rotate(-50deg);
-    animation: legMove1 0.15s ease-in-out infinite;
+    right: 18px;
+    top: 16px;
+    transform: rotate(-55deg);
+    animation: antLegMove1 0.2s ease-in-out infinite;
 }
 
 .fly-leg2 {
-    right: 25px;
-    top: 28px;
-    transform: rotate(-70deg);
-    animation: legMove2 0.15s ease-in-out infinite;
+    right: 20px;
+    top: 22px;
+    transform: rotate(-75deg);
+    animation: antLegMove2 0.2s ease-in-out infinite;
 }
 
 .fly-leg3 {
-    right: 28px;
-    top: 36px;
-    transform: rotate(-90deg);
-    animation: legMove3 0.15s ease-in-out infinite;
+    right: 22px;
+    top: 28px;
+    transform: rotate(-95deg);
+    animation: antLegMove3 0.2s ease-in-out infinite;
 }
 
 .fly-leg4 {
-    right: 22px;
-    top: 20px;
-    transform: rotate(50deg);
-    animation: legMove1 0.15s ease-in-out infinite 0.075s;
+    right: 18px;
+    top: 16px;
+    transform: rotate(55deg);
+    animation: antLegMove1 0.2s ease-in-out infinite 0.1s;
 }
 
 .fly-leg5 {
-    right: 25px;
-    top: 28px;
-    transform: rotate(70deg);
-    animation: legMove2 0.15s ease-in-out infinite 0.075s;
+    right: 20px;
+    top: 22px;
+    transform: rotate(75deg);
+    animation: antLegMove2 0.2s ease-in-out infinite 0.1s;
 }
 
 .fly-leg6 {
-    right: 28px;
-    top: 36px;
-    transform: rotate(90deg);
-    animation: legMove3 0.15s ease-in-out infinite 0.075s;
+    right: 22px;
+    top: 28px;
+    transform: rotate(95deg);
+    animation: antLegMove3 0.2s ease-in-out infinite 0.1s;
 }
 
-@keyframes legMove1 {
-    0%, 100% { transform: rotate(-50deg); }
-    50% { transform: rotate(-60deg); }
+@keyframes antLegMove1 {
+    0%, 100% { transform: rotate(-55deg); }
+    50% { transform: rotate(-65deg); }
 }
 
-@keyframes legMove2 {
-    0%, 100% { transform: rotate(-70deg); }
-    50% { transform: rotate(-80deg); }
+@keyframes antLegMove2 {
+    0%, 100% { transform: rotate(-75deg); }
+    50% { transform: rotate(-85deg); }
 }
 
-@keyframes legMove3 {
-    0%, 100% { transform: rotate(-90deg); }
-    50% { transform: rotate(-100deg); }
+@keyframes antLegMove3 {
+    0%, 100% { transform: rotate(-95deg); }
+    50% { transform: rotate(-105deg); }
 }
 
 /* 尾巴 */
@@ -3146,7 +3308,12 @@ html, body {
 <body>
 
 <div id="loginPage" class="login-container">
-    <div class="tunnel-container" id="tunnelContainer"></div>
+    <!-- 星空背景 -->
+    <div class="stars-container" id="starsContainer">
+        <!-- 动态生成星星 -->
+    </div>
+    <!-- 点击提示 -->
+    <div class="login-hint">点击进入系统</div>
 </div>
 
 <div id="noticePopup" class="notice-popup" style="display:none;">
@@ -3397,15 +3564,20 @@ html, body {
     <button class="menu-btn add-function-btn" id="addFunctionBtn">+ 添加功能</button>
     <button class="menu-btn" style="background:#f56c6c;margin-top:20px;" onclick="App.logout()">退出登录</button>
   </div>
+  <!-- 悬浮横幅 -->
+  <div class="floating-banner" id="floatingBanner">
+    <span class="floating-banner-text">渠道千万条，正确第一条，转单不规范，明儿心慌慌</span>
+    <button class="floating-banner-close" onclick="document.getElementById('floatingBanner').classList.add('hidden')">✕</button>
+  </div>
   <div class="toggle-btn" id="toggleBtn">
     <div class="pet-container">
         <div class="pet-display">
             <div class="pet pet-fly active" id="currentPet">
-                <!-- 苍蝇身体 -->
+                <!-- 蚂蚁身体 -->
                 <div class="fly-body">
                     <!-- 头部 -->
                     <div class="fly-head">
-                        <!-- 大眼睛 -->
+                        <!-- 眼睛 -->
                         <div class="fly-eye fly-eye-left"></div>
                         <div class="fly-eye fly-eye-right"></div>
                         <!-- 触角 -->
@@ -3416,9 +3588,6 @@ html, body {
                     <div class="fly-thorax"></div>
                     <!-- 腹部 -->
                     <div class="fly-abdomen"></div>
-                    <!-- 翅膀 -->
-                    <div class="fly-wing fly-wing-left"></div>
-                    <div class="fly-wing fly-wing-right"></div>
                     <!-- 腿 -->
                     <div class="fly-leg fly-leg1"></div>
                     <div class="fly-leg fly-leg2"></div>
@@ -4072,15 +4241,107 @@ const App = {
   },
   
   initTunnel() {
-    // 创建时空隧道
-    this.createTunnel();
-    
-    // 开始隧道动画
-    this.startTunnelAnimation();
+    // 创建宇宙星空效果
+    this.createStarryBackground();
     
     // 点击进入主页面
     const loginPage = document.getElementById('loginPage');
     loginPage.onclick = () => this.enterThroughTunnel();
+  },
+  
+  createStarryBackground() {
+    const container = document.getElementById('starsContainer');
+    if (!container) return;
+    
+    // 创建三个不同速度旋转的星星层
+    const layers = ['slow', 'medium', 'fast'];
+    const starCounts = [150, 200, 250]; // 不同层的星星数量（增加了！）
+    
+    layers.forEach((layerClass, layerIndex) => {
+      const layer = document.createElement('div');
+      layer.className = `stars-layer ${layerClass}`;
+      
+      const starCount = starCounts[layerIndex];
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        
+        // 星星位置在圆形范围内分布
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 15 + Math.random() * 35; // 距离中心的百分比
+        const size = 0.8 + Math.random() * 2.5;
+        const delay = Math.random() * 3;
+        const duration = 1.5 + Math.random() * 2;
+        
+        // 计算位置（50%是中心）
+        const left = 50 + Math.cos(angle) * distance;
+        const top = 50 + Math.sin(angle) * distance;
+        
+        star.style.cssText = `
+          width: ${size}px;
+          height: ${size}px;
+          left: ${left}%;
+          top: ${top}%;
+          animation-delay: ${delay}s;
+          animation-duration: ${duration}s;
+        `;
+        
+        layer.appendChild(star);
+      }
+      
+      container.appendChild(layer);
+    });
+    
+    // 创建星云（在容器中心，不随星星旋转）
+    const nebulaColors = ['rgba(100, 100, 255, 0.3)', 'rgba(255, 100, 200, 0.2)', 'rgba(100, 255, 200, 0.2)'];
+    for (let i = 0; i < 5; i++) {
+      const nebula = document.createElement('div');
+      nebula.className = 'nebula';
+      
+      const size = 300 + Math.random() * 200;
+      const left = 30 + Math.random() * 40;
+      const top = 30 + Math.random() * 40;
+      const color = nebulaColors[Math.floor(Math.random() * nebulaColors.length)];
+      
+      nebula.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${left}%;
+        top: ${top}%;
+        background: ${color};
+      `;
+      
+      container.appendChild(nebula);
+    }
+    
+    // 创建流星
+    const createMeteor = () => {
+      const meteor = document.createElement('div');
+      meteor.className = 'meteor';
+      
+      const top = Math.random() * 30;
+      const left = Math.random() * 100;
+      const delay = Math.random() * 0.5;
+      
+      meteor.style.cssText = `
+        top: ${top}%;
+        left: ${left}%;
+        animation-delay: ${delay}s;
+      `;
+      
+      container.appendChild(meteor);
+      
+      // 3秒后移除流星并创建新流星
+      setTimeout(() => {
+        meteor.remove();
+        createMeteor();
+      }, 3500);
+    };
+    
+    // 初始创建几颗流星
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => createMeteor(), i * 1000);
+    }
   },
   
   createTunnel() {
@@ -4089,39 +4350,122 @@ const App = {
     
     // 存储元素引用，避免每帧查询
     this.tunnelElements = {
-      particles: []
+      particles: [], // 主粒子
+      trails: [],    // 拖尾粒子
+      vortices: []   // 小旋涡中心
     };
     
-    // 创建更多粒子，满屏都是
-    for (let i = 0; i < 500; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'tunnel-particle';
-      
-      // 随机位置，覆盖全屏
-      const angle = Math.random() * Math.PI * 2;
-      const distance = 0 + Math.random() * 1200; // 更远的距离
+    // 创建多个小旋涡中心（梵高星空的漩涡）
+    const vortexCount = 8;
+    for (let i = 0; i < vortexCount; i++) {
+      const angle = (i / vortexCount) * Math.PI * 2 + Math.random() * 0.3;
+      const distance = 100 + Math.random() * 500;
       const x = Math.cos(angle) * distance;
       const y = Math.sin(angle) * distance;
-      const z = -Math.random() * 6000;
       
-      // 随机大小和颜色
-      const size = 1.5 + Math.random() * 5;
-      const hue = Math.random() * 360;
+      this.tunnelElements.vortices.push({
+        x: x,
+        y: y,
+        strength: 0.8 + Math.random() * 1.2,
+        rotationSpeed: 0.5 + Math.random() * 0.8,
+        direction: Math.random() < 0.5 ? 1 : -1
+      });
+    }
+    
+    // 创建梵高星空粒子（密集拖尾）
+    const trailLength = 12; // 拖尾长度
+    const particleCount = 600; // 粒子数量
+    
+    for (let i = 0; i < particleCount; i++) {
+      // 随机位置
+      const angle = Math.random() * Math.PI * 2;
+      const distance = Math.random() * 1600;
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance;
       
-      particle.style.left = `calc(50% + ${x}px)`;
-      particle.style.top = `calc(50% + ${y}px)`;
-      particle.style.width = size + 'px';
-      particle.style.height = size + 'px';
-      particle.style.background = `radial-gradient(circle, #fff 0%, hsl(${hue}, 100%, 60%) 50%, transparent 100%)`;
-      particle.style.boxShadow = `0 0 ${size*3}px hsl(${hue}, 100%, 60%)`;
-      particle.dataset.z = z;
-      particle.dataset.angle = angle;
-      particle.dataset.distance = distance;
-      particle.dataset.hue = hue;
-      particle.dataset.speed = 2 + Math.random() * 8; // 随机速度
+      // 梵高星空配色：黄、白、蓝、青
+      let color;
+      const colorType = Math.random();
+      if (colorType < 0.4) {
+        // 黄色系（主色调）
+        const hue = 30 + Math.random() * 30;
+        const saturation = 80 + Math.random() * 20;
+        const lightness = 60 + Math.random() * 30;
+        color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+      } else if (colorType < 0.55) {
+        // 白色/亮黄
+        const hue = 45 + Math.random() * 15;
+        color = `hsl(${hue}, 75%, 90%)`;
+      } else if (colorType < 0.85) {
+        // 蓝色系（星空）
+        const hue = 180 + Math.random() * 70;
+        const saturation = 65 + Math.random() * 25;
+        const lightness = 30 + Math.random() * 35;
+        color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+      } else {
+        // 青色系
+        const hue = 160 + Math.random() * 40;
+        const saturation = 70 + Math.random() * 20;
+        const lightness = 40 + Math.random() * 30;
+        color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+      }
       
-      container.appendChild(particle);
-      this.tunnelElements.particles.push(particle);
+      // 粒子大小（更小更密集）
+      const size = 1.2 + Math.random() * 2.5;
+      
+      // 创建主粒子
+      const mainParticle = document.createElement('div');
+      mainParticle.className = 'tunnel-particle';
+      mainParticle.style.left = `calc(50% + ${x}px)`;
+      mainParticle.style.top = `calc(50% + ${y}px)`;
+      mainParticle.style.width = size + 'px';
+      mainParticle.style.height = size + 'px';
+      mainParticle.style.background = color;
+      mainParticle.style.borderRadius = '50%';
+      mainParticle.style.boxShadow = `0 0 ${size*3}px ${color}`;
+      
+      // 保存主粒子数据
+      const mainParticleData = {
+        element: mainParticle,
+        x: x,
+        y: y,
+        vx: 0,
+        vy: 0,
+        size: size,
+        color: color,
+        history: [] // 历史位置（用于拖尾）
+      };
+      
+      // 初始化历史位置
+      for (let h = 0; h < trailLength; h++) {
+        mainParticleData.history.push({ x, y });
+      }
+      
+      // 创建拖尾粒子
+      const particleTrails = [];
+      for (let t = 0; t < trailLength; t++) {
+        const trailParticle = document.createElement('div');
+        trailParticle.className = 'tunnel-particle';
+        
+        const trailSize = size * (1 - t / trailLength);
+        const trailOpacity = 0.85 * (1 - t / trailLength);
+        
+        trailParticle.style.left = `calc(50% + ${x}px)`;
+        trailParticle.style.top = `calc(50% + ${y}px)`;
+        trailParticle.style.width = trailSize + 'px';
+        trailParticle.style.height = trailSize + 'px';
+        trailParticle.style.background = color;
+        trailParticle.style.borderRadius = '50%';
+        trailParticle.style.opacity = trailOpacity;
+        trailParticle.style.boxShadow = `0 0 ${trailSize*1.5}px ${color}`;
+        
+        particleTrails.push(trailParticle);
+        container.appendChild(trailParticle);
+      }
+      
+      this.tunnelElements.particles.push(mainParticleData);
+      this.tunnelElements.trails.push(particleTrails);
+      container.appendChild(mainParticle);
     }
   },
   
@@ -4134,20 +4478,101 @@ const App = {
       
       if (!container || !this.tunnelElements) return;
       
-      // 更新粒子
-      this.tunnelElements.particles.forEach(particle => {
-        let z = parseFloat(particle.dataset.z);
-        const speed = parseFloat(particle.dataset.speed);
-        z += speed;
-        if (z > 600) {
-          z = -5000;
-        }
-        particle.dataset.z = z;
+      const time = elapsed * 0.001;
+      const dt = 0.016;
+      
+      // 更新粒子和拖尾
+      this.tunnelElements.particles.forEach((particleData, index) => {
+        let x = particleData.x;
+        let y = particleData.y;
+        let vx = particleData.vx;
+        let vy = particleData.vy;
+        const size = particleData.size;
+        const color = particleData.color;
         
-        const scale = Math.max(0.1, 1 - Math.abs(z) / 5000);
-        const opacity = Math.max(0.2, 1 - Math.abs(z) / 5000);
-        particle.style.transform = `translateZ(${z}px) scale(${scale})`;
-        particle.style.opacity = opacity;
+        // 计算所有旋涡的影响（更强）
+        let totalVortexX = 0;
+        let totalVortexY = 0;
+        
+        this.tunnelElements.vortices.forEach((vortex) => {
+          const dx = x - vortex.x;
+          const dy = y - vortex.y;
+          const distToVortex = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distToVortex < 700 && distToVortex > 5) {
+            const influence = vortex.strength * (1 - distToVortex / 700);
+            const vortexAngle = Math.atan2(dy, dx) + (vortex.direction * time * vortex.rotationSpeed);
+            const vortexPull = influence * 55;
+            
+            totalVortexX += Math.cos(vortexAngle + Math.PI/2 * vortex.direction) * vortexPull;
+            totalVortexY += Math.sin(vortexAngle + Math.PI/2 * vortex.direction) * vortexPull;
+          }
+        });
+        
+        // 基础轨道运动（更快）
+        const baseAngle = Math.atan2(y, x);
+        const baseDist = Math.sqrt(x * x + y * y);
+        const orbitSpeed = 0.15 + baseDist * 0.0004;
+        const baseVx = -Math.sin(baseAngle) * orbitSpeed;
+        const baseVy = Math.cos(baseAngle) * orbitSpeed;
+        
+        // 更新速度（更快）
+        vx = vx * 0.93 + (totalVortexX + baseVx * 7) * dt * 25;
+        vy = vy * 0.93 + (totalVortexY + baseVy * 7) * dt * 25;
+        
+        // 更新位置
+        x += vx;
+        y += vy;
+        
+        // 边界检查
+        const currentDist = Math.sqrt(x * x + y * y);
+        if (currentDist > 1700) {
+          const resetAngle = Math.random() * Math.PI * 2;
+          const resetDist = 80 + Math.random() * 250;
+          x = Math.cos(resetAngle) * resetDist;
+          y = Math.sin(resetAngle) * resetDist;
+          vx = 0;
+          vy = 0;
+          
+          // 重置历史位置
+          for (let h = 0; h < particleData.history.length; h++) {
+            particleData.history[h].x = x;
+            particleData.history[h].y = y;
+          }
+        }
+        
+        // 更新历史位置
+        for (let h = particleData.history.length - 1; h > 0; h--) {
+          particleData.history[h].x = particleData.history[h - 1].x;
+          particleData.history[h].y = particleData.history[h - 1].y;
+        }
+        particleData.history[0].x = x;
+        particleData.history[0].y = y;
+        
+        // 更新主粒子
+        const mainEl = particleData.element;
+        mainEl.style.left = `calc(50% + ${x}px)`;
+        mainEl.style.top = `calc(50% + ${y}px)`;
+        
+        // 更新拖尾粒子
+        const trailParticles = this.tunnelElements.trails[index];
+        trailParticles.forEach((trailEl, tIndex) => {
+          const historyPos = particleData.history[tIndex + 1] || particleData.history[particleData.history.length - 1];
+          const trailSize = size * (1 - (tIndex + 1) / trailParticles.length);
+          const trailOpacity = 0.8 * (1 - (tIndex + 1) / trailParticles.length);
+          
+          trailEl.style.left = `calc(50% + ${historyPos.x}px)`;
+          trailEl.style.top = `calc(50% + ${historyPos.y}px)`;
+          trailEl.style.width = trailSize + 'px';
+          trailEl.style.height = trailSize + 'px';
+          trailEl.style.opacity = trailOpacity;
+        });
+        
+        // 保存粒子数据
+        particleData.x = x;
+        particleData.y = y;
+        particleData.vx = vx;
+        particleData.vy = vy;
       });
       
       requestAnimationFrame(animate);
@@ -4188,75 +4613,6 @@ const App = {
       loginPage.style.display = 'none';
       transition.remove();
       
-      // 现在创建一个满屏粒子爆炸效果
-      const burstContainer = document.createElement('div');
-      burstContainer.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 10000;
-        pointer-events: none;
-      `;
-      
-      // 创建爆炸粒子数据
-      const particlesData = [];
-      for (let i = 0; i < 400; i++) {
-        const angle = (i / 400) * Math.PI * 2 + Math.random() * 0.8;
-        const distance = 50 + Math.random() * 1200;
-        const size = 2 + Math.random() * 6;
-        const hue = Math.random() * 360;
-        const delay = Math.random() * 150;
-        
-        particlesData.push({ angle, distance, size, hue, delay });
-      }
-      
-      // 设置一个统一的关键帧样式
-      const style = document.createElement('style');
-      let keyframesContent = '';
-      particlesData.forEach((p, i) => {
-        keyframesContent += `
-          @keyframes burstParticle${i} {
-            0% {
-              transform: translate(-50%, -50%) scale(0);
-              opacity: 1;
-            }
-            20% {
-              transform: translate(-50%, -50%) scale(1.5);
-              opacity: 1;
-            }
-            100% {
-              transform: translate(calc(-50% + ${Math.cos(p.angle) * p.distance}px), calc(-50% + ${Math.sin(p.angle) * p.distance}px)) scale(0.2);
-              opacity: 0;
-            }
-          }
-        `;
-      });
-      style.textContent = keyframesContent;
-      document.head.appendChild(style);
-      
-      // 创建粒子元素
-      particlesData.forEach((p, i) => {
-        const burstParticle = document.createElement('div');
-        burstParticle.style.cssText = `
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          width: ${p.size}px;
-          height: ${p.size}px;
-          background: radial-gradient(circle, #fff 0%, hsl(${p.hue}, 100%, 60%) 50%, transparent 100%);
-          border-radius: 50%;
-          box-shadow: 0 0 ${p.size*5}px hsl(${p.hue}, 100%, 60%);
-          transform: translate(-50%, -50%) scale(0);
-          opacity: 1;
-          animation: burstParticle${i} 1.5s ease-out ${p.delay}ms forwards;
-        `;
-        burstContainer.appendChild(burstParticle);
-      });
-      
-      document.body.appendChild(burstContainer);
-      
       // 平滑显示主页面
       let startOpacity = 0;
       const fadeIn = () => {
@@ -4267,12 +4623,6 @@ const App = {
         }
       };
       fadeIn();
-      
-      // 清理
-      setTimeout(() => {
-        burstContainer.remove();
-        style.remove();
-      }, 2000);
     }, 1500);
   },
 
@@ -5886,7 +6236,7 @@ function closeSettingsModal() {
     
     toggleBtn.addEventListener('mousedown', handleMouseDown);
     
-    // 开始苍蝇自动移动
+    // 开始蚂蚁自动移动
     this.startFlyMovement(toggleBtn, () => mouseX, () => mouseY, (val) => isFollowingMouse = val);
   },
   
@@ -5911,6 +6261,7 @@ function closeSettingsModal() {
     
     let isFollowingMouse = false;
     let followAnimationFrame = null;
+    let isMouseHovering = false;
     
     const stopFollowing = () => {
       isFollowingMouse = false;
@@ -5919,25 +6270,28 @@ function closeSettingsModal() {
         cancelAnimationFrame(followAnimationFrame);
         followAnimationFrame = null;
       }
-      decideNextMove();
+      // 只有鼠标不在hover时才决定下一次移动
+      if (!isMouseHovering) {
+        decideNextMove();
+      }
     };
     
     const followMouse = () => {
       if (!isFollowingMouse) return;
       
-      const targetX = getMouseX() - 40;
-      const targetY = getMouseY() - 25;
+      const targetX = getMouseX() - 35;
+      const targetY = getMouseY() - 20;
       const currentX = parseFloat(toggleBtn.style.left) || 100;
       const currentY = parseFloat(toggleBtn.style.top) || 200;
       
       // 缓慢靠近鼠标
-      const newX = currentX + (targetX - currentX) * 0.05;
-      const newY = currentY + (targetY - currentY) * 0.05;
+      const newX = currentX + (targetX - currentX) * 0.08;
+      const newY = currentY + (targetY - currentY) * 0.08;
       
       toggleBtn.style.left = newX + 'px';
       toggleBtn.style.top = newY + 'px';
       
-      // 让苍蝇朝向鼠标 - 头朝前面
+      // 让蚂蚁朝向鼠标 - 头朝前面
       const angle = Math.atan2(targetY - currentY, targetX - currentX) * 180 / Math.PI;
       this.flyCurrentRotation = angle;
       
@@ -5951,30 +6305,38 @@ function closeSettingsModal() {
     
     const decideNextMove = () => {
       if (!this.isFlyMoving) return;
+      if (isMouseHovering) return; // 鼠标hover时不随机移动
       
-      // 30%几率跟随鼠标，70%几率随机移动
-      if (Math.random() < 0.3) {
-        isFollowingMouse = true;
-        setFollowing(true);
-        followMouse();
-        
-        // 跟随鼠标一段时间后停止
-        setTimeout(stopFollowing, 3000 + Math.random() * 2000); // 跟随3-5秒
-      } else {
-        isFollowingMouse = false;
-        setFollowing(false);
-        // 随机生成新的目标位置
-        const padding = 50;
-        const maxX = window.innerWidth - toggleBtn.offsetWidth - padding;
-        const maxY = window.innerHeight - toggleBtn.offsetHeight - padding;
-        
-        this.flyTargetX = Math.random() * maxX + padding / 2;
-        this.flyTargetY = Math.random() * maxY + padding / 2;
-        
-        // 平滑移动到新位置
-        this.moveFlySmoothly(toggleBtn, this.flyTargetX, this.flyTargetY, decideNextMove);
-      }
+      isFollowingMouse = false;
+      setFollowing(false);
+      // 随机生成新的目标位置
+      const padding = 50;
+      const maxX = window.innerWidth - toggleBtn.offsetWidth - padding;
+      const maxY = window.innerHeight - toggleBtn.offsetHeight - padding;
+      
+      this.flyTargetX = Math.random() * maxX + padding / 2;
+      this.flyTargetY = Math.random() * maxY + padding / 2;
+      
+      // 平滑移动到新位置
+      this.moveFlySmoothly(toggleBtn, this.flyTargetX, this.flyTargetY, decideNextMove);
     };
+    
+    // 鼠标hover时跟随
+    toggleBtn.addEventListener('mouseenter', () => {
+      isMouseHovering = true;
+      isFollowingMouse = true;
+      setFollowing(true);
+      if (followAnimationFrame) {
+        cancelAnimationFrame(followAnimationFrame);
+      }
+      followMouse();
+    });
+    
+    // 鼠标离开时停止跟随
+    toggleBtn.addEventListener('mouseleave', () => {
+      isMouseHovering = false;
+      stopFollowing();
+    });
     
     // 开始第一次移动
     setTimeout(decideNextMove, 1000);
@@ -7964,7 +8326,59 @@ function getLocalIPs(callback) {
   }, 2000);
 }
 
-
+// 横幅拖拽功能
+(function() {
+  const banner = document.getElementById('floatingBanner');
+  if (!banner) return;
+  
+  let isDragging = false;
+  let startX, startY;
+  let offsetX = 0, offsetY = 0;
+  
+  banner.addEventListener('mousedown', (e) => {
+    // 如果点击的是关闭按钮，不拖拽
+    if (e.target.classList.contains('floating-banner-close')) return;
+    
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    
+    // 获取当前的偏移量
+    const rect = banner.getBoundingClientRect();
+    offsetX = rect.left + window.scrollX;
+    offsetY = rect.top + window.scrollY;
+    
+    // 取消初始的 translateX(-50%)
+    banner.style.left = offsetX + 'px';
+    banner.style.top = offsetY + 'px';
+    banner.style.transform = 'none';
+    
+    // 开启 will-change 优化
+    banner.style.willChange = 'left, top';
+    
+    e.preventDefault();
+  });
+  
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    
+    banner.style.left = (offsetX + dx) + 'px';
+    banner.style.top = (offsetY + dy) + 'px';
+  });
+  
+  document.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      banner.style.willChange = 'auto';
+    }
+  });
+  
+  // 防止文本选中
+  banner.addEventListener('selectstart', (e) => e.preventDefault());
+})();
 
 // 全局函数
 </script>
