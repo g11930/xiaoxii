@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>数据员</title>
+<!-- Google Fonts - 艺术字体 -->
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
 <style>
 * {
     box-sizing: border-box;
@@ -32,6 +34,130 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* 诗歌艺术字容器 */
+.poetry-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 100;
+    animation: poetryFadeIn 2s ease-out 1s both;
+}
+
+@keyframes poetryFadeIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0);
+    }
+}
+
+.poetry-line {
+    font-family: 'Ma Shan Zheng', 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', serif;
+    color: #ffffff;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.8),
+        0 0 20px rgba(255, 255, 255, 0.6),
+        0 0 30px rgba(255, 255, 255, 0.4),
+        0 0 40px rgba(255, 255, 255, 0.2);
+    letter-spacing: 0.3em;
+    margin: 15px 0;
+}
+
+.poetry-1 {
+    font-size: 4rem;
+    animation: poetryFloat 4s ease-in-out infinite;
+}
+
+.poetry-2 {
+    font-size: 3.5rem;
+    animation: poetryFloat 4s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+@keyframes poetryFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes whiteShimmer {
+    0%, 100% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.3);
+    }
+}
+
+.poetry-line .red {
+    color: #ff6b6b;
+    text-shadow: 
+        0 0 15px rgba(255, 107, 107, 0.9),
+        0 0 30px rgba(255, 107, 107, 0.7),
+        0 0 45px rgba(255, 107, 107, 0.5),
+        0 0 60px rgba(255, 107, 107, 0.3);
+    animation: redGlow 2s ease-in-out infinite;
+}
+
+@keyframes redGlow {
+    0%, 100% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.5);
+    }
+}
+
+/* 诗句飞散动画 - 坠入星河效果 */
+.poetry-container.scatter .char {
+    animation: starBurst 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    display: inline-block;
+}
+
+/* 第一行诗句 - 圆形向外分散，模拟从中心向外爆发 */
+.poetry-container.scatter .poetry-1 .char:nth-child(1) { animation-delay: 0s; --angle: 200deg; --distance: 500px; }
+.poetry-container.scatter .poetry-1 .char:nth-child(2) { animation-delay: 0.05s; --angle: 220deg; --distance: 550px; }
+.poetry-container.scatter .poetry-1 .char:nth-child(3) { animation-delay: 0.1s; --angle: 240deg; --distance: 480px; }
+.poetry-container.scatter .poetry-1 .char:nth-child(4) { animation-delay: 0.15s; --angle: 260deg; --distance: 520px; }
+.poetry-container.scatter .poetry-1 .char:nth-child(5) { animation-delay: 0.2s; --angle: 280deg; --distance: 560px; }
+.poetry-container.scatter .poetry-1 .char:nth-child(6) { animation-delay: 0.25s; --angle: 300deg; --distance: 490px; }
+.poetry-container.scatter .poetry-1 .char:nth-child(7) { animation-delay: 0.3s; --angle: 320deg; --distance: 530px; }
+
+/* 第二行诗句 - 向另一侧圆形分散 */
+.poetry-container.scatter .poetry-2 .char:nth-child(1) { animation-delay: 0.08s; --angle: 40deg; --distance: 510px; }
+.poetry-container.scatter .poetry-2 .char:nth-child(2) { animation-delay: 0.12s; --angle: 60deg; --distance: 570px; }
+.poetry-container.scatter .poetry-2 .char:nth-child(3) { animation-delay: 0.16s; --angle: 80deg; --distance: 495px; }
+.poetry-container.scatter .poetry-2 .char:nth-child(4) { animation-delay: 0.2s; --angle: 100deg; --distance: 540px; }
+.poetry-container.scatter .poetry-2 .char:nth-child(5) { animation-delay: 0.24s; --angle: 120deg; --distance: 505px; }
+.poetry-container.scatter .poetry-2 .char:nth-child(6) { animation-delay: 0.28s; --angle: 140deg; --distance: 555px; }
+.poetry-container.scatter .poetry-2 .char:nth-child(7) { animation-delay: 0.32s; --angle: 160deg; --distance: 485px; }
+
+@keyframes starBurst {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        filter: blur(0px) brightness(1);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(calc(cos(var(--angle)) * 30px), calc(sin(var(--angle)) * 30px)) scale(1.2) rotate(10deg);
+        filter: blur(2px) brightness(2);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(calc(cos(var(--angle)) * var(--distance)), calc(sin(var(--angle)) * var(--distance))) scale(0.1) rotate(calc(var(--angle) + 360deg));
+        filter: blur(8px) brightness(3);
+    }
 }
 
 /* 星星容器 */
@@ -153,27 +279,6 @@ html, body {
     }
 }
 
-/* 点击提示 */
-.login-hint {
-    position: absolute;
-    bottom: 60px;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 14px;
-    text-align: center;
-    opacity: 0;
-    animation: hintFadeIn 0.8s ease-out 2.5s forwards;
-}
-
-@keyframes hintFadeIn {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 /* 进入过渡动画 */
 .enter-transition {
     position: fixed;
@@ -3312,8 +3417,16 @@ html, body {
     <div class="stars-container" id="starsContainer">
         <!-- 动态生成星星 -->
     </div>
-    <!-- 点击提示 -->
-    <div class="login-hint">点击进入系统</div>
+    
+    <!-- 艺术字诗句 -->
+    <div class="poetry-container">
+        <div class="poetry-line poetry-1">
+            <span class="char">此</span><span class="char">情</span><span class="char">可</span><span class="char">待</span><span class="char">成</span><span class="char">追</span><span class="char">忆</span>
+        </div>
+        <div class="poetry-line poetry-2">
+            <span class="char">只</span><span class="char">是</span><span class="char red">当</span><span class="char red">时</span><span class="char">已</span><span class="char red">惘</span><span class="char red">然</span>
+        </div>
+    </div>
 </div>
 
 <div id="noticePopup" class="notice-popup" style="display:none;">
@@ -4582,6 +4695,12 @@ const App = {
   },
   
   enterThroughTunnel() {
+    // 触发诗句飞散动画
+    const poetryContainer = document.querySelector('.poetry-container');
+    if (poetryContainer) {
+      poetryContainer.classList.add('scatter');
+    }
+    
     // 先准备主页面，确保内容加载好
     const mainPage = document.getElementById('mainPage');
     mainPage.style.display = 'flex';
