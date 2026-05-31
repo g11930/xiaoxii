@@ -7500,7 +7500,7 @@ App.initHomePage = function() {
   // 仓储
   if (warehouseBtn) {
     warehouseBtn.addEventListener('click', () => {
-      openPage('仓储', 'https://www.kdocs.cn/l/cnLDizeYKJ4K');
+      showWarehouseMonthSelector();
       if (zipSubgroup) zipSubgroup.style.display = 'none';
     });
   }
@@ -7516,7 +7516,7 @@ App.initHomePage = function() {
   // 专线
   if (lineBtn) {
     lineBtn.addEventListener('click', () => {
-      openPage('专线', 'https://www.kdocs.cn/l/cbWVlaTOmyEe');
+      showLineMonthSelector();
       if (zipSubgroup) zipSubgroup.style.display = 'none';
     });
   }
@@ -7524,7 +7524,7 @@ App.initHomePage = function() {
   // 速量
   if (speedBtn) {
     speedBtn.addEventListener('click', () => {
-      openPage('速量', 'https://www.kdocs.cn/l/ch5xdUJYMzbH');
+      showSpeedMonthSelector();
       if (zipSubgroup) zipSubgroup.style.display = 'none';
     });
   }
@@ -8380,6 +8380,144 @@ function getLocalIPs(callback) {
   // 防止文本选中
   banner.addEventListener('selectstart', (e) => e.preventDefault());
 })();
+
+// 速量月份选择器
+function showSpeedMonthSelector() {
+  const months = [
+    { name: '五月份', url: 'https://www.kdocs.cn/l/ch5xdUJYMzbH' },
+    { name: '六月份', url: 'https://www.kdocs.cn/l/cjyFHcqAyGuJ' }
+  ];
+  
+  let selectorHTML = `
+    <div id="speedMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
+      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+        <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+  `;
+  
+  months.forEach((month, index) => {
+    selectorHTML += `
+      <button 
+        style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
+        onclick="selectSpeedMonth('速量 - ${month.name}','${month.url}')"
+      >
+        <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
+        <span>${month.name}</span>
+      </button>
+    `;
+  });
+  
+  selectorHTML += `
+        </div>
+        <button 
+          style="margin-top:16px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
+          onclick="document.getElementById('speedMonthSelector').remove()"
+        >
+          取消
+        </button>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', selectorHTML);
+}
+
+function selectSpeedMonth(name, url) {
+  document.getElementById('speedMonthSelector').remove();
+  openPage(name, url);
+}
+
+// 仓储月份选择器
+function showWarehouseMonthSelector() {
+  const months = [
+    { name: '五月份', url: 'https://www.kdocs.cn/l/cnLDizeYKJ4K' },
+    { name: '六月份', url: 'https://www.kdocs.cn/l/ceSENEnBJ4ir' }
+  ];
+  
+  let selectorHTML = `
+    <div id="warehouseMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
+      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+        <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+  `;
+  
+  months.forEach((month, index) => {
+    selectorHTML += `
+      <button 
+        style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
+        onclick="selectWarehouseMonth('仓储 - ${month.name}','${month.url}')"
+      >
+        <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
+        <span>${month.name}</span>
+      </button>
+    `;
+  });
+  
+  selectorHTML += `
+        </div>
+        <button 
+          style="margin-top:16px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
+          onclick="document.getElementById('warehouseMonthSelector').remove()"
+        >
+          取消
+        </button>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', selectorHTML);
+}
+
+function selectWarehouseMonth(name, url) {
+  document.getElementById('warehouseMonthSelector').remove();
+  openPage(name, url);
+}
+
+// 专线月份选择器
+function showLineMonthSelector() {
+  const months = [
+    { name: '五月份', url: 'https://www.kdocs.cn/l/cbWVlaTOmyEe' },
+    { name: '六月份', url: 'https://www.kdocs.cn/l/cpoXE2lCEZje' }
+  ];
+  
+  let selectorHTML = `
+    <div id="lineMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
+      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+        <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+  `;
+  
+  months.forEach((month, index) => {
+    selectorHTML += `
+      <button 
+        style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
+        onclick="selectLineMonth('专线 - ${month.name}','${month.url}')"
+      >
+        <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
+        <span>${month.name}</span>
+      </button>
+    `;
+  });
+  
+  selectorHTML += `
+        </div>
+        <button 
+          style="margin-top:16px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
+          onclick="document.getElementById('lineMonthSelector').remove()"
+        >
+          取消
+        </button>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', selectorHTML);
+}
+
+function selectLineMonth(name, url) {
+  document.getElementById('lineMonthSelector').remove();
+  openPage(name, url);
+}
 
 // 全局函数
 </script>
