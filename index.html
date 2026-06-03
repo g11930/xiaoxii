@@ -3598,7 +3598,7 @@ html, body {
     <button class="menu-btn" onclick="openPage('单量','https://www.kdocs.cn/l/cdiNjSnC4i2E')">单量</button>
     <button class="menu-btn" onclick="openPage('人效','https://www.kdocs.cn/l/coByacPZqwoP')">人效</button>
     <button class="menu-btn" onclick="openPage('小包数据汇总','https://www.kdocs.cn/l/coJEsFw0SGEz')">小包数据</button>
-    <button class="menu-btn" onclick="openPage('车辆','http://uc.dlysjg.td.gd.gov.cn/#/securityCenter/postSearchCenter')">车辆</button>
+    <button class="menu-btn" onclick="openVehiclePage()">车辆</button>
     <button class="menu-btn" onclick="openPage('出库单','https://www.kdocs.cn/l/caRQJ7Gz4GYG')">出库单</button>
     <button class="menu-btn" onclick="openPage('小包数据汇总夜','https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001')">小包数据汇总夜</button>
     <button class="menu-btn" onclick="openIllustrationPage()">插图</button>
@@ -4099,6 +4099,22 @@ html, body {
       <div style="margin-top:20px;">
         <h3>图片列表（可修改位置）</h3>
         <div id="image-list-page" style="min-height: 40px; border: 1px solid #eee; border-radius: 4px; padding: 5px;"></div>
+      </div>
+    </div>
+
+    <div id="vehicle-page" class="page" style="display:none; padding:20px; overflow-y:auto; height:100%;">
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center;">
+        <div style="font-size:80px; margin-bottom:30px;">🚗</div>
+        <h2 style="color:#333; margin-bottom:15px; font-size:28px;">车辆管理系统</h2>
+        <p style="color:#666; font-size:16px; line-height:1.8; max-width:500px;">
+          此功能需要访问内网环境才能使用。<br/>
+          请连接到公司内部网络后再尝试访问。
+        </p>
+        <div style="margin-top:30px; padding:20px; background:#f5f7fa; border-radius:12px;">
+          <p style="color:#999; font-size:14px;">
+            🔒 内网地址: <code style="color:#666;">http://uc.dlysjg.td.gd.gov.cn</code>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -4846,7 +4862,7 @@ const App = {
     
     if (this.tabs.length === 0) {
       this.tabs = [
-        { id: '车辆', name: '车辆', url: 'http://uc.dlysjg.td.gd.gov.cn/#/securityCenter/postSearchCenter' },
+        { id: '车辆', name: '车辆', url: null },
         { id: '出库单', name: '出库单', url: 'https://www.kdocs.cn/l/caRQJ7Gz4GYG' },
         { id: '小包数据汇总夜', name: '小包数据汇总夜', url: 'https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001' }
       ];
@@ -6459,6 +6475,29 @@ function closeSettingsModal() {
     }
   },
 
+  openVehiclePage() {
+    try {
+      const id = 'vehicle';
+      
+      const existingTab = this.tabs.find(t => t.id === id);
+      if (existingTab) {
+        this.switchTab(id);
+        return;
+      }
+
+      const newTab = { id, name: '车辆', url: null };
+      this.tabs.push(newTab);
+      this.activeId = id;
+      
+      this.saveTabs();
+      this.renderTabs();
+      this.switchTab(id);
+    } catch (error) {
+      console.error('打开车辆页面失败:', error);
+      alert('打开车辆页面失败，请重试');
+    }
+  },
+
   switchTab(id) {
     if (!id && this.tabs.length === 0) return;
     
@@ -6498,6 +6537,14 @@ function closeSettingsModal() {
       if (id === 'illustration') {
         illustrationPage.style.display = 'block';
         illustrationPage.classList.add('active');
+      }
+    }
+    
+    const vehiclePage = document.getElementById('vehicle-page');
+    if (vehiclePage) {
+      if (id === 'vehicle') {
+        vehiclePage.style.display = 'block';
+        vehiclePage.classList.add('active');
       }
     }
     
@@ -7317,6 +7364,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 window.openPage = (name, url) => App.openPage(name, url);
 window.openIllustrationPage = () => App.openIllustrationPage();
+window.openVehiclePage = () => App.openVehiclePage();
 window.toggleSidebar = () => App.toggleSidebar();
 window.closeTab = (e, id) => App.closeTab(e, id);
 window.switchTab = (id) => App.switchTab(id);
@@ -7648,7 +7696,7 @@ App.initHomePage = function() {
   // 车辆
   if (vehicleBtn) {
     vehicleBtn.addEventListener('click', () => {
-      App.openPage('车辆', 'http://uc.dlysjg.td.gd.gov.cn/#/securityCenter/postSearchCenter');
+      App.openVehiclePage();
       if (zipSubgroup) zipSubgroup.style.display = 'none';
       closeAllModal();
     });
