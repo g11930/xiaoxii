@@ -3598,7 +3598,7 @@ html, body {
     <button class="menu-btn" onclick="openPage('单量','https://www.kdocs.cn/l/cdiNjSnC4i2E')">单量</button>
     <button class="menu-btn" onclick="openPage('人效','https://www.kdocs.cn/l/coByacPZqwoP')">人效</button>
     <button class="menu-btn" onclick="openPage('小包数据汇总','https://www.kdocs.cn/l/coJEsFw0SGEz')">小包数据</button>
-    <button class="menu-btn" onclick="openPage('车辆','http://uc.dlysjg.td.gd.gov.cn/#/user_login')">车辆</button>
+    <button class="menu-btn" onclick="openPage('车辆','http://uc.dlysjg.td.gd.gov.cn/#/securityCenter/postSearchCenter')">车辆</button>
     <button class="menu-btn" onclick="openPage('出库单','https://www.kdocs.cn/l/caRQJ7Gz4GYG')">出库单</button>
     <button class="menu-btn" onclick="openPage('小包数据汇总夜','https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001')">小包数据汇总夜</button>
     <button class="menu-btn" onclick="openIllustrationPage()">插图</button>
@@ -4846,7 +4846,7 @@ const App = {
     
     if (this.tabs.length === 0) {
       this.tabs = [
-        { id: '车辆', name: '车辆', url: 'http://uc.dlysjg.td.gd.gov.cn/#/user_login' },
+        { id: '车辆', name: '车辆', url: 'http://uc.dlysjg.td.gd.gov.cn/#/securityCenter/postSearchCenter' },
         { id: '出库单', name: '出库单', url: 'https://www.kdocs.cn/l/caRQJ7Gz4GYG' },
         { id: '小包数据汇总夜', name: '小包数据汇总夜', url: 'https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001' }
       ];
@@ -7648,7 +7648,7 @@ App.initHomePage = function() {
   // 车辆
   if (vehicleBtn) {
     vehicleBtn.addEventListener('click', () => {
-      App.openPage('车辆', 'http://uc.dlysjg.td.gd.gov.cn/#/user_login');
+      App.openPage('车辆', 'http://uc.dlysjg.td.gd.gov.cn/#/securityCenter/postSearchCenter');
       if (zipSubgroup) zipSubgroup.style.display = 'none';
       closeAllModal();
     });
