@@ -3598,7 +3598,7 @@ html, body {
     <button class="menu-btn" onclick="openPage('单量','https://www.kdocs.cn/l/cdiNjSnC4i2E')">单量</button>
     <button class="menu-btn" onclick="openPage('人效','https://www.kdocs.cn/l/coByacPZqwoP')">人效</button>
     <button class="menu-btn" onclick="openPage('小包数据汇总','https://www.kdocs.cn/l/coJEsFw0SGEz')">小包数据</button>
-    <button class="menu-btn" onclick="openVehiclePage()">车辆</button>
+    <button class="menu-btn" onclick="openPage('车辆','http://uc.dlysjg.td.gd.gov.cn/#/user_login')">车辆</button>
     <button class="menu-btn" onclick="openPage('出库单','https://www.kdocs.cn/l/caRQJ7Gz4GYG')">出库单</button>
     <button class="menu-btn" onclick="openPage('小包数据汇总夜','https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001')">小包数据汇总夜</button>
     <button class="menu-btn" onclick="openIllustrationPage()">插图</button>
@@ -4103,19 +4103,200 @@ html, body {
     </div>
 
     <div id="vehicle-page" class="page" style="display:none; padding:20px; overflow-y:auto; height:100%;">
-      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center;">
-        <div style="font-size:80px; margin-bottom:30px;">🚗</div>
-        <h2 style="color:#333; margin-bottom:15px; font-size:28px;">车辆管理系统</h2>
-        <p style="color:#666; font-size:16px; line-height:1.8; max-width:500px;">
-          此功能需要访问内网环境才能使用。<br/>
-          请连接到公司内部网络后再尝试访问。
-        </p>
-        <div style="margin-top:30px; padding:20px; background:#f5f7fa; border-radius:12px;">
-          <p style="color:#999; font-size:14px;">
-            🔒 内网地址: <code style="color:#666;">http://uc.dlysjg.td.gd.gov.cn</code>
-          </p>
+      <div style="max-width:1200px; margin:0 auto;">
+        <h2 style="color:#333; margin-bottom:20px; font-size:24px; display:flex; align-items:center; gap:10px;">
+          🚗 车辆管理系统
+        </h2>
+        
+        <div style="display:flex; gap:15px; margin-bottom:20px;">
+          <input 
+            type="text" 
+            id="vehicleSearch" 
+            placeholder="搜索车牌号..." 
+            style="flex:1; padding:10px 15px; border:1px solid #ddd; border-radius:8px; font-size:14px;"
+          >
+          <button 
+            onclick="addVehicle()" 
+            style="padding:10px 20px; background:#409eff; color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px;"
+          >
+            + 添加车辆
+          </button>
+        </div>
+        
+        <div style="background:white; border-radius:12px; box-shadow:0 2px 12px rgba(0,0,0,0.08); overflow:hidden;">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr style="background:#f5f7fa;">
+                <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666; border-bottom:1px solid #eee;">车牌号</th>
+                <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666; border-bottom:1px solid #eee;">车辆类型</th>
+                <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666; border-bottom:1px solid #eee;">司机</th>
+                <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666; border-bottom:1px solid #eee;">状态</th>
+                <th style="padding:12px 15px; text-align:left; font-weight:600; color:#666; border-bottom:1px solid #eee;">操作</th>
+              </tr>
+            </thead>
+            <tbody id="vehicleTableBody">
+            </tbody>
+          </table>
+        </div>
+        
+        <div id="vehicleModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center; z-index:9999;">
+          <div style="background:white; border-radius:12px; padding:24px; width:400px;">
+            <h3 style="margin:0 0 20px 0; font-size:18px; color:#333;">{{isEdit ? '编辑车辆' : '添加车辆'}}</h3>
+            
+            <div style="display:flex; flex-direction:column; gap:15px;">
+              <div>
+                <label style="display:block; margin-bottom:5px; color:#666; font-size:14px;">车牌号</label>
+                <input type="text" id="vehiclePlate" placeholder="请输入车牌号" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box;">
+              </div>
+              <div>
+                <label style="display:block; margin-bottom:5px; color:#666; font-size:14px;">车辆类型</label>
+                <select id="vehicleType" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box;">
+                  <option value="货车">货车</option>
+                  <option value="客车">客车</option>
+                  <option value="轿车">轿车</option>
+                  <option value="其他">其他</option>
+                </select>
+              </div>
+              <div>
+                <label style="display:block; margin-bottom:5px; color:#666; font-size:14px;">司机姓名</label>
+                <input type="text" id="vehicleDriver" placeholder="请输入司机姓名" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box;">
+              </div>
+              <div>
+                <label style="display:block; margin-bottom:5px; color:#666; font-size:14px;">车辆状态</label>
+                <select id="vehicleStatus" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box;">
+                  <option value="运行中">运行中</option>
+                  <option value="空闲">空闲</option>
+                  <option value="维修">维修</option>
+                  <option value="停运">停运</option>
+                </select>
+              </div>
+            </div>
+            
+            <div style="display:flex; gap:10px; margin-top:20px;">
+              <button onclick="saveVehicle()" style="flex:1; padding:10px; background:#409eff; color:white; border:none; border-radius:8px; cursor:pointer;">
+                保存
+              </button>
+              <button onclick="closeVehicleModal()" style="padding:10px 20px; background:#eee; color:#666; border:none; border-radius:8px; cursor:pointer;">
+                取消
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+      
+      <script>
+        let vehicleData = [
+          { id: 1, plate: '粤A12345', type: '货车', driver: '张三', status: '运行中' },
+          { id: 2, plate: '粤B67890', type: '客车', driver: '李四', status: '空闲' },
+          { id: 3, plate: '粤C24680', type: '货车', driver: '王五', status: '维修' },
+          { id: 4, plate: '粤D13579', type: '轿车', driver: '赵六', status: '运行中' },
+          { id: 5, plate: '粤E97531', type: '货车', driver: '孙七', status: '停运' },
+        ];
+        
+        let editingVehicle = null;
+        
+        function renderVehicles(filter = '') {
+          const tbody = document.getElementById('vehicleTableBody');
+          const filtered = vehicleData.filter(v => v.plate.includes(filter) || v.driver.includes(filter));
+          
+          tbody.innerHTML = filtered.map(v => `
+            <tr style="border-bottom:1px solid #eee;">
+              <td style="padding:12px 15px;">${v.plate}</td>
+              <td style="padding:12px 15px;">${v.type}</td>
+              <td style="padding:12px 15px;">${v.driver}</td>
+              <td style="padding:12px 15px;">
+                <span style="display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; ${getStatusStyle(v.status)}">
+                  ${v.status}
+                </span>
+              </td>
+              <td style="padding:12px 15px;">
+                <button onclick="editVehicle(${v.id})" style="margin-right:8px; padding:5px 12px; background:#67c23a; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">编辑</button>
+                <button onclick="deleteVehicle(${v.id})" style="padding:5px 12px; background:#f56c6c; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">删除</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+        
+        function getStatusStyle(status) {
+          const styles = {
+            '运行中': 'background:#e8f5e9; color:#67c23a;',
+            '空闲': 'background:#f0f9ff; color:#409eff;',
+            '维修': 'background:#fff7e6; color:#e6a23c;',
+            '停运': 'background:#fef0f0; color:#f56c6c;'
+          };
+          return styles[status] || '';
+        }
+        
+        function addVehicle() {
+          editingVehicle = null;
+          document.getElementById('vehiclePlate').value = '';
+          document.getElementById('vehicleType').value = '货车';
+          document.getElementById('vehicleDriver').value = '';
+          document.getElementById('vehicleStatus').value = '运行中';
+          document.getElementById('vehicleModal').style.display = 'flex';
+        }
+        
+        function editVehicle(id) {
+          editingVehicle = vehicleData.find(v => v.id === id);
+          if (editingVehicle) {
+            document.getElementById('vehiclePlate').value = editingVehicle.plate;
+            document.getElementById('vehicleType').value = editingVehicle.type;
+            document.getElementById('vehicleDriver').value = editingVehicle.driver;
+            document.getElementById('vehicleStatus').value = editingVehicle.status;
+            document.getElementById('vehicleModal').style.display = 'flex';
+          }
+        }
+        
+        function deleteVehicle(id) {
+          if (confirm('确定要删除这辆车吗？')) {
+            vehicleData = vehicleData.filter(v => v.id !== id);
+            renderVehicles(document.getElementById('vehicleSearch').value);
+          }
+        }
+        
+        function saveVehicle() {
+          const plate = document.getElementById('vehiclePlate').value;
+          const type = document.getElementById('vehicleType').value;
+          const driver = document.getElementById('vehicleDriver').value;
+          const status = document.getElementById('vehicleStatus').value;
+          
+          if (!plate || !driver) {
+            alert('请填写车牌号和司机姓名');
+            return;
+          }
+          
+          if (editingVehicle) {
+            editingVehicle.plate = plate;
+            editingVehicle.type = type;
+            editingVehicle.driver = driver;
+            editingVehicle.status = status;
+          } else {
+            vehicleData.push({
+              id: Date.now(),
+              plate,
+              type,
+              driver,
+              status
+            });
+          }
+          
+          closeVehicleModal();
+          renderVehicles(document.getElementById('vehicleSearch').value);
+        }
+        
+        function closeVehicleModal() {
+          document.getElementById('vehicleModal').style.display = 'none';
+          editingVehicle = null;
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+          renderVehicles();
+          
+          document.getElementById('vehicleSearch')?.addEventListener('input', (e) => {
+            renderVehicles(e.target.value);
+          });
+        });
+      </script>
     </div>
   </div>
 </div>
@@ -4862,7 +5043,7 @@ const App = {
     
     if (this.tabs.length === 0) {
       this.tabs = [
-        { id: '车辆', name: '车辆', url: null },
+        { id: '车辆', name: '车辆', url: 'http://uc.dlysjg.td.gd.gov.cn/#/user_login' },
         { id: '出库单', name: '出库单', url: 'https://www.kdocs.cn/l/caRQJ7Gz4GYG' },
         { id: '小包数据汇总夜', name: '小包数据汇总夜', url: 'https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001' }
       ];
@@ -7696,7 +7877,7 @@ App.initHomePage = function() {
   // 车辆
   if (vehicleBtn) {
     vehicleBtn.addEventListener('click', () => {
-      App.openVehiclePage();
+      App.openPage('车辆', 'http://uc.dlysjg.td.gd.gov.cn/#/user_login');
       if (zipSubgroup) zipSubgroup.style.display = 'none';
       closeAllModal();
     });
