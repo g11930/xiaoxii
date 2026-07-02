@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>数据员</title>
 <!-- Google Fonts - 艺术字体 -->
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&amp;family=ZCOOL+XiaoWei&amp;display=swap" rel="stylesheet">
 <style>
 * {
     box-sizing: border-box;
@@ -24,305 +22,7 @@ html, body {
   height: 100%;
 }
 
-.login-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a0a2a 100%);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-/* 诗歌艺术字容器 */
-.poetry-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    z-index: 100;
-    animation: poetryFadeIn 2s ease-out 1s both;
-}
-
-@keyframes poetryFadeIn {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translate(-50%, -50%) translateY(0);
-    }
-}
-
-.poetry-line {
-    font-family: 'Ma Shan Zheng', 'ZCOOL XiaoWei', 'STKaiti', 'KaiTi', serif;
-    color: #ffffff;
-    text-shadow: 
-        0 0 10px rgba(255, 255, 255, 0.8),
-        0 0 20px rgba(255, 255, 255, 0.6),
-        0 0 30px rgba(255, 255, 255, 0.4),
-        0 0 40px rgba(255, 255, 255, 0.2);
-    letter-spacing: 0.3em;
-    margin: 15px 0;
-}
-
-.poetry-1 {
-    font-size: 4rem;
-    animation: poetryFloat 4s ease-in-out infinite;
-}
-
-.poetry-2 {
-    font-size: 3.5rem;
-    animation: poetryFloat 4s ease-in-out infinite;
-    animation-delay: 2s;
-}
-
-@keyframes poetryFloat {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-8px);
-    }
-}
-
-@keyframes whiteShimmer {
-    0%, 100% {
-        filter: brightness(1);
-    }
-    50% {
-        filter: brightness(1.3);
-    }
-}
-
-.poetry-line .red {
-    color: #ff6b6b;
-    text-shadow: 
-        0 0 15px rgba(255, 107, 107, 0.9),
-        0 0 30px rgba(255, 107, 107, 0.7),
-        0 0 45px rgba(255, 107, 107, 0.5),
-        0 0 60px rgba(255, 107, 107, 0.3);
-    animation: redGlow 2s ease-in-out infinite;
-}
-
-@keyframes redGlow {
-    0%, 100% {
-        filter: brightness(1);
-    }
-    50% {
-        filter: brightness(1.5);
-    }
-}
-
-/* 诗句飞散动画 - 坠入星河效果 */
-.poetry-container.scatter .char {
-    animation: starBurst 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    display: inline-block;
-}
-
-/* 第一行诗句 - 圆形向外分散，模拟从中心向外爆发 */
-.poetry-container.scatter .poetry-1 .char:nth-child(1) { animation-delay: 0s; --angle: 200deg; --distance: 500px; }
-.poetry-container.scatter .poetry-1 .char:nth-child(2) { animation-delay: 0.05s; --angle: 220deg; --distance: 550px; }
-.poetry-container.scatter .poetry-1 .char:nth-child(3) { animation-delay: 0.1s; --angle: 240deg; --distance: 480px; }
-.poetry-container.scatter .poetry-1 .char:nth-child(4) { animation-delay: 0.15s; --angle: 260deg; --distance: 520px; }
-.poetry-container.scatter .poetry-1 .char:nth-child(5) { animation-delay: 0.2s; --angle: 280deg; --distance: 560px; }
-.poetry-container.scatter .poetry-1 .char:nth-child(6) { animation-delay: 0.25s; --angle: 300deg; --distance: 490px; }
-.poetry-container.scatter .poetry-1 .char:nth-child(7) { animation-delay: 0.3s; --angle: 320deg; --distance: 530px; }
-
-/* 第二行诗句 - 向另一侧圆形分散 */
-.poetry-container.scatter .poetry-2 .char:nth-child(1) { animation-delay: 0.08s; --angle: 40deg; --distance: 510px; }
-.poetry-container.scatter .poetry-2 .char:nth-child(2) { animation-delay: 0.12s; --angle: 60deg; --distance: 570px; }
-.poetry-container.scatter .poetry-2 .char:nth-child(3) { animation-delay: 0.16s; --angle: 80deg; --distance: 495px; }
-.poetry-container.scatter .poetry-2 .char:nth-child(4) { animation-delay: 0.2s; --angle: 100deg; --distance: 540px; }
-.poetry-container.scatter .poetry-2 .char:nth-child(5) { animation-delay: 0.24s; --angle: 120deg; --distance: 505px; }
-.poetry-container.scatter .poetry-2 .char:nth-child(6) { animation-delay: 0.28s; --angle: 140deg; --distance: 555px; }
-.poetry-container.scatter .poetry-2 .char:nth-child(7) { animation-delay: 0.32s; --angle: 160deg; --distance: 485px; }
-
-@keyframes starBurst {
-    0% {
-        opacity: 1;
-        transform: translate(0, 0) scale(1) rotate(0deg);
-        filter: blur(0px) brightness(1);
-    }
-    20% {
-        opacity: 1;
-        transform: translate(calc(cos(var(--angle)) * 30px), calc(sin(var(--angle)) * 30px)) scale(1.2) rotate(10deg);
-        filter: blur(2px) brightness(2);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(calc(cos(var(--angle)) * var(--distance)), calc(sin(var(--angle)) * var(--distance))) scale(0.1) rotate(calc(var(--angle) + 360deg));
-        filter: blur(8px) brightness(3);
-    }
-}
-
-/* 星星容器 */
-.stars-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 200%;
-    height: 200%;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    animation: rotateStars 120s linear infinite;
-}
-
-@keyframes rotateStars {
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
-}
-
-/* 星星层 - 不同速度旋转 */
-.stars-layer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    transform: translate(-50%, -50%);
-}
-
-.stars-layer.slow {
-    animation: rotateSlow 200s linear infinite;
-}
-
-.stars-layer.medium {
-    animation: rotateMedium 100s linear infinite reverse;
-}
-
-.stars-layer.fast {
-    animation: rotateFast 60s linear infinite;
-}
-
-@keyframes rotateSlow {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-@keyframes rotateMedium {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-@keyframes rotateFast {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* 星星 */
-.star {
-    position: absolute;
-    background: #fff;
-    border-radius: 50%;
-    animation: twinkle 2s ease-in-out infinite;
-}
-
-@keyframes twinkle {
-    0%, 100% {
-        opacity: 0.3;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.2);
-    }
-}
-
-/* 流星 */
-.meteor {
-    position: absolute;
-    width: 100px;
-    height: 2px;
-    background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
-    border-radius: 1px;
-    animation: meteorFall 3s linear infinite;
-}
-
-@keyframes meteorFall {
-    0% {
-        transform: translateX(0) translateY(0) rotate(-45deg);
-        opacity: 1;
-    }
-    70% {
-        opacity: 1;
-    }
-    100% {
-        transform: translateX(500px) translateY(500px) rotate(-45deg);
-        opacity: 0;
-    }
-}
-
-/* 星云效果 */
-.nebula {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.2;
-    animation: nebulaFloat 30s ease-in-out infinite;
-}
-
-@keyframes nebulaFloat {
-    0%, 100% {
-        transform: translate(-50%, -50%) rotate(0deg) scale(1);
-    }
-    50% {
-        transform: translate(-50%, -50%) rotate(180deg) scale(1.1);
-    }
-}
-
-/* 进入过渡动画 */
-.enter-transition {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(0, 0, 0, 0.9) 50%, #000 100%);
-    z-index: 9999;
-    pointer-events: none;
-    animation: fadeOut 1s ease-out forwards;
-}
-
-@keyframes fadeOut {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-
-/* 时空隧道CSS (备用) */
-.tunnel-container {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    perspective: 1000px;
-    transform-style: preserve-3d;
-}
-
-.tunnel-particle {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: radial-gradient(circle, #fff 0%, #00ffff 50%, transparent 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 10px #00ffff;
-    transform-style: preserve-3d;
-    will-change: transform;
-}
 .login-box {
     background: white;
     padding: 40px;
@@ -520,47 +220,6 @@ html, body {
     height: 100%;
 }
 
-.sidebar {
-    width: 0;
-    background: #2b3445;
-    color: #fff;
-    padding: 16px;
-    transition: width 0.3s ease, overflow 0.3s ease, padding 0.3s ease;
-    overflow: hidden;
-    padding: 0;
-}
-.sidebar.expand {
-    width: 180px;
-    padding: 16px;
-}
-.sidebar.collapse {
-    width: 60px;
-    padding: 16px;
-}
-.sidebar-avatar-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    margin: 0 auto 16px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    transition: transform 0.2s, box-shadow 0.2s;
-    object-fit: cover;
-}
-.sidebar-avatar-img[src=""]::before {
-    content: '👤';
-    color: white;
-    font-size: 24px;
-}
-.sidebar-avatar-img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
-}
 .add-function-btn {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
@@ -571,32 +230,7 @@ html, body {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
-.sidebar.collapse .sidebar-avatar {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    margin: 0 auto 12px;
-}
-.menu-btn {
-    display: block;
-    width: 100%;
-    padding: 12px 10px;
-    margin-bottom: 8px;
-    background: #3c4658;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.2s;
-}
-.menu-btn:hover {
-    background: #4b576e;
-}
-.menu-btn.active {
-    background: #4299e1;
-}
+
 
 /* 悬浮横幅 - 磨砂玻璃效果 */
 .floating-banner {
@@ -2000,6 +1634,8 @@ html, body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 14px;
+    padding: 20px;
+    min-height: 200px;
 }
 .func-card {
     background: white;
@@ -2007,15 +1643,64 @@ html, body {
     padding: 18px 8px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-    border: 1px solid #edf2f7;
+    border: 2px solid #edf2f7;
     transition: all 0.2s ease;
-    cursor: pointer;
+    cursor: grab;
+    user-select: none;
 }
 .func-card:hover {
     transform: translateY(-4px);
     border-color: #cbd5e1;
     box-shadow: 0 12px 24px -8px rgba(20, 80, 150, 0.15);
     background: #fafdff;
+}
+.func-card.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+    transform: scale(1.05);
+    border-color: #409eff;
+}
+.func-card.drag-over {
+    border-color: #409eff;
+    background: #ecf5ff;
+}
+.func-card.add-card {
+    border-style: dashed;
+    border-color: #409eff;
+    background: #f0f7ff;
+    color: #409eff;
+}
+.func-card.add-card:hover {
+    background: #e6f7ff;
+    border-color: #1890ff;
+}
+.context-menu {
+    position: fixed;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    padding: 8px 0;
+    min-width: 160px;
+    z-index: 10000;
+    display: none;
+}
+.context-menu.show {
+    display: block;
+}
+.context-menu-item {
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #333;
+}
+.context-menu-item:hover {
+    background: #f5f7fa;
+}
+.context-menu-item.separator {
+    height: 1px;
+    background: #eee;
+    padding: 0;
+    margin: 4px 0;
 }
 .func-emoji {
     font-size: 28px;
@@ -3353,31 +3038,56 @@ html, body {
 </style>
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
-</head>
+<style id="theme-style">
+        :root {
+          --primary-color: #667eea;
+          --secondary-color: #764ba2;
+        }
+        .sidebar-avatar, .user-panel-avatar-img {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        }
+        .btn-save, .profile-modal-header, .profile-modal-content button.btn-save {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        }
+        .add-function-btn {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        }
+        .add-function-btn:hover {
+          background: linear-gradient(135deg, #764ba2 0%, #673c93 100%) !important;
+        }
+        .tabs button.active {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        }
+        .sidebar-avatar:hover {
+          box-shadow: 0 6px 16px #667eea40 !important;
+        }
+        .avatar-upload-btn {
+          background: #667eea !important;
+        }
+        .avatar-upload-btn:hover {
+          background: #764ba2 !important;
+        }
+        .checkbox-item input[type="checkbox"] {
+          accent-color: #667eea !important;
+        }
+      </style><style id="sidebar-style">
+        .menu-btn:not(.add-function-btn):not([style*="background:#f56c6c"]) {
+          background: #3c4658 !important;
+          
+        }
+        .menu-btn:not(.add-function-btn):not([style*="background:#f56c6c"]):hover {
+          background: #505a6c !important;
+        }
+      </style></head>
 <body>
 
-<div id="loginPage" class="login-container">
-    <!-- 星空背景 -->
-    <div class="stars-container" id="starsContainer">
-        <!-- 动态生成星星 -->
-    </div>
-    
-    <!-- 艺术字诗句 -->
-    <div class="poetry-container">
-        <div class="poetry-line poetry-1">
-            <span class="char">此</span><span class="char">情</span><span class="char">可</span><span class="char">待</span><span class="char">成</span><span class="char">追</span><span class="char">忆</span>
-        </div>
-        <div class="poetry-line poetry-2">
-            <span class="char">只</span><span class="char">是</span><span class="char red">当</span><span class="char red">时</span><span class="char">已</span><span class="char red">惘</span><span class="char red">然</span>
-        </div>
-    </div>
-</div>
+
 
 <div id="adminPanel" class="admin-panel" style="display:none;">
     <div class="admin-content">
         <div class="admin-header">
             <div class="admin-title">账号管理</div>
-            <button class="admin-close" id="closeAdminBtn">&times;</button>
+            <button class="admin-close" id="closeAdminBtn">×</button>
         </div>
         <div class="admin-tabs">
             <button class="admin-tab active" data-tab="list">账号列表</button>
@@ -3554,12 +3264,12 @@ html, body {
 <div class="user-panel" id="userPanel">
     <div class="user-panel-header">
         <div class="avatar-container">
-            <img id="panelAvatarImg" src="" alt="头像" class="user-panel-avatar-img" />
+            <img id="panelAvatarImg" src="" alt="头像" class="user-panel-avatar-img">
             <div class="avatar-upload-btn" id="avatarUploadBtn">+</div>
         </div>
         <div class="user-panel-name" id="panelUserName">小东</div>
         <div class="user-panel-role" id="panelUserRole">管理员</div>
-        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" />
+        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;">
     </div>
     <div class="user-panel-menu">
         <div class="user-panel-item" id="panelProfile">
@@ -3586,34 +3296,17 @@ html, body {
     </div>
 </div>
 
-<div class="main" id="mainPage" style="display:none;">
-  <div class="sidebar" id="sidebar">
-    <img id="sidebarAvatarImg" src="" alt="头像" class="sidebar-avatar-img" />
-    <button class="menu-btn home-main-btn" onclick="openHomePage()">🏠 首页</button>
-    <button class="menu-btn" onclick="openPage('仓储','https://www.kdocs.cn/l/cnLDizeYKJ4K')">仓储</button>
-    <button class="menu-btn" onclick="openPage('专线','https://www.kdocs.cn/l/cbWVlaTOmyEe')">专线</button>
-    <button class="menu-btn" onclick="openPage('速量','https://www.kdocs.cn/l/ch5xdUJYMzbH')">速量</button>
-    <button class="menu-btn" onclick="openPage('泡比','https://www.kdocs.cn/l/cjZZGlQnBtmm')">泡比</button>
-    <button class="menu-btn" onclick="openPage('包数','https://www.kdocs.cn/l/cbJs05zRewYZ')">包数</button>
-    <button class="menu-btn" onclick="openPage('单量','https://www.kdocs.cn/l/cdiNjSnC4i2E')">单量</button>
-    <button class="menu-btn" onclick="openPage('人效','https://www.kdocs.cn/l/coByacPZqwoP')">人效</button>
-    <button class="menu-btn" onclick="openPage('小包数据汇总','https://www.kdocs.cn/l/coJEsFw0SGEz')">小包数据</button>
-    <button class="menu-btn" onclick="openPage('车辆','http://uc.dlysjg.td.gd.gov.cn/#/user_login')">车辆</button>
-    <button class="menu-btn" onclick="openPage('出库单','https://www.kdocs.cn/l/caRQJ7Gz4GYG')">出库单</button>
-    <button class="menu-btn" onclick="openPage('小包数据汇总夜','https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001')">小包数据汇总夜</button>
-    <button class="menu-btn" onclick="openIllustrationPage()">插图</button>
-    <button class="menu-btn add-function-btn" id="addFunctionBtn">+ 添加功能</button>
-    <button class="menu-btn" style="background:#f56c6c;margin-top:20px;" onclick="App.logout()">退出登录</button>
-  </div>
+<div class="main" id="mainPage" style="display: flex;">
+
   <!-- 悬浮横幅 -->
   <div class="floating-banner" id="floatingBanner">
     <span class="floating-banner-text">渠道千万条，正确第一条，转单不规范，明儿心慌慌</span>
     <button class="floating-banner-close" onclick="document.getElementById('floatingBanner').classList.add('hidden')">✕</button>
   </div>
-  <div class="toggle-btn" id="toggleBtn">
+  <div class="toggle-btn" id="toggleBtn" style="inset: 346.802px auto auto 1091.99px;">
     <div class="pet-container">
         <div class="pet-display">
-            <div class="pet pet-fly active" id="currentPet">
+            <div class="pet pet-fly active" id="currentPet" style="transform: rotate(-66.2702deg);">
                 <!-- 蚂蚁身体 -->
                 <div class="fly-body">
                     <!-- 头部 -->
@@ -3640,12 +3333,10 @@ html, body {
             </div>
         </div>
     </div>
-</div>
-  <div class="content">
-    <div class="tabs" id="tabs">
-      <div class="tabs-progress-bg" id="tabs-progress-bg"></div>
-    </div>
-    <div class="pages" id="pages"></div>
+  </div>
+  <div class="content animation-slide">
+    <div class="tabs" id="tabs" style="transform: translateY(0px) scale(1);"><div class="tabs-progress-bg" id="tabs-progress-bg" style="width: 0%; background: linear-gradient(90deg, rgb(43, 238, 43), rgb(51, 238, 44), rgb(59, 239, 46), rgb(67, 239, 48), rgb(75, 240, 49), rgb(83, 240, 51), rgb(90, 240, 53), rgb(98, 241, 55), rgb(106, 241, 56), rgb(113, 242, 58), rgb(121, 242, 60), rgb(128, 242, 62), rgb(135, 243, 63), rgb(142, 243, 65), rgb(149, 244, 67), rgb(156, 244, 68), rgb(163, 244, 70), rgb(170, 245, 72), rgb(176, 245, 74), rgb(183, 245, 76), rgb(190, 246, 77), rgb(196, 246, 79), rgb(202, 246, 81), rgb(208, 247, 83), rgb(214, 247, 85), rgb(220, 247, 86), rgb(226, 248, 88), rgb(232, 248, 90), rgb(238, 248, 92), rgb(243, 248, 94), rgb(249, 249, 95), rgb(249, 244, 97), rgb(249, 239, 99), rgb(250, 235, 101), rgb(250, 230, 103), rgb(250, 226, 105), rgb(250, 222, 107), rgb(251, 217, 108), rgb(251, 213, 110), rgb(251, 209, 112), rgb(251, 206, 114), rgb(252, 202, 116), rgb(252, 198, 118), rgb(252, 195, 120), rgb(252, 191, 122), rgb(252, 188, 124), rgb(253, 185, 126), rgb(253, 182, 127), rgb(253, 179, 129), rgb(253, 176, 131), rgb(253, 173, 133), rgb(254, 171, 135), rgb(254, 168, 137), rgb(254, 166, 139), rgb(254, 164, 141), rgb(254, 162, 143), rgb(254, 160, 145), rgb(255, 158, 147), rgb(255, 156, 149), rgb(255, 154, 151), rgb(255, 153, 153)); opacity: 0.2;"></div><div class="tab home-tab active">🏠 首页</div><div class="tab" data-tab-index="0" data-tab-id="小包数据" draggable="true">小包数据<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '小包数据')">×</span></div><div class="tab" data-tab-index="1" data-tab-id="全量" draggable="true">全量<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '全量')">×</span></div><div class="tab" data-tab-index="2" data-tab-id="仓储 - 七月份" draggable="true">仓储 - 七月份<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '仓储 - 七月份')">×</span></div></div>
+    <div class="pages" id="pages"><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/coJEsFw0SGEz" data-id="小包数据" id="iframe-小包数据" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjHcYd3KIRkA" data-id="全量" id="iframe-全量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cmCAFEVsjJmy" data-id="仓储 - 七月份" id="iframe-仓储 - 七月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div></div>
     
     <div id="remove-empty-rows-page" class="page" style="display:none; padding:20px; height:100%; overflow-y:auto; background:#f0f2f5;">
       <div style="max-width: 800px; margin: 0 auto;">
@@ -3675,7 +3366,7 @@ html, body {
           <div class="config-row">
             <label>删除方式：</label>
             <div class="radio-group">
-              <label><input type="radio" name="delete-mode" value="all-empty" checked> 删除完全空白的行</label>
+              <label><input type="radio" name="delete-mode" value="all-empty" checked=""> 删除完全空白的行</label>
               <label><input type="radio" name="delete-mode" value="key-empty"> 删除关键字段空白的行</label>
             </div>
           </div>
@@ -3704,7 +3395,7 @@ html, body {
       </div>
     </div>
     
-    <div id="home-page" class="page" style="display:none; padding:0; height:100%; overflow-y:auto; background:#f0f2f5;">
+    <div id="home-page" class="page active" style="display: block; padding: 0px; height: 100%; overflow-y: auto; background: rgb(240, 242, 245);">
       <div class="dashboard">
         <div class="header-card">
             <div class="logo-area">
@@ -3712,219 +3403,117 @@ html, body {
                 <span>学又学不会，睡又睡不着，干又干不完</span>
             </div>
             <div style="display: flex; gap: 16px; align-items: center;">
-                <div class="live-clock" id="liveClock">⏱️ 加载中...</div>
+                <div class="live-clock" id="liveClock">⏱️ 2026.07.03 周五 00:28:10</div>
                 <div class="date-badge">    </div>
+                <button id="export-code-btn" style="padding: 8px 16px; background: #67c23a; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <span>📥</span><span>导出代码</span>
+                </button>
             </div>
         </div>
         <div class="func-grid">
-            <div class="func-card" id="warehouse"><span class="func-emoji">🏭</span><span>仓储</span></div>
-            <div class="func-card" id="daily-storage"><span class="func-emoji">📦</span><span>每日留仓数量</span></div>
-            <div class="func-card" id="line"><span class="func-emoji">🚀</span><span>专线</span></div>
-            <div class="func-card" id="speed"><span class="func-emoji">⚡</span><span>速量</span></div>
-            <div class="func-card" id="bubble-ratio"><span class="func-emoji">📊</span><span>泡比</span></div>
-            <div class="func-card" id="package-count"><span class="func-emoji">📦</span><span>包数</span></div>
-            <div class="func-card" id="order-count"><span class="func-emoji">📝</span><span>单量</span></div>
-            <div class="func-card" id="person-efficiency"><span class="func-emoji">👤</span><span>人效</span></div>
-            <div class="func-card" id="small-package"><span class="func-emoji">📦📊</span><span>小包数据</span></div>
-            <div class="func-card" id="illustration"><span class="func-emoji">🖼️</span><span>插图</span></div>
-            <div class="func-card" id="trans-order"><span class="func-emoji">📦</span><span>转单</span></div>
-            <div class="func-card" id="zip-search"><span class="func-emoji">📍</span><span>邮政编码查询</span></div>
-            <div class="func-card" id="channel-search"><span class="func-emoji">🔀</span><span>渠道查询</span></div>
-            <div class="func-card" id="name-register"><span class="func-emoji">📋</span><span>异常登记</span></div>
-            <div class="func-card" id="recheck"><span class="func-emoji">📐</span><span>复测</span></div>
-            <div class="func-card" id="check-arrival"><span class="func-emoji">📦📦</span><span>其他客户到货量</span></div>
-            <div class="func-card" id="exception-type"><span class="func-emoji">⚠️</span><span>异常类型</span></div>
-            <div class="func-card" id="missing-data"><span class="func-emoji">📉</span><span>漏数据</span></div>
-            <div class="func-card" id="cost-table"><span class="func-emoji">💰</span><span>成本表</span></div>
-            <div class="func-card" id="exception-register"><span class="func-emoji">📝</span><span>异常登记</span></div>
-            <div class="func-card" id="remove-empty-rows"><span class="func-emoji">🗑️</span><span>删除空白行</span></div>
-            <div class="func-card" id="vehicle"><span class="func-emoji">🚗</span><span>车辆</span></div>
-            <div class="func-card" id="outbound-order"><span class="func-emoji">📤</span><span>出库单</span></div>
-            <div class="func-card" id="small-package-night"><span class="func-emoji">🌙</span><span>小包数据汇总夜</span></div>
+            <div class="func-card" id="warehouse" draggable="true" data-index="0"><span class="func-emoji">🏭</span><span>仓储</span></div>
+            <div class="func-card" id="daily-storage" draggable="true" data-index="1"><span class="func-emoji">📦</span><span>每日留仓数量</span></div>
+            <div class="func-card" id="full" draggable="true" data-index="2"><span class="func-emoji">📊</span><span>全量</span></div>
+            <div class="func-card" id="line" draggable="true" data-index="3"><span class="func-emoji">🚀</span><span>专线</span></div>
+            <div class="func-card" id="speed" draggable="true" data-index="4"><span class="func-emoji">⚡</span><span>速量</span></div>
+            <div class="func-card" id="bubble-ratio" draggable="true" data-index="5"><span class="func-emoji">📊</span><span>泡比</span></div>
+            <div class="func-card" id="package-count" draggable="true" data-index="6"><span class="func-emoji">📦</span><span>包数</span></div>
+            <div class="func-card" id="order-count" draggable="true" data-index="7"><span class="func-emoji">📝</span><span>单量</span></div>
+            <div class="func-card" id="person-efficiency" draggable="true" data-index="8"><span class="func-emoji">👤</span><span>人效</span></div>
+            <div class="func-card" id="small-package" draggable="true" data-index="9"><span class="func-emoji">📦📊</span><span>小包数据</span></div>
+            <div class="func-card" id="illustration" draggable="true" data-index="10"><span class="func-emoji">🖼️</span><span>插图</span></div>
+            <div class="func-card" id="trans-order" draggable="true" data-index="11"><span class="func-emoji">📦</span><span>转单</span></div>
+            <div class="func-card" id="zip-search" draggable="true" data-index="12"><span class="func-emoji">📍</span><span>邮政编码查询</span></div>
+            <div class="func-card" id="channel-search" draggable="true" data-index="13"><span class="func-emoji">🔀</span><span>渠道查询</span></div>
+            <div class="func-card" id="name-register" draggable="true" data-index="14"><span class="func-emoji">📋</span><span>异常登记</span></div>
+            <div class="func-card" id="recheck" draggable="true" data-index="15"><span class="func-emoji">📐</span><span>复测</span></div>
+            <div class="func-card" id="check-arrival" draggable="true" data-index="16"><span class="func-emoji">📦📦</span><span>其他客户到货量</span></div>
+            <div class="func-card" id="exception-type" draggable="true" data-index="17"><span class="func-emoji">⚠️</span><span>异常类型</span></div>
+            <div class="func-card" id="missing-data" draggable="true" data-index="18"><span class="func-emoji">📉</span><span>漏数据</span></div>
+            <div class="func-card" id="cost-table" draggable="true" data-index="19"><span class="func-emoji">💰</span><span>成本表</span></div>
+            <div class="func-card" id="exception-register" draggable="true" data-index="20"><span class="func-emoji">📝</span><span>异常登记</span></div>
+            <div class="func-card" id="remove-empty-rows" draggable="true" data-index="21"><span class="func-emoji">🗑️</span><span>删除空白行</span></div>
+            <div class="func-card" id="vehicle" draggable="true" data-index="22"><span class="func-emoji">🚗</span><span>车辆</span></div>
+            <div class="func-card" id="outbound-order" draggable="true" data-index="23"><span class="func-emoji">📤</span><span>出库单</span></div>
+            <div class="func-card" id="small-package-night" draggable="true" data-index="24"><span class="func-emoji">🌙</span><span>小包数据汇总夜</span></div>
+            <div class="func-card add-card" id="add-new-card"><span class="func-emoji">➕</span><span>添加卡片</span></div>
             <div class="zip-subgroup" id="zip-subgroup" style="display: none;">
                 <div class="zip-subcard" id="zip-btn1">🇦🇺 澳洲地址查询</div>
                 <div class="zip-subcard" id="zip-btn2">🇫🇷 法国邮编查询</div>
             </div>
         </div>
-        <div class="row-split">
-            <div class="left-stack">
-                <div class="project-grid">
-                    <div class="project-card">
-                        <div class="project-category">问题</div>
-                        <div class="project-count"><span contenteditable="true">0</span> <small>个项目</small></div>
-                        <a href="#" class="view-link">查看全部 →</a>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-category">数据</div>
-                        <div class="project-count"><span contenteditable="true">1430</span> <small>个项目</small></div>
-                        <a href="#" class="view-link">查看全部 →</a>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-category">中转</div>
-                        <div class="project-count"><span contenteditable="true">5200</span> <small>个项目</small></div>
-                        <a href="#" class="view-link">查看全部 →</a>
+        
+        <div class="context-menu" id="context-menu" style="left: 340.969px; top: 321.333px;">
+            <div class="context-menu-item" id="menu-edit-link">✏️ 修改链接</div>
+            <div class="context-menu-item" id="menu-open-link">🔗 在新窗口打开</div>
+            <div class="context-menu-item separator"></div>
+            <div class="context-menu-item" id="menu-delete-card" style="color: #f56c6c;">🗑️ 删除卡片</div>
+        </div>
+        
+        <div class="modal-mask" id="edit-link-mask" style="display: none;"></div>
+        <div class="func-modal" id="edit-link-modal" style="display: none;">
+            <h3 class="modal-title">修改链接</h3>
+            <div class="modal-content" style="padding: 20px;">
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">按钮名称</label>
+                    <input type="text" id="edit-link-name" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" readonly="">
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">链接地址</label>
+                    <input type="text" id="edit-link-url" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" placeholder="请输入新的链接地址">
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">打开方式</label>
+                    <div style="display: flex; gap: 20px;">
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <input type="radio" name="edit-link-target" value="iframe" style="cursor: pointer;">
+                            <span>本网页内打开</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <input type="radio" name="edit-link-target" value="blank" style="cursor: pointer;">
+                            <span>新开网页</span>
+                        </label>
                     </div>
                 </div>
-                <div class="channel-card">
-                    <div class="channel-header">
-                        <h3>📋 中转产品</h3>
-                        <div class="channel-tab-group" id="newChannelTabs">
-                            <button class="channel-tab active" data-target="pkg">仓储PKG</button>
-                            <button class="channel-tab" data-target="halara">全量halara</button>
-                            <button class="channel-tab" data-target="dfl">专线DFL</button>
-                            <button class="channel-tab" data-target="other">其他客户</button>
-                        </div>
-                    </div>
-                    <div class="table-wrap new-channel-tables">
-                        <table id="pkg" class="channel-table active-table">
-                            <thead><tr><th>线路产品</th><th>中转产品</th><th>备注</th></tr></thead>
-                            <tbody>
-                                <tr><td>德国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">德国SK.DHL.清派.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>法国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">法国WD.CLM.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>法国普货CR</td><td class="copy-group"><span class="trans-text" contenteditable="true"> </span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>欧盟普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">东欧Pactic.普</span><button class="copy-btn">复制</button></td><td>HU/PL/CZ</td></tr>
-                                <tr><td>葡萄牙普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">葡萄牙CTT.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>西班牙普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">西班牙CTT.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>西班牙西邮普货特快专线</td><td class="copy-group"><span class="trans-text" contenteditable="true">西班牙KParcel.西邮特快.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>英国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">英国UBI.EVRi.普</span><button class="copy-btn">复制</button></td><td>优先</td></tr>
-                                <tr><td></td><td class="copy-group"><span class="trans-text" contenteditable="true">英国UBI.RM.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td colspan="3">注：欧盟若新增其他国家，可参考专线</td></tr>
-                            </tbody>
-                        </table>
-                        <table id="halara" class="channel-table">
-                            <thead><tr><th>线路产品</th><th>中转产品</th><th>备注</th></tr></thead>
-                            <tbody>
-                                <tr><td>德国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">德国SK.DHL.清派.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>东欧普货专线_K</td><td class="copy-group"><span class="trans-text" contenteditable="true">东欧Pactic.普-Halara</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>法国普货专线</td><td class="copy-group"><span class="trans-text" contenteditable="true"> </span><button class="copy-btn">复制</button></td><td>单量50%</td></tr>
-                                <tr><td></td><td class="copy-group"><span class="trans-text" contenteditable="true">法国WD.CLM.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>荷兰普货专线</td><td class="copy-group"><span class="trans-text" contenteditable="true">荷兰SK.DHL.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>葡萄牙普货专线</td><td class="copy-group"><span class="trans-text" contenteditable="true">葡萄牙CTT.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>西班牙普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">西班牙CTT.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>西班牙西邮普货特快专线</td><td class="copy-group"><span class="trans-text" contenteditable="true">西班牙CTT.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>意大利普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">意大利快速SENGI.PI.FCO.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>英国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">英国UBI.RM.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                            </tbody>
-                        </table>
-                        <table id="dfl" class="channel-table">
-                            <thead><tr><th>线路产品</th><th>中转产品</th><th>备注</th></tr></thead>
-                            <tbody>
-                                <tr><td>澳洲带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">澳洲ACAupost电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>澳洲普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">澳洲ACAupost普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>德国带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">德国SK.DHL本土.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>德国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">德国SK.DHL.清派.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>法国带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">法国WD.CLM.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>法国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true"> </span><button class="copy-btn">复制</button></td><td>200票</td></tr>
-                                <tr><td></td><td class="copy-group"><span class="trans-text" contenteditable="true">法国WD.CLM.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>加拿大带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">加拿大CD电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>加拿大普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">加拿大CD特</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>罗马尼亚SAMEDAY普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">罗马尼亚Pactic.SAMEDAY.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>美国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true"> 美国万邦USPS普货专线</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>欧盟带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">国际GWE.DHL.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>欧盟普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">国际GWE.DHL.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td></td><td class="copy-group"><span class="trans-text" contenteditable="true">东欧Pactic.普</span><button class="copy-btn">复制</button></td><td>HU/PL/CZ</td></tr>
-                                <tr><td>葡萄牙带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">葡萄牙CTT.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>葡萄牙普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">葡萄牙CTT.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>西班牙带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">西班牙CTT.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>西班牙普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">西班牙CTT.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>意大利带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">国际GWE.DHL.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>意大利普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">意大利快速SENGI.PI.FCO.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>英国带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">英国(WD-Evri+UBI-RM).电</span><button class="copy-btn">复制</button></td><td>优先</td></tr>
-                                <tr><td></td><td class="copy-group"><span class="trans-text" contenteditable="true">英国UBI.RM.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>英国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">英国UBI.EVRi.普</span><button class="copy-btn">复制</button></td><td>优先</td></tr>
-                                <tr><td></td><td class="copy-group"><span class="trans-text" contenteditable="true">英国UBI.RM.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>广州EUB</td><td class="copy-group"><span class="trans-text" contenteditable="true">澳洲ACAupost电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                            </tbody>
-                        </table>
-                        <table id="other" class="channel-table">
-                            <thead><tr><th>线路产品</th><th>中转产品</th><th>备注</th></tr></thead>
-                            <tbody>
-                                <tr><td>德国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">德国SK.DHL.清派.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>法国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">法国WD.CLM.普</span><button class="copy-btn">复制</button></td><td>禓耀法国先下cirro 失败转CLM</td></tr>
-                                <tr><td>英国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">英国UBI.RM.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>西班牙普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">西班牙CTT.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>西班牙西邮普货特快</td><td class="copy-group"><span class="trans-text" contenteditable="true">西班牙KParcel.西邮特快.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>葡萄牙普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">葡萄牙CTT.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>意大利普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">意大利快速SENGI.PI.FCO.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>加拿大普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">加拿大CD特</span><button class="copy-btn">复制</button></td><td>F类</td></tr>
-                                <tr><td></td><td class="copy-group"><span class="trans-text" contenteditable="true">加拿大CD普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>美国普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">壹号美国混合商派-F货</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>欧盟普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">国际GWE.DHL.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td></td><td class="copy-group"><span class="trans-text" contenteditable="true">东欧Pactic.普</span><button class="copy-btn">复制</button></td><td>HU/PL/CZ</td></tr>
-                                <tr><td></td><td class="copy-group"><span class="trans-text" contenteditable="true">德国DHL国际普货专线</span><button class="copy-btn">复制</button></td><td>重量异常</td></tr>
-                                <tr><td>荷兰普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">荷兰SK.DHL.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>澳洲普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">澳洲ACAupost普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>罗马尼亚普货</td><td class="copy-group"><span class="trans-text" contenteditable="true">罗马尼亚Pactic.SAMEDAY.普</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>德国带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">德国SK.DHL本土.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>法国带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">法国WD.CLM.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>英国带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">英国UBI.RM.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>西班牙带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">西班牙CTT.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>葡萄牙带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">葡萄牙CTT.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>意大利带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">国际GWE.DHL.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>加拿大带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">加拿大CD电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>欧盟带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">国际GWE.DHL.电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>澳洲带电</td><td class="copy-group"><span class="trans-text" contenteditable="true">澳洲ACAupost电</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>奥地利</td><td class="copy-group"><span class="trans-text" contenteditable="true">奥地利GLS pacti</span><button class="copy-btn">复制</button></td><td></td></tr>
-                                <tr><td>法国马帮</td><td class="copy-group"><span class="trans-text" contenteditable="true">法国普货专线-w</span><button class="copy-btn">复制</button></td><td></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div style="display: flex; gap: 12px;">
+                    <button id="edit-link-cancel" style="flex: 1; padding: 10px; background: #f5f7fa; color: #666; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">取消</button>
+                    <button id="edit-link-save" style="flex: 1; padding: 10px; background: #409eff; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">保存</button>
                 </div>
             </div>
-            <div class="right-stack">
-                <div class="calendar-card">
-                    <div class="calendar-header">
-                        <h3 id="calendar-month-year">2026年2月</h3>
-                        <div class="calendar-nav">
-                            <button id="prev-month">←</button>
-                            <button id="next-month">→</button>
-                        </div>
-                    </div>
-                    <div class="calendar-grid" id="calendar-grid"></div>
-                    <div style="margin-top: 16px; font-size: 13px; color: #409eff;">📌 no问题</div>
+        </div>
+
+        <div class="modal-mask" id="add-card-mask" style="display: none;"></div>
+        <div class="func-modal" id="add-card-modal" style="display: none;">
+            <h3 class="modal-title">添加新卡片</h3>
+            <div class="modal-content" style="padding: 20px;">
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">卡片名称</label>
+                    <input type="text" id="add-card-name" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" placeholder="请输入卡片名称">
                 </div>
-                <div class="schedule-card">
-                    <div style="font-weight:600; font-size:18px;">到货日志</div>
-                    <div class="schedule-hours">09:00 | 10:00 | 11:00 | 12:00 | 13:00 | 14:00 | 15:00</div>
-                    <div class="schedule-item"><span class="schedule-name">PKG</span> <span class="schedule-link">查看详情 →</span></div>
-                    <div class="schedule-item"><span class="schedule-name">halara</span> <span class="schedule-link">查看详情 →</span></div>
-                    <div class="schedule-item"><span class="schedule-name">DFL</span> <span class="schedule-link">查看详情 →</span></div>
-                    <div class="schedule-item"><span class="schedule-name">其他客户</span> <span class="schedule-link">查看详情 →</span></div>
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">链接地址</label>
+                    <input type="text" id="add-card-url" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" placeholder="请输入链接地址（可选）">
                 </div>
-                <div class="today-card" style="background:white; border-radius:24px; padding:22px; border:1px solid #edf2f8;">
-                    <div style="display:flex; gap:20px; margin-bottom:20px;"><span>23周一</span><span>24周二</span><span>25周三</span><span>26周四</span><span>27周五</span><span>28周六</span></div>
-                    <div class="event-badge"><div><strong>组员</strong> <span style="float:right;">13:00</span></div><div class="event-time">UI设计</div></div>
-                    <div class="event-badge"><div><strong>篮球</strong> <span style="float:right;">10:00</span></div><div class="event-time">UI设计</div></div>
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">图标</label>
+                    <input type="text" id="add-card-emoji" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" placeholder="输入一个emoji图标，如：⭐" value="⭐">
                 </div>
-                <div class="illustration-home-card" style="background:white; border-radius:24px; padding:20px; border:1px solid #edf2f8;">
-                    <div style="font-weight:600; font-size:16px; margin-bottom:16px;">🖼️ 图片批量插入</div>
-                    <div class="drop-area-home" id="dropAreaHome" style="border: 2px dashed #ddd; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer;">
-                        <div style="font-size: 32px; margin-bottom: 8px;">📂</div>
-                        <div style="font-size: 14px; color: #666;">点击或拖拽添加图片</div>
-                        <input type="file" id="fileInputHome" accept="image/*" multiple style="display: none;">
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">打开方式</label>
+                    <div style="display: flex; gap: 20px;">
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <input type="radio" name="add-card-target" value="iframe" checked="" style="cursor: pointer;">
+                            <span>本网页内打开</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <input type="radio" name="add-card-target" value="blank" style="cursor: pointer;">
+                            <span>新开网页</span>
+                        </label>
                     </div>
-                    <div id="homeImageCount" style="margin-top: 12px; font-size: 12px; color: #999; text-align: center;">已选择：0 张图片</div>
-                    <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 10px;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 12px; color: #666;">起始单元格:</span>
-                            <input type="text" id="startCellHome" value="C1" placeholder="A1" style="flex: 1; padding: 4px; font-size: 12px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 12px; color: #666;">每行数量:</span>
-                            <input type="number" id="perRowHome" value="4" min="1" style="width: 60px; padding: 4px; font-size: 12px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 12px; color: #666;">文件名:</span>
-                            <input type="text" id="fileNameHome" value="LOT复测" placeholder="导出文件名" style="flex: 1; padding: 4px; font-size: 12px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                    </div>
-                    <div style="margin-top: 16px; display: flex; gap: 8px;">
-                        <button id="exportExcelHome" style="flex: 1; padding: 8px; background: #67c23a; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">导出Excel</button>
-                        <button id="clearImagesHome" style="padding: 8px 16px; background: #f56c6c; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">清空</button>
-                    </div>
-                    <div id="homeImageList" style="margin-top: 12px; max-height: 120px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px; padding: 8px; display: none;">
-                        <div style="text-align: center; color: #999; font-size: 12px;">图片列表</div>
-                    </div>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button id="add-card-cancel" style="flex: 1; padding: 10px; background: #f5f7fa; color: #666; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">取消</button>
+                    <button id="add-card-save" style="flex: 1; padding: 10px; background: #67c23a; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer;">添加</button>
                 </div>
             </div>
         </div>
@@ -3962,7 +3551,7 @@ html, body {
                       <div style="margin: 8px 0; color: #999; font-size: 13px;">支持 Ctrl / Shift 选择多张图片</div>
                       <button class="illustration-btn" id="addImagesBtn">添加图片</button>
                       <button class="illustration-btn clear-btn" id="clearImagesBtn" style="margin-top: 8px;">清空图片</button>
-                      <input type="file" id="fileInput2" accept="image/*" multiple style="display: none;">
+                      <input type="file" id="fileInput2" accept="image/*" multiple="" style="display: none;">
                   </div>
                   <div id="image-list-container" style="max-height: 150px; overflow-y: auto; margin: 10px 0; border: 1px solid #eee; border-radius: 8px; padding: 5px;">
                     <div id="image-list" style="min-height: 40px;">
@@ -3981,7 +3570,7 @@ html, body {
               <div class="illustration-right">
                   <div class="section"><div class="section-title">插入方式</div>
                       <div class="radio-group">
-                          <label class="radio-item"><input type="radio" name="insertMode" value="embed" checked> 嵌入</label>
+                          <label class="radio-item"><input type="radio" name="insertMode" value="embed" checked=""> 嵌入</label>
                           <label class="radio-item"><input type="radio" name="insertMode" value="float"> 浮于单元格</label>
                       </div>
                   </div>
@@ -3989,7 +3578,7 @@ html, body {
                   <div class="section"><div class="section-title">排列方向</div>
                       <div class="radio-group">
                           <label class="radio-item"><input type="radio" name="layout" value="vertical"> 按列竖排</label>
-                          <label class="radio-item"><input type="radio" name="layout" value="horizontal" checked> 按行横排</label>
+                          <label class="radio-item"><input type="radio" name="layout" value="horizontal" checked=""> 按行横排</label>
                       </div>
                       <div style="margin-top: 12px; display: flex; align-items: center; gap: 8px;">
                           <span>每行/每列</span>
@@ -4010,7 +3599,7 @@ html, body {
                   </div>
                   <div class="section"><div class="section-title">添加图片名</div>
                       <div class="radio-group">
-                          <label class="radio-item"><input type="radio" name="addName" value="none" checked> 不添加</label>
+                          <label class="radio-item"><input type="radio" name="addName" value="none" checked=""> 不添加</label>
                           <label class="radio-item"><input type="radio" name="addName" value="below"> 图片下方（单独行）</label>
                           <label class="radio-item"><input type="radio" name="addName" value="above"> 图片上方（单独行）</label>
                       </div>
@@ -4037,7 +3626,7 @@ html, body {
           <div>点击或拖拽图片文件到此处</div>
           <div style="font-size:12px; color:#666; margin-top:10px;">支持 JPG、PNG、GIF 等图片格式</div>
         </div>
-        <input type="file" id="fileInputPage" multiple accept="image/*" style="display:none;">
+        <input type="file" id="fileInputPage" multiple="" accept="image/*" style="display:none;">
       </div>
 
       <div class="config-panel">
@@ -4049,7 +3638,7 @@ html, body {
         <div class="config-row">
           <label>排列方式:</label>
           <div class="radio-group">
-            <label><input type="radio" name="layoutPage" value="horizontal" checked> 按行横排</label>
+            <label><input type="radio" name="layoutPage" value="horizontal" checked=""> 按行横排</label>
             <label><input type="radio" name="layoutPage" value="vertical"> 按列竖排</label>
           </div>
         </div>
@@ -4060,7 +3649,7 @@ html, body {
         <div class="config-row">
           <label>图片名显示:</label>
           <div class="radio-group">
-            <label><input type="radio" name="addNamePage" value="none" checked> 不显示</label>
+            <label><input type="radio" name="addNamePage" value="none" checked=""> 不显示</label>
             <label><input type="radio" name="addNamePage" value="above"> 上方</label>
             <label><input type="radio" name="addNamePage" value="below"> 下方</label>
           </div>
@@ -4109,16 +3698,8 @@ html, body {
         </h2>
         
         <div style="display:flex; gap:15px; margin-bottom:20px;">
-          <input 
-            type="text" 
-            id="vehicleSearch" 
-            placeholder="搜索车牌号..." 
-            style="flex:1; padding:10px 15px; border:1px solid #ddd; border-radius:8px; font-size:14px;"
-          >
-          <button 
-            onclick="addVehicle()" 
-            style="padding:10px 20px; background:#409eff; color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px;"
-          >
+          <input type="text" id="vehicleSearch" placeholder="搜索车牌号..." style="flex:1; padding:10px 15px; border:1px solid #ddd; border-radius:8px; font-size:14px;">
+          <button onclick="addVehicle()" style="padding:10px 20px; background:#409eff; color:white; border:none; border-radius:8px; cursor:pointer; font-size:14px;">
             + 添加车辆
           </button>
         </div>
@@ -4135,7 +3716,81 @@ html, body {
               </tr>
             </thead>
             <tbody id="vehicleTableBody">
-            </tbody>
+            <tr style="border-bottom:1px solid #eee;">
+              <td style="padding:12px 15px;">粤A12345</td>
+              <td style="padding:12px 15px;">货车</td>
+              <td style="padding:12px 15px;">张三</td>
+              <td style="padding:12px 15px;">
+                <span style="display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; background:#e8f5e9; color:#67c23a;">
+                  运行中
+                </span>
+              </td>
+              <td style="padding:12px 15px;">
+                <button onclick="editVehicle(1)" style="margin-right:8px; padding:5px 12px; background:#67c23a; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">编辑</button>
+                <button onclick="deleteVehicle(1)" style="padding:5px 12px; background:#f56c6c; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">删除</button>
+              </td>
+            </tr>
+          
+            <tr style="border-bottom:1px solid #eee;">
+              <td style="padding:12px 15px;">粤B67890</td>
+              <td style="padding:12px 15px;">客车</td>
+              <td style="padding:12px 15px;">李四</td>
+              <td style="padding:12px 15px;">
+                <span style="display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; background:#f0f9ff; color:#409eff;">
+                  空闲
+                </span>
+              </td>
+              <td style="padding:12px 15px;">
+                <button onclick="editVehicle(2)" style="margin-right:8px; padding:5px 12px; background:#67c23a; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">编辑</button>
+                <button onclick="deleteVehicle(2)" style="padding:5px 12px; background:#f56c6c; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">删除</button>
+              </td>
+            </tr>
+          
+            <tr style="border-bottom:1px solid #eee;">
+              <td style="padding:12px 15px;">粤C24680</td>
+              <td style="padding:12px 15px;">货车</td>
+              <td style="padding:12px 15px;">王五</td>
+              <td style="padding:12px 15px;">
+                <span style="display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; background:#fff7e6; color:#e6a23c;">
+                  维修
+                </span>
+              </td>
+              <td style="padding:12px 15px;">
+                <button onclick="editVehicle(3)" style="margin-right:8px; padding:5px 12px; background:#67c23a; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">编辑</button>
+                <button onclick="deleteVehicle(3)" style="padding:5px 12px; background:#f56c6c; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">删除</button>
+              </td>
+            </tr>
+          
+            <tr style="border-bottom:1px solid #eee;">
+              <td style="padding:12px 15px;">粤D13579</td>
+              <td style="padding:12px 15px;">轿车</td>
+              <td style="padding:12px 15px;">赵六</td>
+              <td style="padding:12px 15px;">
+                <span style="display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; background:#e8f5e9; color:#67c23a;">
+                  运行中
+                </span>
+              </td>
+              <td style="padding:12px 15px;">
+                <button onclick="editVehicle(4)" style="margin-right:8px; padding:5px 12px; background:#67c23a; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">编辑</button>
+                <button onclick="deleteVehicle(4)" style="padding:5px 12px; background:#f56c6c; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">删除</button>
+              </td>
+            </tr>
+          
+            <tr style="border-bottom:1px solid #eee;">
+              <td style="padding:12px 15px;">粤E97531</td>
+              <td style="padding:12px 15px;">货车</td>
+              <td style="padding:12px 15px;">孙七</td>
+              <td style="padding:12px 15px;">
+                <span style="display:inline-block; padding:4px 12px; border-radius:20px; font-size:12px; background:#fef0f0; color:#f56c6c;">
+                  停运
+                </span>
+              </td>
+              <td style="padding:12px 15px;">
+                <button onclick="editVehicle(5)" style="margin-right:8px; padding:5px 12px; background:#67c23a; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">编辑</button>
+                <button onclick="deleteVehicle(5)" style="padding:5px 12px; background:#f56c6c; color:white; border:none; border-radius:4px; cursor:pointer; font-size:12px;">删除</button>
+              </td>
+            </tr>
+          </tbody>
           </table>
         </div>
         
@@ -4474,398 +4129,42 @@ const App = {
 
   init() {
     this.loadAccounts();
-    this.initTunnel();
-  },
-  
-  initTunnel() {
-    // 创建宇宙星空效果
-    this.createStarryBackground();
-    
-    // 点击进入主页面
-    const loginPage = document.getElementById('loginPage');
-    loginPage.onclick = () => this.enterThroughTunnel();
-  },
-  
-  createStarryBackground() {
-    const container = document.getElementById('starsContainer');
-    if (!container) return;
-    
-    // 创建三个不同速度旋转的星星层
-    const layers = ['slow', 'medium', 'fast'];
-    const starCounts = [150, 200, 250]; // 不同层的星星数量（增加了！）
-    
-    layers.forEach((layerClass, layerIndex) => {
-      const layer = document.createElement('div');
-      layer.className = `stars-layer ${layerClass}`;
-      
-      const starCount = starCounts[layerIndex];
-      for (let i = 0; i < starCount; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        
-        // 星星位置在圆形范围内分布
-        const angle = Math.random() * Math.PI * 2;
-        const distance = 15 + Math.random() * 35; // 距离中心的百分比
-        const size = 0.8 + Math.random() * 2.5;
-        const delay = Math.random() * 3;
-        const duration = 1.5 + Math.random() * 2;
-        
-        // 计算位置（50%是中心）
-        const left = 50 + Math.cos(angle) * distance;
-        const top = 50 + Math.sin(angle) * distance;
-        
-        star.style.cssText = `
-          width: ${size}px;
-          height: ${size}px;
-          left: ${left}%;
-          top: ${top}%;
-          animation-delay: ${delay}s;
-          animation-duration: ${duration}s;
-        `;
-        
-        layer.appendChild(star);
-      }
-      
-      container.appendChild(layer);
-    });
-    
-    // 创建星云（在容器中心，不随星星旋转）
-    const nebulaColors = ['rgba(100, 100, 255, 0.3)', 'rgba(255, 100, 200, 0.2)', 'rgba(100, 255, 200, 0.2)'];
-    for (let i = 0; i < 5; i++) {
-      const nebula = document.createElement('div');
-      nebula.className = 'nebula';
-      
-      const size = 300 + Math.random() * 200;
-      const left = 30 + Math.random() * 40;
-      const top = 30 + Math.random() * 40;
-      const color = nebulaColors[Math.floor(Math.random() * nebulaColors.length)];
-      
-      nebula.style.cssText = `
-        width: ${size}px;
-        height: ${size}px;
-        left: ${left}%;
-        top: ${top}%;
-        background: ${color};
-      `;
-      
-      container.appendChild(nebula);
-    }
-    
-    // 创建流星
-    const createMeteor = () => {
-      const meteor = document.createElement('div');
-      meteor.className = 'meteor';
-      
-      const top = Math.random() * 30;
-      const left = Math.random() * 100;
-      const delay = Math.random() * 0.5;
-      
-      meteor.style.cssText = `
-        top: ${top}%;
-        left: ${left}%;
-        animation-delay: ${delay}s;
-      `;
-      
-      container.appendChild(meteor);
-      
-      // 3秒后移除流星并创建新流星
-      setTimeout(() => {
-        meteor.remove();
-        createMeteor();
-      }, 3500);
-    };
-    
-    // 初始创建几颗流星
-    for (let i = 0; i < 3; i++) {
-      setTimeout(() => createMeteor(), i * 1000);
-    }
-  },
-  
-  createTunnel() {
-    const container = document.getElementById('tunnelContainer');
-    container.innerHTML = '';
-    
-    // 存储元素引用，避免每帧查询
-    this.tunnelElements = {
-      particles: [], // 主粒子
-      trails: [],    // 拖尾粒子
-      vortices: []   // 小旋涡中心
-    };
-    
-    // 创建多个小旋涡中心（梵高星空的漩涡）
-    const vortexCount = 8;
-    for (let i = 0; i < vortexCount; i++) {
-      const angle = (i / vortexCount) * Math.PI * 2 + Math.random() * 0.3;
-      const distance = 100 + Math.random() * 500;
-      const x = Math.cos(angle) * distance;
-      const y = Math.sin(angle) * distance;
-      
-      this.tunnelElements.vortices.push({
-        x: x,
-        y: y,
-        strength: 0.8 + Math.random() * 1.2,
-        rotationSpeed: 0.5 + Math.random() * 0.8,
-        direction: Math.random() < 0.5 ? 1 : -1
-      });
-    }
-    
-    // 创建梵高星空粒子（密集拖尾）
-    const trailLength = 12; // 拖尾长度
-    const particleCount = 600; // 粒子数量
-    
-    for (let i = 0; i < particleCount; i++) {
-      // 随机位置
-      const angle = Math.random() * Math.PI * 2;
-      const distance = Math.random() * 1600;
-      const x = Math.cos(angle) * distance;
-      const y = Math.sin(angle) * distance;
-      
-      // 梵高星空配色：黄、白、蓝、青
-      let color;
-      const colorType = Math.random();
-      if (colorType < 0.4) {
-        // 黄色系（主色调）
-        const hue = 30 + Math.random() * 30;
-        const saturation = 80 + Math.random() * 20;
-        const lightness = 60 + Math.random() * 30;
-        color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-      } else if (colorType < 0.55) {
-        // 白色/亮黄
-        const hue = 45 + Math.random() * 15;
-        color = `hsl(${hue}, 75%, 90%)`;
-      } else if (colorType < 0.85) {
-        // 蓝色系（星空）
-        const hue = 180 + Math.random() * 70;
-        const saturation = 65 + Math.random() * 25;
-        const lightness = 30 + Math.random() * 35;
-        color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-      } else {
-        // 青色系
-        const hue = 160 + Math.random() * 40;
-        const saturation = 70 + Math.random() * 20;
-        const lightness = 40 + Math.random() * 30;
-        color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-      }
-      
-      // 粒子大小（更小更密集）
-      const size = 1.2 + Math.random() * 2.5;
-      
-      // 创建主粒子
-      const mainParticle = document.createElement('div');
-      mainParticle.className = 'tunnel-particle';
-      mainParticle.style.left = `calc(50% + ${x}px)`;
-      mainParticle.style.top = `calc(50% + ${y}px)`;
-      mainParticle.style.width = size + 'px';
-      mainParticle.style.height = size + 'px';
-      mainParticle.style.background = color;
-      mainParticle.style.borderRadius = '50%';
-      mainParticle.style.boxShadow = `0 0 ${size*3}px ${color}`;
-      
-      // 保存主粒子数据
-      const mainParticleData = {
-        element: mainParticle,
-        x: x,
-        y: y,
-        vx: 0,
-        vy: 0,
-        size: size,
-        color: color,
-        history: [] // 历史位置（用于拖尾）
-      };
-      
-      // 初始化历史位置
-      for (let h = 0; h < trailLength; h++) {
-        mainParticleData.history.push({ x, y });
-      }
-      
-      // 创建拖尾粒子
-      const particleTrails = [];
-      for (let t = 0; t < trailLength; t++) {
-        const trailParticle = document.createElement('div');
-        trailParticle.className = 'tunnel-particle';
-        
-        const trailSize = size * (1 - t / trailLength);
-        const trailOpacity = 0.85 * (1 - t / trailLength);
-        
-        trailParticle.style.left = `calc(50% + ${x}px)`;
-        trailParticle.style.top = `calc(50% + ${y}px)`;
-        trailParticle.style.width = trailSize + 'px';
-        trailParticle.style.height = trailSize + 'px';
-        trailParticle.style.background = color;
-        trailParticle.style.borderRadius = '50%';
-        trailParticle.style.opacity = trailOpacity;
-        trailParticle.style.boxShadow = `0 0 ${trailSize*1.5}px ${color}`;
-        
-        particleTrails.push(trailParticle);
-        container.appendChild(trailParticle);
-      }
-      
-      this.tunnelElements.particles.push(mainParticleData);
-      this.tunnelElements.trails.push(particleTrails);
-      container.appendChild(mainParticle);
-    }
-  },
-  
-  startTunnelAnimation() {
-    let startTime = Date.now();
-    
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const container = document.getElementById('tunnelContainer');
-      
-      if (!container || !this.tunnelElements) return;
-      
-      const time = elapsed * 0.001;
-      const dt = 0.016;
-      
-      // 更新粒子和拖尾
-      this.tunnelElements.particles.forEach((particleData, index) => {
-        let x = particleData.x;
-        let y = particleData.y;
-        let vx = particleData.vx;
-        let vy = particleData.vy;
-        const size = particleData.size;
-        const color = particleData.color;
-        
-        // 计算所有旋涡的影响（更强）
-        let totalVortexX = 0;
-        let totalVortexY = 0;
-        
-        this.tunnelElements.vortices.forEach((vortex) => {
-          const dx = x - vortex.x;
-          const dy = y - vortex.y;
-          const distToVortex = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distToVortex < 700 && distToVortex > 5) {
-            const influence = vortex.strength * (1 - distToVortex / 700);
-            const vortexAngle = Math.atan2(dy, dx) + (vortex.direction * time * vortex.rotationSpeed);
-            const vortexPull = influence * 55;
-            
-            totalVortexX += Math.cos(vortexAngle + Math.PI/2 * vortex.direction) * vortexPull;
-            totalVortexY += Math.sin(vortexAngle + Math.PI/2 * vortex.direction) * vortexPull;
-          }
-        });
-        
-        // 基础轨道运动（更快）
-        const baseAngle = Math.atan2(y, x);
-        const baseDist = Math.sqrt(x * x + y * y);
-        const orbitSpeed = 0.15 + baseDist * 0.0004;
-        const baseVx = -Math.sin(baseAngle) * orbitSpeed;
-        const baseVy = Math.cos(baseAngle) * orbitSpeed;
-        
-        // 更新速度（更快）
-        vx = vx * 0.93 + (totalVortexX + baseVx * 7) * dt * 25;
-        vy = vy * 0.93 + (totalVortexY + baseVy * 7) * dt * 25;
-        
-        // 更新位置
-        x += vx;
-        y += vy;
-        
-        // 边界检查
-        const currentDist = Math.sqrt(x * x + y * y);
-        if (currentDist > 1700) {
-          const resetAngle = Math.random() * Math.PI * 2;
-          const resetDist = 80 + Math.random() * 250;
-          x = Math.cos(resetAngle) * resetDist;
-          y = Math.sin(resetAngle) * resetDist;
-          vx = 0;
-          vy = 0;
-          
-          // 重置历史位置
-          for (let h = 0; h < particleData.history.length; h++) {
-            particleData.history[h].x = x;
-            particleData.history[h].y = y;
-          }
-        }
-        
-        // 更新历史位置
-        for (let h = particleData.history.length - 1; h > 0; h--) {
-          particleData.history[h].x = particleData.history[h - 1].x;
-          particleData.history[h].y = particleData.history[h - 1].y;
-        }
-        particleData.history[0].x = x;
-        particleData.history[0].y = y;
-        
-        // 更新主粒子
-        const mainEl = particleData.element;
-        mainEl.style.left = `calc(50% + ${x}px)`;
-        mainEl.style.top = `calc(50% + ${y}px)`;
-        
-        // 更新拖尾粒子
-        const trailParticles = this.tunnelElements.trails[index];
-        trailParticles.forEach((trailEl, tIndex) => {
-          const historyPos = particleData.history[tIndex + 1] || particleData.history[particleData.history.length - 1];
-          const trailSize = size * (1 - (tIndex + 1) / trailParticles.length);
-          const trailOpacity = 0.8 * (1 - (tIndex + 1) / trailParticles.length);
-          
-          trailEl.style.left = `calc(50% + ${historyPos.x}px)`;
-          trailEl.style.top = `calc(50% + ${historyPos.y}px)`;
-          trailEl.style.width = trailSize + 'px';
-          trailEl.style.height = trailSize + 'px';
-          trailEl.style.opacity = trailOpacity;
-        });
-        
-        // 保存粒子数据
-        particleData.x = x;
-        particleData.y = y;
-        particleData.vx = vx;
-        particleData.vy = vy;
-      });
-      
-      requestAnimationFrame(animate);
-    };
-    
-    animate();
+    this.enterThroughTunnel();
   },
   
   enterThroughTunnel() {
-    // 触发诗句飞散动画
-    const poetryContainer = document.querySelector('.poetry-container');
-    if (poetryContainer) {
-      poetryContainer.classList.add('scatter');
-    }
-    
-    // 先准备主页面，确保内容加载好
-    const mainPage = document.getElementById('mainPage');
-    mainPage.style.display = 'flex';
-    mainPage.style.opacity = '0';
-    
-    // 添加进入过渡动画
-    const transition = document.createElement('div');
-    transition.className = 'enter-transition';
-    document.body.appendChild(transition);
-    
-    // 自动登录第一个账号
-    const accounts = this.getAccounts();
-    if (accounts && accounts.length > 0) {
-      this.currentUser = accounts[0];
-      this.isAdmin = accounts[0].role === '管理员';
-    } else {
-      this.currentUser = { name: '访客', role: '用户' };
-      this.isAdmin = false;
-    }
-    
-    // 先初始化应用
-    this.initMainApp();
-    this.initHomePage();
-    
-    // 等待过渡动画完成
-    setTimeout(() => {
-      const loginPage = document.getElementById('loginPage');
-      loginPage.style.display = 'none';
-      transition.remove();
+    try {
+      const mainPage = document.getElementById('mainPage');
+      if (!mainPage) {
+        console.error('mainPage element not found!');
+        return;
+      }
+      console.log('mainPage found, showing it...');
+      mainPage.style.display = 'flex';
       
-      // 平滑显示主页面
-      let startOpacity = 0;
-      const fadeIn = () => {
-        startOpacity += 0.06;
-        if (startOpacity <= 1) {
-          mainPage.style.opacity = startOpacity;
-          requestAnimationFrame(fadeIn);
-        }
-      };
-      fadeIn();
-    }, 1500);
+      console.log('Calling initMainApp...');
+      this.initMainApp();
+      console.log('initMainApp completed');
+      
+      console.log('Calling initHomePage...');
+      this.initHomePage();
+      console.log('initHomePage completed');
+      
+      const homePage = document.getElementById('home-page');
+      if (homePage) {
+        console.log('home-page found, displaying it...');
+        homePage.style.display = 'block';
+      } else {
+        console.error('home-page element not found!');
+      }
+      
+      console.log('Switching to home tab...');
+      this.switchTab('home');
+      console.log('enterThroughTunnel completed successfully');
+    } catch(e) {
+      console.error('enterThroughTunnel error:', e);
+      console.error('Error stack:', e.stack);
+    }
   },
 
   loadAccounts() {
@@ -5034,8 +4333,8 @@ const App = {
     this.currentUser = null;
     this.isAdmin = false;
     this.selectedAccountIndex = undefined;
-    document.getElementById('loginPage').style.display = 'flex';
     document.getElementById('mainPage').style.display = 'none';
+    this.enterThroughTunnel();
   },
 
   initMainApp() {
@@ -5057,64 +4356,35 @@ const App = {
     this.initIllustrationFunction();
     this.initUserPanel();
     this.initDragPet();
-    
-    const toggleBtn = document.getElementById('toggleBtn');
-    if (toggleBtn) {
-      toggleBtn.onclick = () => this.toggleSidebar();
-    }
   },
 
   initUserPanel() {
-    // 用户头像点击事件
-    const sidebarAvatarImg = document.getElementById('sidebarAvatarImg');
     const userPanel = document.getElementById('userPanel');
     const panelLogout = document.getElementById('panelLogout');
 
-    if (sidebarAvatarImg) {
-      sidebarAvatarImg.addEventListener('click', function(e) {
-        e.stopPropagation();
-        if (userPanel) {
-          userPanel.classList.toggle('show');
-        }
-      });
-    }
-
-    // 点击页面其他地方关闭用户面板
     document.addEventListener('click', function(e) {
       if (userPanel && userPanel.classList.contains('show')) {
-        const isClickInside = userPanel.contains(e.target) || 
-                             (sidebarAvatarImg && sidebarAvatarImg.contains(e.target));
+        const isClickInside = userPanel.contains(e.target);
         if (!isClickInside) {
           userPanel.classList.remove('show');
         }
       }
     });
 
-    // 头像上传功能
     const panelAvatarImg = document.getElementById('panelAvatarImg');
     const avatarUploadBtn = document.getElementById('avatarUploadBtn');
     const avatarFileInput = document.getElementById('avatarFileInput');
 
-    // 加载头像
     function loadAvatar() {
       const savedAvatar = localStorage.getItem('userAvatar');
       if (savedAvatar) {
         panelAvatarImg.src = savedAvatar;
-        // 同步加载侧边栏头像
-        if (sidebarAvatarImg) {
-          sidebarAvatarImg.src = savedAvatar;
-        }
       }
     }
 
-    // 保存头像
     function saveAvatar(base64) {
       localStorage.setItem('userAvatar', base64);
-      panelAvatarImg.src = base64;
-      // 同步更新侧边栏头像
-      if (sidebarAvatarImg) {
-        sidebarAvatarImg.src = base64;
-      }
+      if (panelAvatarImg) panelAvatarImg.src = base64;
     }
 
     // 点击上传按钮
@@ -5337,26 +4607,26 @@ const App = {
       const saved = localStorage.getItem('systemSettings');
       if (saved) {
         const data = JSON.parse(saved);
-        settingsTheme.value = data.theme || 'default';
-        settingsLanguage.value = data.language || 'zh-CN';
-        settingsNotifications.checked = data.notifications || true;
-        settingsAutoSave.checked = data.autoSave || false;
-        settingsDefaultPage.value = data.defaultPage || 'home';
-        settingsColor.value = data.color || '#667eea';
-        sidebarBtnColor.value = data.sidebarBtnColor || '#3c4658';
-        textStyle.value = data.textStyle || 'normal';
-        settingsAnimation.value = data.animation || 'slide';
+        if (settingsTheme) settingsTheme.value = data.theme || 'default';
+        if (settingsLanguage) settingsLanguage.value = data.language || 'zh-CN';
+        if (settingsNotifications) settingsNotifications.checked = data.notifications || true;
+        if (settingsAutoSave) settingsAutoSave.checked = data.autoSave || false;
+        if (settingsDefaultPage) settingsDefaultPage.value = data.defaultPage || 'home';
+        if (settingsColor) settingsColor.value = data.color || '#667eea';
+        if (sidebarBtnColor) sidebarBtnColor.value = data.sidebarBtnColor || '#3c4658';
+        if (textStyle) textStyle.value = data.textStyle || 'normal';
+        if (settingsAnimation) settingsAnimation.value = data.animation || 'slide';
       } else {
         // 默认值
-        settingsTheme.value = 'default';
-        settingsLanguage.value = 'zh-CN';
-        settingsNotifications.checked = true;
-        settingsAutoSave.checked = false;
-        settingsDefaultPage.value = 'home';
-        settingsColor.value = '#667eea';
-        sidebarBtnColor.value = '#3c4658';
-        textStyle.value = 'normal';
-        settingsAnimation.value = 'slide';
+        if (settingsTheme) settingsTheme.value = 'default';
+        if (settingsLanguage) settingsLanguage.value = 'zh-CN';
+        if (settingsNotifications) settingsNotifications.checked = true;
+        if (settingsAutoSave) settingsAutoSave.checked = false;
+        if (settingsDefaultPage) settingsDefaultPage.value = 'home';
+        if (settingsColor) settingsColor.value = '#667eea';
+        if (sidebarBtnColor) sidebarBtnColor.value = '#3c4658';
+        if (textStyle) textStyle.value = 'normal';
+        if (settingsAnimation) settingsAnimation.value = 'slide';
       }
       // 更新预设颜色选中状态
       updateColorPresetSelection();
@@ -5376,6 +4646,7 @@ const App = {
 
     // 更新预设颜色选中状态
     function updateColorPresetSelection() {
+      if (!settingsColor) return;
       document.querySelectorAll('.color-preset').forEach(preset => {
         preset.classList.remove('selected');
         if (preset.dataset.color === settingsColor.value) {
@@ -5493,13 +4764,15 @@ const App = {
         autoSave: settingsAutoSave.checked,
         defaultPage: settingsDefaultPage.value,
         color: settingsColor.value,
-        sidebarBtnColor: sidebarBtnColor.value,
-        textStyle: textStyle.value,
+        sidebarBtnColor: sidebarBtnColor ? sidebarBtnColor.value : '#3c4658',
+        textStyle: textStyle ? textStyle.value : 'normal',
         animation: settingsAnimation.value
       };
       localStorage.setItem('systemSettings', JSON.stringify(data));
       applyThemeColor(settingsColor.value);
-      applySidebarStyle(sidebarBtnColor.value, textStyle.value);
+      if (sidebarBtnColor && textStyle) {
+        applySidebarStyle(sidebarBtnColor.value, textStyle.value);
+      }
       applyAnimation(settingsAnimation.value);
       closeSettingsModal();
     }
@@ -5512,16 +4785,16 @@ const App = {
     }
 
     // 清除所有存储数据
-function clearAllStorage() {
-    if (confirm('确定要清除所有存储数据吗？此操作不可恢复！')) {
+    function clearAllStorage() {
+      if (confirm('确定要清除所有存储数据吗？此操作不可恢复！')) {
         localStorage.clear();
         alert('已清除所有存储数据，页面将刷新！');
         location.reload();
+      }
     }
-}
 
-// 关闭系统设置模态框
-function closeSettingsModal() {
+    // 关闭系统设置模态框
+    function closeSettingsModal() {
       if (settingsModal) settingsModal.style.display = 'none';
     }
 
@@ -5573,7 +4846,9 @@ function closeSettingsModal() {
     // 初始化应用侧边栏样式
     const savedBtnColor = savedSettings ? JSON.parse(savedSettings).sidebarBtnColor : '#3c4658';
     const savedTextStyle = savedSettings ? JSON.parse(savedSettings).textStyle : 'normal';
-    applySidebarStyle(savedBtnColor, savedTextStyle);
+    if (sidebarBtnColor && textStyle) {
+      applySidebarStyle(savedBtnColor, savedTextStyle);
+    }
     
     // 初始化应用页面切换动画
     const savedAnimation = savedSettings ? JSON.parse(savedSettings).animation : 'slide';
@@ -5609,10 +4884,6 @@ function closeSettingsModal() {
   },
 
   bindEvents() {
-    const toggleBtn = document.getElementById('toggleBtn');
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', () => this.toggleSidebar());
-    }
   },
 
   initPages() {
@@ -6583,31 +5854,7 @@ function closeSettingsModal() {
     animate();
   },
   
-  toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggleBtn');
-    
-    if (!sidebar || !toggleBtn) return;
-    
-    // 切换侧边栏状态
-    const isExpanded = sidebar.classList.contains('expand');
-    if (isExpanded) {
-      sidebar.classList.remove('expand');
-      toggleBtn.classList.remove('on');
-    } else {
-      sidebar.classList.add('expand');
-      toggleBtn.classList.add('on');
-    }
-    
-    // 添加点击动画效果
-    const petBody = toggleBtn.querySelector('.pet-body');
-    if (petBody) {
-      petBody.style.transform = 'scale(0.9)';
-      setTimeout(() => {
-        petBody.style.transform = '';
-      }, 150);
-    }
-  },
+
 
   openPage(name, url) {
     try {
@@ -6829,13 +6076,8 @@ function closeSettingsModal() {
     this._bindClick('refreshPreviewBtnPage', () => this.generatePreview('page'));
     this._bindClick('exportExcelBtnPage', () => this.exportToExcelWithProgress());
     
-    this._bindClick('exportExcelHome', () => this.exportExcelHome());
-    this._bindClick('clearImagesHome', () => this.clearImagesHome());
-    
     this._bindConfigChange('modal');
     this._bindConfigChange('page');
-    
-    this._bindHomeImageUpload();
 
     this._bindChange('unitSelectPage', (e) => { this.currentUnit = e.target.value; });
 
@@ -6919,118 +6161,6 @@ function closeSettingsModal() {
     layoutRadios.forEach(radio => {
       radio.addEventListener('change', refresh);
     });
-  },
-
-  _bindHomeImageUpload() {
-    const dropArea = document.getElementById('dropAreaHome');
-    const fileInput = document.getElementById('fileInputHome');
-    
-    if (dropArea && fileInput) {
-      dropArea.addEventListener('click', () => fileInput.click());
-      
-      dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropArea.style.borderColor = '#409eff';
-      });
-      
-      dropArea.addEventListener('dragleave', () => {
-        dropArea.style.borderColor = '#ddd';
-      });
-      
-      dropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropArea.style.borderColor = '#ddd';
-        const files = Array.from(e.dataTransfer.files);
-        this.handleHomeFiles(files);
-      });
-      
-      fileInput.addEventListener('change', (e) => {
-        const files = Array.from(e.target.files);
-        this.handleHomeFiles(files);
-      });
-    }
-  },
-  
-  async handleHomeFiles(files) {
-    const imageFiles = files.filter(f => f.type.startsWith('image/'));
-    if (imageFiles.length === 0) {
-      alert('请选择图片文件');
-      return;
-    }
-    
-    for (let file of imageFiles) {
-      const base64 = await this.fileToBase64(file);
-      this.imageBase64List.push({
-        name: file.name,
-        data: base64,
-        type: file.type,
-        cellAddress: null
-      });
-    }
-    
-    this.updateHomeImageList();
-  },
-  
-  updateHomeImageList() {
-    const countEl = document.getElementById('homeImageCount');
-    const listEl = document.getElementById('homeImageList');
-    
-    if (countEl) {
-      countEl.textContent = `已选择：${this.imageBase64List.length} 张图片`;
-    }
-    
-    if (listEl) {
-      if (this.imageBase64List.length === 0) {
-        listEl.style.display = 'none';
-      } else {
-        listEl.style.display = 'block';
-        let html = '';
-        this.imageBase64List.forEach((imgData, index) => {
-          const url = `data:${imgData.type};base64,${imgData.data}`;
-          html += `
-            <div style="display: flex; align-items: center; padding: 4px; border-bottom: 1px solid #eee; gap: 8px;">
-              <img src="${url}" style="width: 32px; height: 32px; object-fit: cover; border-radius: 4px;">
-              <span style="flex: 1; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${imgData.name}</span>
-              <button onclick="App.removeImage(${index}); App.updateHomeImageList();" style="padding: 2px 6px; font-size: 10px; background: #f56c6c; color: white; border: none; border-radius: 3px; cursor: pointer;">删除</button>
-            </div>
-          `;
-        });
-        listEl.innerHTML = html;
-      }
-    }
-  },
-  
-  clearImagesHome() {
-    this.imageBase64List = [];
-    this.updateHomeImageList();
-  },
-  
-  async exportExcelHome() {
-    if (this.imageBase64List.length === 0) {
-      alert('请先添加图片');
-      return;
-    }
-    
-    const startCell = document.getElementById('startCellHome')?.value.trim() || 'C1';
-    const perRow = parseInt(document.getElementById('perRowHome')?.value || '4');
-    const fileName = document.getElementById('fileNameHome')?.value.trim() || 'LOT复测';
-    
-    const today = new Date();
-    const month = today.getMonth() + 1;
-    const day = today.getDate();
-    const exportFileName = `${month}.${day}${fileName}.xlsx`;
-    
-    const config = {
-      startCell: startCell,
-      layout: 'horizontal',
-      perRow: perRow,
-      colWidth: 3,
-      rowHeight: 3,
-      unit: 'cm',
-      addName: 'none'
-    };
-    
-    await this.exportExcelCore(config, exportFileName);
   },
 
   _initExportFileName() {
@@ -7546,7 +6676,7 @@ window.addEventListener('DOMContentLoaded', () => {
 window.openPage = (name, url) => App.openPage(name, url);
 window.openIllustrationPage = () => App.openIllustrationPage();
 window.openVehiclePage = () => App.openVehiclePage();
-window.toggleSidebar = () => App.toggleSidebar();
+
 window.closeTab = (e, id) => App.closeTab(e, id);
 window.switchTab = (id) => App.switchTab(id);
 
@@ -7625,58 +6755,12 @@ App.initHomePage = function() {
   updateClock();
   setInterval(updateClock, 1000);
 
-  // ========== 可切换日历 ==========
-  let currentDate = new Date();
-  const monthYearEl = document.getElementById('calendar-month-year');
-  const calendarGrid = document.getElementById('calendar-grid');
-  const prevBtn = document.getElementById('prev-month');
-  const nextBtn = document.getElementById('next-month');
-
-  function renderCalendar() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const startDayOfWeek = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-    const totalDays = lastDay.getDate();
-    
-    monthYearEl.textContent = `${year}年${month + 1}月`;
-    
-    let html = '';
-    const weekdays = ['一','二','三','四','五','六','日'];
-    weekdays.forEach(d => html += `<div class="weekday">${d}</div>`);
-    
-    for (let i = 0; i < startDayOfWeek; i++) {
-      html += `<div class="calendar-day"></div>`;
-    }
-    
-    const today = new Date();
-    for (let d = 1; d <= totalDays; d++) {
-      const date = new Date(year, month, d);
-      let className = 'calendar-day';
-      if (date.toDateString() === today.toDateString()) className += ' today';
-      html += `<div class="${className}">${d}</div>`;
-    }
-    calendarGrid.innerHTML = html;
-  }
-  
-  if (prevBtn && nextBtn) {
-    prevBtn.addEventListener('click', () => {
-      currentDate.setMonth(currentDate.getMonth() - 1);
-      renderCalendar();
-    });
-    nextBtn.addEventListener('click', () => {
-      currentDate.setMonth(currentDate.getMonth() + 1);
-      renderCalendar();
-    });
-  }
-  renderCalendar();
-
   // ========== 功能按钮事件 ==========
   const homeBtn = document.getElementById('homeBtn');
   const transOrderBtn = document.getElementById('trans-order');
   const warehouseBtn = document.getElementById('warehouse');
   const dailyStorageBtn = document.getElementById('daily-storage');
+  const fullBtn = document.getElementById('full');
   const lineBtn = document.getElementById('line');
   const speedBtn = document.getElementById('speed');
   const bubbleRatioBtn = document.getElementById('bubble-ratio');
@@ -7730,6 +6814,14 @@ App.initHomePage = function() {
   if (warehouseBtn) {
     warehouseBtn.addEventListener('click', () => {
       showWarehouseMonthSelector();
+      if (zipSubgroup) zipSubgroup.style.display = 'none';
+    });
+  }
+
+  // 全量
+  if (fullBtn) {
+    fullBtn.addEventListener('click', () => {
+      showFullMonthSelector();
       if (zipSubgroup) zipSubgroup.style.display = 'none';
     });
   }
@@ -7938,14 +7030,336 @@ App.initHomePage = function() {
     });
   }
 
-  // 渠道查询 - 平滑滚动
+  // 渠道查询
   if (channelSearchBtn) {
     channelSearchBtn.addEventListener('click', () => {
-      document.querySelector('.channel-card')?.scrollIntoView({ behavior: 'smooth' });
       if (zipSubgroup) zipSubgroup.style.display = 'none';
       closeAllModal();
     });
   }
+
+  // ========== 按钮链接数据 ==========
+  const buttonLinks = {
+    'warehouse': { name: '仓储', url: 'https://www.kdocs.cn/l/cnLDizeYKJ4K', target: 'iframe' },
+    'daily-storage': { name: '每日留仓数量', url: 'https://www.kdocs.cn/l/clrDVXP1277F', target: 'iframe' },
+    'full': { name: '全量', url: 'https://www.kdocs.cn/l/cjHcYd3KIRkA', target: 'iframe' },
+    'line': { name: '专线', url: 'https://www.kdocs.cn/l/cbWVlaTOmyEe', target: 'iframe' },
+    'speed': { name: '速量', url: 'https://www.kdocs.cn/l/ch5xdUJYMzbH', target: 'iframe' },
+    'bubble-ratio': { name: '泡比', url: 'https://www.kdocs.cn/l/cjZZGlQnBtmm', target: 'iframe' },
+    'package-count': { name: '包数', url: 'https://www.kdocs.cn/l/cbJs05zRewYZ', target: 'iframe' },
+    'order-count': { name: '单量', url: 'https://www.kdocs.cn/l/cdiNjSnC4i2E', target: 'iframe' },
+    'person-efficiency': { name: '人效', url: 'https://www.kdocs.cn/l/coByacPZqwoP', target: 'iframe' },
+    'small-package': { name: '小包数据', url: 'https://www.kdocs.cn/l/coJEsFw0SGEz', target: 'iframe' },
+    'illustration': { name: '插图', url: 'illustration', target: 'iframe' },
+    'trans-order': { name: '转单', url: 'http://120.77.151.112:16321/module/index?mv=index', target: 'iframe' },
+    'zip-search': { name: '邮政编码查询', url: 'zip', target: 'iframe' },
+    'channel-search': { name: '渠道查询', url: 'channel', target: 'iframe' },
+    'name-register': { name: '异常登记', url: 'https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYWBBxTkl', target: 'iframe' },
+    'recheck': { name: '复测', url: 'modal:recheck', target: 'iframe' },
+    'check-arrival': { name: '其他客户到货量', url: 'modal:arrival', target: 'iframe' },
+    'exception-type': { name: '异常类型', url: 'modal:exception', target: 'iframe' },
+    'missing-data': { name: '漏数据', url: 'https://doc.weixin.qq.com/sheet/e3_AagALQa5AHMCN52GkF71eR1GtvBBh?scode=AGMAxAeNAHY1LY1ShtATMAqQaKAPU&tab=BB08J2', target: 'iframe' },
+    'cost-table': { name: '成本表', url: 'https://doc.weixin.qq.com/sheet/e3_AQYAHgbXAKkNrDKGbk1STm236e58J?scode=AGMAxAeNAHYa2G9O85ATMAqQaKAPU&tab=oqiig0', target: 'iframe' },
+    'exception-register': { name: '异常登记', url: 'https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYP2S6hbNATMAqQaKAPU&tab=5v7cyc', target: 'iframe' },
+    'remove-empty-rows': { name: '删除空白行', url: 'remove-empty', target: 'iframe' },
+    'vehicle': { name: '车辆', url: 'vehicle', target: 'iframe' },
+    'outbound-order': { name: '出库单', url: 'https://www.kdocs.cn/l/caRQJ7Gz4GYG', target: 'iframe' },
+    'small-package-night': { name: '小包数据汇总夜', url: 'https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001', target: 'iframe' }
+  };
+  
+  window.window.speedExtraMonths = [];
+  window.window.warehouseExtraMonths = [];
+  window.window.lineExtraMonths = [];
+  window.window.fullExtraMonths = [];
+
+  // ========== 拖拽排序功能（事件委托）==========
+  const funcGrid = document.querySelector('.func-grid');
+  let draggedItem = null;
+
+  if (funcGrid) {
+    initCardDraggable();
+
+    funcGrid.addEventListener('dragstart', (e) => {
+      const card = e.target.closest('.func-card');
+      if (card && !card.classList.contains('add-card')) {
+        draggedItem = card;
+        card.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      } else {
+        e.preventDefault();
+      }
+    });
+
+    funcGrid.addEventListener('dragend', () => {
+      if (draggedItem) {
+        draggedItem.classList.remove('dragging');
+        draggedItem = null;
+      }
+      funcGrid.querySelectorAll('.func-card').forEach(c => c.classList.remove('drag-over'));
+    });
+
+    funcGrid.addEventListener('dragover', (e) => {
+      const card = e.target.closest('.func-card');
+      if (card && !card.classList.contains('add-card')) {
+        e.preventDefault();
+        card.classList.add('drag-over');
+      }
+    });
+
+    funcGrid.addEventListener('dragleave', (e) => {
+      const card = e.target.closest('.func-card');
+      if (card) {
+        card.classList.remove('drag-over');
+      }
+    });
+
+    funcGrid.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const card = e.target.closest('.func-card');
+      if (card && !card.classList.contains('add-card')) {
+        card.classList.remove('drag-over');
+        if (draggedItem && draggedItem !== card) {
+          const cards = Array.from(funcGrid.querySelectorAll('.func-card:not(.add-card)'));
+          const draggedIndex = cards.indexOf(draggedItem);
+          const dropIndex = cards.indexOf(card);
+          
+          if (draggedIndex < dropIndex) {
+            funcGrid.insertBefore(draggedItem, card.nextSibling);
+          } else {
+            funcGrid.insertBefore(draggedItem, card);
+          }
+          
+          updateCardIndexes();
+        }
+      }
+    });
+
+    function initCardDraggable() {
+      funcGrid.querySelectorAll('.func-card:not(.add-card)').forEach((card, index) => {
+        card.setAttribute('draggable', 'true');
+        card.dataset.index = index;
+      });
+    }
+
+    function updateCardIndexes() {
+      const newCards = funcGrid.querySelectorAll('.func-card:not(.add-card)');
+      newCards.forEach((card, index) => {
+        card.dataset.index = index;
+      });
+    }
+
+    funcGrid.addEventListener('click', (e) => {
+      const card = e.target.closest('.func-card');
+      if (card && card.classList.contains('add-card')) return;
+      
+      const cardId = card.id;
+      const linkData = buttonLinks[cardId];
+      
+      if (linkData && linkData.url) {
+        const url = linkData.url;
+        
+        if (cardId === 'warehouse') {
+          showWarehouseMonthSelector();
+        } else if (cardId === 'speed') {
+          showSpeedMonthSelector();
+        } else if (cardId === 'line') {
+          showLineMonthSelector();
+        } else if (cardId === 'full') {
+          showFullMonthSelector();
+        } else if (url.startsWith('modal:')) {
+          const modalType = url.split(':')[1];
+          if (modalType === 'recheck') document.getElementById('recheck-modal').classList.add('show');
+          else if (modalType === 'arrival') document.getElementById('arrival-modal').classList.add('show');
+          else if (modalType === 'exception') document.getElementById('exception-modal').classList.add('show');
+          document.getElementById('modal-mask').classList.add('show');
+        } else if (url === 'illustration') {
+          openIllustrationPage();
+        } else if (url === 'vehicle') {
+          openVehiclePage();
+        } else if (url === 'zip') {
+          const zipSubgroup = document.getElementById('zip-subgroup');
+          if (zipSubgroup) zipSubgroup.style.display = zipSubgroup.style.display === 'flex' ? 'none' : 'flex';
+        } else if (url === 'channel') {
+          const channelCard = document.getElementById('channel-card');
+          if (channelCard) channelCard.style.display = channelCard.style.display === 'block' ? 'none' : 'block';
+        } else if (url === 'remove-empty') {
+          const removeEmptyPage = document.getElementById('remove-empty-rows-page');
+          if (removeEmptyPage) {
+            openHomePage();
+            removeEmptyPage.style.display = 'block';
+          }
+        } else {
+          if (linkData.target === 'blank') {
+            window.open(url, '_blank');
+          } else {
+            openPage(linkData.name, url);
+          }
+        }
+      }
+    });
+  }
+
+  // ========== 右键菜单功能 ==========
+  const contextMenu = document.getElementById('context-menu');
+  let currentCard = null;
+
+  document.addEventListener('click', () => {
+    contextMenu.classList.remove('show');
+  });
+
+  document.addEventListener('contextmenu', (e) => {
+    const card = e.target.closest('.func-card');
+    if (card && !card.classList.contains('add-card')) {
+      e.preventDefault();
+      currentCard = card;
+      const rect = card.getBoundingClientRect();
+      contextMenu.style.left = `${rect.left}px`;
+      contextMenu.style.top = `${rect.bottom + 8}px`;
+      contextMenu.classList.add('show');
+    } else {
+      contextMenu.classList.remove('show');
+    }
+  });
+
+  // 修改链接
+  const editLinkMask = document.getElementById('edit-link-mask');
+  const editLinkModal = document.getElementById('edit-link-modal');
+  const editLinkName = document.getElementById('edit-link-name');
+  const editLinkUrl = document.getElementById('edit-link-url');
+
+  document.getElementById('menu-edit-link').addEventListener('click', () => {
+    contextMenu.classList.remove('show');
+    if (currentCard) {
+      const cardId = currentCard.id;
+      const linkData = buttonLinks[cardId];
+      if (linkData) {
+        editLinkName.value = linkData.name;
+        editLinkUrl.value = linkData.url;
+        const target = linkData.target || 'iframe';
+        document.querySelector(`input[name="edit-link-target"][value="${target}"]`).checked = true;
+      }
+      editLinkMask.style.display = 'block';
+      editLinkModal.style.display = 'block';
+    }
+  });
+
+  // 在新窗口打开
+  document.getElementById('menu-open-link').addEventListener('click', () => {
+    contextMenu.classList.remove('show');
+    if (currentCard) {
+      const cardId = currentCard.id;
+      const linkData = buttonLinks[cardId];
+      if (linkData && linkData.url && !linkData.url.startsWith('modal:') && !linkData.url.startsWith('illustration') && !linkData.url.startsWith('zip') && !linkData.url.startsWith('channel') && !linkData.url.startsWith('remove-empty')) {
+        window.open(linkData.url, '_blank');
+      }
+    }
+  });
+
+  // 删除卡片
+  document.getElementById('menu-delete-card').addEventListener('click', () => {
+    contextMenu.classList.remove('show');
+    if (currentCard) {
+      const cardName = currentCard.querySelector('span:last-child').textContent;
+      if (confirm(`确定要删除卡片「${cardName}」吗？`)) {
+        const cardId = currentCard.id;
+        delete buttonLinks[cardId];
+        currentCard.remove();
+        updateCardIndexes();
+      }
+    }
+  });
+
+  // 关闭修改链接弹窗
+  document.getElementById('edit-link-cancel').addEventListener('click', () => {
+    editLinkMask.style.display = 'none';
+    editLinkModal.style.display = 'none';
+  });
+
+  // 保存修改的链接
+  document.getElementById('edit-link-save').addEventListener('click', () => {
+    if (currentCard) {
+      const cardId = currentCard.id;
+      const newUrl = editLinkUrl.value.trim();
+      const target = document.querySelector('input[name="edit-link-target"]:checked').value;
+      if (newUrl) {
+        buttonLinks[cardId].url = newUrl;
+      }
+      buttonLinks[cardId].target = target;
+    }
+    editLinkMask.style.display = 'none';
+    editLinkModal.style.display = 'none';
+  });
+
+  // ========== 导出网页代码功能 ==========
+  const exportCodeBtn = document.getElementById('export-code-btn');
+  if (exportCodeBtn) {
+    exportCodeBtn.addEventListener('click', () => {
+      const htmlContent = document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '小东控制台.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // ========== 添加新卡片功能 ==========
+  const addCardBtn = document.getElementById('add-new-card');
+  const addCardMask = document.getElementById('add-card-mask');
+  const addCardModal = document.getElementById('add-card-modal');
+  const addCardName = document.getElementById('add-card-name');
+  const addCardUrl = document.getElementById('add-card-url');
+  const addCardEmoji = document.getElementById('add-card-emoji');
+
+  if (addCardBtn) {
+    addCardBtn.addEventListener('click', () => {
+      addCardMask.style.display = 'block';
+      addCardModal.style.display = 'block';
+      addCardName.value = '';
+      addCardUrl.value = '';
+      addCardEmoji.value = '⭐';
+      addCardName.focus();
+    });
+  }
+
+  document.getElementById('add-card-cancel').addEventListener('click', () => {
+    addCardMask.style.display = 'none';
+    addCardModal.style.display = 'none';
+  });
+
+  document.getElementById('add-card-save').addEventListener('click', () => {
+    const name = addCardName.value.trim();
+    const url = addCardUrl.value.trim();
+    const emoji = addCardEmoji.value.trim() || '⭐';
+    const target = document.querySelector('input[name="add-card-target"]:checked').value;
+
+    if (!name) {
+      alert('请输入卡片名称');
+      return;
+    }
+
+    const newCardId = 'custom-' + Date.now();
+    
+    const newCard = document.createElement('div');
+    newCard.className = 'func-card';
+    newCard.id = newCardId;
+    newCard.setAttribute('draggable', 'true');
+    newCard.innerHTML = `<span class="func-emoji">${emoji}</span><span>${name}</span>`;
+
+    buttonLinks[newCardId] = { name: name, url: url, target: target };
+
+    const addCardBtnEl = document.getElementById('add-new-card');
+    funcGrid.insertBefore(newCard, addCardBtnEl);
+
+    updateCardIndexes();
+
+    addCardMask.style.display = 'none';
+    addCardModal.style.display = 'none';
+  });
 
   // 复制功能
   const copyBtns = document.querySelectorAll('.copy-btn');
@@ -8617,14 +8031,16 @@ function showSpeedMonthSelector() {
     { name: '六月份', url: 'https://www.kdocs.cn/l/cjyFHcqAyGuJ' }
   ];
   
+  const allMonths = [...months, ...window.speedExtraMonths];
+  
   let selectorHTML = `
     <div id="speedMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
-      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
         <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div style="display:flex;flex-direction:column;gap:12px;">
+        <div id="speed-month-list" style="display:flex;flex-direction:column;gap:12px;">
   `;
   
-  months.forEach((month, index) => {
+  allMonths.forEach((month, index) => {
     selectorHTML += `
       <button 
         style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
@@ -8638,8 +8054,22 @@ function showSpeedMonthSelector() {
   
   selectorHTML += `
         </div>
+        <div id="speed-add-form" style="margin-top:16px;display:none;">
+          <input type="text" id="speed-add-name" placeholder="月份名称（如：八月份）" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
+          <input type="text" id="speed-add-url" placeholder="链接地址" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
+          <div style="display:flex;gap:8px;">
+            <button onclick="confirmAddSpeedMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#409eff;color:white;font-size:14px;cursor:pointer;">确定</button>
+            <button onclick="cancelAddSpeedMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#eee;color:#666;font-size:14px;cursor:pointer;">取消</button>
+          </div>
+        </div>
+        <button id="speed-add-btn"
+          style="margin-top:16px;width:100%;padding:12px;border:2px dashed #409eff;border-radius:10px;background:#f0f7ff;color:#409eff;font-size:14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;"
+          onclick="showSpeedAddForm()"
+        >
+          <span>➕</span><span>添加月份</span>
+        </button>
         <button 
-          style="margin-top:16px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
+          style="margin-top:8px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
           onclick="document.getElementById('speedMonthSelector').remove()"
         >
           取消
@@ -8651,6 +8081,47 @@ function showSpeedMonthSelector() {
   document.body.insertAdjacentHTML('beforeend', selectorHTML);
 }
 
+function showSpeedAddForm() {
+  document.getElementById('speed-add-form').style.display = 'block';
+  document.getElementById('speed-add-btn').style.display = 'none';
+  document.getElementById('speed-add-name').focus();
+}
+
+function cancelAddSpeedMonth() {
+  document.getElementById('speed-add-form').style.display = 'none';
+  document.getElementById('speed-add-btn').style.display = 'flex';
+  document.getElementById('speed-add-name').value = '';
+  document.getElementById('speed-add-url').value = '';
+}
+
+function confirmAddSpeedMonth() {
+  const monthName = document.getElementById('speed-add-name').value.trim();
+  const monthUrl = document.getElementById('speed-add-url').value.trim();
+  
+  if (!monthName) {
+    alert('请输入月份名称');
+    return;
+  }
+  if (!monthUrl) {
+    alert('请输入链接地址');
+    return;
+  }
+  
+  window.speedExtraMonths.push({ name: monthName, url: monthUrl });
+  
+  const monthList = document.getElementById('speed-month-list');
+  const newBtn = document.createElement('button');
+  newBtn.style.cssText = 'padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;';
+  newBtn.innerHTML = `<span style="font-size:20px;">🔵</span><span>${monthName}</span>`;
+  newBtn.onclick = function() {
+    document.getElementById('speedMonthSelector').remove();
+    openPage(`速量 - ${monthName}`, monthUrl);
+  };
+  monthList.appendChild(newBtn);
+  
+  cancelAddSpeedMonth();
+}
+
 function selectSpeedMonth(name, url) {
   document.getElementById('speedMonthSelector').remove();
   openPage(name, url);
@@ -8660,17 +8131,20 @@ function selectSpeedMonth(name, url) {
 function showWarehouseMonthSelector() {
   const months = [
     { name: '五月份', url: 'https://www.kdocs.cn/l/cnLDizeYKJ4K' },
-    { name: '六月份', url: 'https://www.kdocs.cn/l/ceSENEnBJ4ir' }
+    { name: '六月份', url: 'https://www.kdocs.cn/l/ceSENEnBJ4ir' },
+    { name: '七月份', url: 'https://www.kdocs.cn/l/cmCAFEVsjJmy' }
   ];
+  
+  const allMonths = [...months, ...window.warehouseExtraMonths];
   
   let selectorHTML = `
     <div id="warehouseMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
-      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
         <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div style="display:flex;flex-direction:column;gap:12px;">
+        <div id="warehouse-month-list" style="display:flex;flex-direction:column;gap:12px;">
   `;
   
-  months.forEach((month, index) => {
+  allMonths.forEach((month, index) => {
     selectorHTML += `
       <button 
         style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
@@ -8684,8 +8158,22 @@ function showWarehouseMonthSelector() {
   
   selectorHTML += `
         </div>
+        <div id="warehouse-add-form" style="margin-top:16px;display:none;">
+          <input type="text" id="warehouse-add-name" placeholder="月份名称（如：八月份）" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
+          <input type="text" id="warehouse-add-url" placeholder="链接地址" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
+          <div style="display:flex;gap:8px;">
+            <button onclick="confirmAddWarehouseMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#409eff;color:white;font-size:14px;cursor:pointer;">确定</button>
+            <button onclick="cancelAddWarehouseMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#eee;color:#666;font-size:14px;cursor:pointer;">取消</button>
+          </div>
+        </div>
+        <button id="warehouse-add-btn"
+          style="margin-top:16px;width:100%;padding:12px;border:2px dashed #409eff;border-radius:10px;background:#f0f7ff;color:#409eff;font-size:14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;"
+          onclick="showWarehouseAddForm()"
+        >
+          <span>➕</span><span>添加月份</span>
+        </button>
         <button 
-          style="margin-top:16px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
+          style="margin-top:8px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
           onclick="document.getElementById('warehouseMonthSelector').remove()"
         >
           取消
@@ -8697,6 +8185,47 @@ function showWarehouseMonthSelector() {
   document.body.insertAdjacentHTML('beforeend', selectorHTML);
 }
 
+function showWarehouseAddForm() {
+  document.getElementById('warehouse-add-form').style.display = 'block';
+  document.getElementById('warehouse-add-btn').style.display = 'none';
+  document.getElementById('warehouse-add-name').focus();
+}
+
+function cancelAddWarehouseMonth() {
+  document.getElementById('warehouse-add-form').style.display = 'none';
+  document.getElementById('warehouse-add-btn').style.display = 'flex';
+  document.getElementById('warehouse-add-name').value = '';
+  document.getElementById('warehouse-add-url').value = '';
+}
+
+function confirmAddWarehouseMonth() {
+  const monthName = document.getElementById('warehouse-add-name').value.trim();
+  const monthUrl = document.getElementById('warehouse-add-url').value.trim();
+  
+  if (!monthName) {
+    alert('请输入月份名称');
+    return;
+  }
+  if (!monthUrl) {
+    alert('请输入链接地址');
+    return;
+  }
+  
+  window.warehouseExtraMonths.push({ name: monthName, url: monthUrl });
+  
+  const monthList = document.getElementById('warehouse-month-list');
+  const newBtn = document.createElement('button');
+  newBtn.style.cssText = 'padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;';
+  newBtn.innerHTML = `<span style="font-size:20px;">🔵</span><span>${monthName}</span>`;
+  newBtn.onclick = function() {
+    document.getElementById('warehouseMonthSelector').remove();
+    openPage(`仓储 - ${monthName}`, monthUrl);
+  };
+  monthList.appendChild(newBtn);
+  
+  cancelAddWarehouseMonth();
+}
+
 function selectWarehouseMonth(name, url) {
   document.getElementById('warehouseMonthSelector').remove();
   openPage(name, url);
@@ -8706,17 +8235,20 @@ function selectWarehouseMonth(name, url) {
 function showLineMonthSelector() {
   const months = [
     { name: '五月份', url: 'https://www.kdocs.cn/l/cbWVlaTOmyEe' },
-    { name: '六月份', url: 'https://www.kdocs.cn/l/cpoXE2lCEZje' }
+    { name: '六月份', url: 'https://www.kdocs.cn/l/cpoXE2lCEZje' },
+    { name: '七月份', url: 'https://www.kdocs.cn/l/cd3DiyOuerT8' }
   ];
+  
+  const allMonths = [...months, ...window.lineExtraMonths];
   
   let selectorHTML = `
     <div id="lineMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
-      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
         <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div style="display:flex;flex-direction:column;gap:12px;">
+        <div id="line-month-list" style="display:flex;flex-direction:column;gap:12px;">
   `;
   
-  months.forEach((month, index) => {
+  allMonths.forEach((month, index) => {
     selectorHTML += `
       <button 
         style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
@@ -8730,8 +8262,22 @@ function showLineMonthSelector() {
   
   selectorHTML += `
         </div>
+        <div id="line-add-form" style="margin-top:16px;display:none;">
+          <input type="text" id="line-add-name" placeholder="月份名称（如：八月份）" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
+          <input type="text" id="line-add-url" placeholder="链接地址" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
+          <div style="display:flex;gap:8px;">
+            <button onclick="confirmAddLineMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#409eff;color:white;font-size:14px;cursor:pointer;">确定</button>
+            <button onclick="cancelAddLineMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#eee;color:#666;font-size:14px;cursor:pointer;">取消</button>
+          </div>
+        </div>
+        <button id="line-add-btn"
+          style="margin-top:16px;width:100%;padding:12px;border:2px dashed #409eff;border-radius:10px;background:#f0f7ff;color:#409eff;font-size:14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;"
+          onclick="showLineAddForm()"
+        >
+          <span>➕</span><span>添加月份</span>
+        </button>
         <button 
-          style="margin-top:16px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
+          style="margin-top:8px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
           onclick="document.getElementById('lineMonthSelector').remove()"
         >
           取消
@@ -8743,12 +8289,197 @@ function showLineMonthSelector() {
   document.body.insertAdjacentHTML('beforeend', selectorHTML);
 }
 
+function showLineAddForm() {
+  document.getElementById('line-add-form').style.display = 'block';
+  document.getElementById('line-add-btn').style.display = 'none';
+  document.getElementById('line-add-name').focus();
+}
+
+function cancelAddLineMonth() {
+  document.getElementById('line-add-form').style.display = 'none';
+  document.getElementById('line-add-btn').style.display = 'flex';
+  document.getElementById('line-add-name').value = '';
+  document.getElementById('line-add-url').value = '';
+}
+
+function confirmAddLineMonth() {
+  const monthName = document.getElementById('line-add-name').value.trim();
+  const monthUrl = document.getElementById('line-add-url').value.trim();
+  
+  if (!monthName) {
+    alert('请输入月份名称');
+    return;
+  }
+  if (!monthUrl) {
+    alert('请输入链接地址');
+    return;
+  }
+  
+  window.lineExtraMonths.push({ name: monthName, url: monthUrl });
+  
+  const monthList = document.getElementById('line-month-list');
+  const newBtn = document.createElement('button');
+  newBtn.style.cssText = 'padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;';
+  newBtn.innerHTML = `<span style="font-size:20px;">🔵</span><span>${monthName}</span>`;
+  newBtn.onclick = function() {
+    document.getElementById('lineMonthSelector').remove();
+    openPage(`专线 - ${monthName}`, monthUrl);
+  };
+  monthList.appendChild(newBtn);
+  
+  cancelAddLineMonth();
+}
+
 function selectLineMonth(name, url) {
   document.getElementById('lineMonthSelector').remove();
   openPage(name, url);
 }
 
+// 全量月份选择器
+function showFullMonthSelector() {
+  const months = [
+    { name: '七月份', url: 'https://www.kdocs.cn/l/cjHcYd3KIRkA' }
+  ];
+  
+  const allMonths = [...months, ...window.fullExtraMonths];
+  
+  let selectorHTML = `
+    <div id="fullMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
+      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
+        <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
+        <div id="full-month-list" style="display:flex;flex-direction:column;gap:12px;">
+  `;
+  
+  allMonths.forEach((month, index) => {
+    selectorHTML += `
+      <button 
+        style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
+        onclick="selectFullMonth('全量 - ${month.name}','${month.url}')"
+      >
+        <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
+        <span>${month.name}</span>
+      </button>
+    `;
+  });
+  
+  selectorHTML += `
+        </div>
+        <div id="full-add-form" style="margin-top:16px;display:none;">
+          <input type="text" id="full-add-name" placeholder="月份名称（如：八月份）" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
+          <input type="text" id="full-add-url" placeholder="链接地址" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
+          <div style="display:flex;gap:8px;">
+            <button onclick="confirmAddFullMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#409eff;color:white;font-size:14px;cursor:pointer;">确定</button>
+            <button onclick="cancelAddFullMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#eee;color:#666;font-size:14px;cursor:pointer;">取消</button>
+          </div>
+        </div>
+        <button id="full-add-btn"
+          style="margin-top:16px;width:100%;padding:12px;border:2px dashed #409eff;border-radius:10px;background:#f0f7ff;color:#409eff;font-size:14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;"
+          onclick="showFullAddForm()"
+        >
+          <span>➕</span><span>添加月份</span>
+        </button>
+        <button 
+          style="margin-top:8px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
+          onclick="document.getElementById('fullMonthSelector').remove()"
+        >
+          取消
+        </button>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', selectorHTML);
+}
+
+function showFullAddForm() {
+  document.getElementById('full-add-form').style.display = 'block';
+  document.getElementById('full-add-btn').style.display = 'none';
+  document.getElementById('full-add-name').focus();
+}
+
+function cancelAddFullMonth() {
+  document.getElementById('full-add-form').style.display = 'none';
+  document.getElementById('full-add-btn').style.display = 'flex';
+  document.getElementById('full-add-name').value = '';
+  document.getElementById('full-add-url').value = '';
+}
+
+function confirmAddFullMonth() {
+  const monthName = document.getElementById('full-add-name').value.trim();
+  const monthUrl = document.getElementById('full-add-url').value.trim();
+  
+  if (!monthName) {
+    alert('请输入月份名称');
+    return;
+  }
+  if (!monthUrl) {
+    alert('请输入链接地址');
+    return;
+  }
+  
+  window.fullExtraMonths.push({ name: monthName, url: monthUrl });
+  
+  const monthList = document.getElementById('full-month-list');
+  const newBtn = document.createElement('button');
+  newBtn.style.cssText = 'padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;';
+  newBtn.innerHTML = `<span style="font-size:20px;">🔵</span><span>${monthName}</span>`;
+  newBtn.onclick = function() {
+    document.getElementById('fullMonthSelector').remove();
+    openPage(`全量 - ${monthName}`, monthUrl);
+  };
+  monthList.appendChild(newBtn);
+  
+  cancelAddFullMonth();
+}
+
+function selectFullMonth(name, url) {
+  document.getElementById('fullMonthSelector').remove();
+  openPage(name, url);
+}
+
 // 全局函数
 </script>
-</body>
-</html>
+  
+
+
+<div class="floating-toolbar">
+          <div class="floating-menu">
+            <div class="floating-menu-item" onclick="App.refreshCurrentViewer()">
+              <span>🔄</span><span>刷新</span>
+            </div>
+            <div class="floating-menu-item" onclick="App.openCurrentViewerInNewWindow()">
+              <span>↗</span><span>在新窗口打开</span>
+            </div>
+            <div class="floating-menu-item" onclick="App.toggleCurrentViewerFullscreen()">
+              <span>⛶</span><span>全屏</span>
+            </div>
+            <div class="floating-menu-item" onclick="App.requestMicrophonePermission()">
+              <span>🎤</span><span>申请麦克风权限</span>
+            </div>
+          </div>
+          <button class="floating-btn" title="文档工具">⚙️</button>
+        </div>
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  </body></html>
