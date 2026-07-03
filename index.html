@@ -293,770 +293,7 @@ html, body {
     color: #fff;
 }
 
-.toggle-btn {
-    position: fixed;
-    left: 20px;
-    bottom: 10px;
-    width: 70px;
-    height: 100px;
-    background: transparent;
-    cursor: grab;
-    z-index: 9999;
-    outline: none;
-    user-select: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    pointer-events: auto;
-    transition: transform 0.1s ease;
-}
-.toggle-btn:active {
-    cursor: grabbing;
-    transform: scale(1.05);
-}
-/* 电子宠物样式 */
-.pet-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-}
-.pet-display {
-    position: relative;
-}
-.pet {
-    width: 70px;
-    height: 80px;
-    position: relative;
-    display: none;
-}
-.pet.active {
-    display: block;
-}
-.pet-body {
-    width: 90px;
-    height: 100px;
-    background: 
-        radial-gradient(ellipse at 40% 20%, #fff9c4 0%, transparent 40%),
-        radial-gradient(ellipse at 30% 35%, #fff59d 0%, transparent 35%),
-        radial-gradient(ellipse at 60% 50%, #ffeb3b 0%, transparent 40%),
-        linear-gradient(135deg, #fff9c4 0%, #fff59d 15%, #ffe082 30%, #ffd54f 50%, #ffca28 70%, #ffc107 88%, #ff9800 100%);
-    border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%;
-    position: relative;
-    box-shadow: 
-        0 10px 20px rgba(255, 152, 0, 0.3),
-        0 15px 30px rgba(255, 152, 0, 0.15),
-        inset 0 -10px 25px rgba(0,0,0,0.1),
-        inset 0 8px 20px rgba(255,255,255,0.3),
-        inset 0 0 30px rgba(255,255,255,0.1);
-    animation: petBounce 2.5s ease-in-out infinite;
-}
-
-/* 身体高光效果 */
-.pet-body::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 10px;
-    right: 20px;
-    height: 35px;
-    background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 60%);
-    border-radius: 50%;
-}
-
-/* 身体底部阴影效果 */
-.pet-body::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 20%;
-    right: 20%;
-    height: 20px;
-    background: radial-gradient(ellipse at center, rgba(255, 152, 0, 0.25) 0%, transparent 70%);
-    border-radius: 50%;
-    filter: blur(4px);
-}
-
-/* 蚂蚁样式 */
-.pet-fly {
-    width: 70px;
-    height: 40px;
-    position: relative;
-    transition: transform 0.1s ease-out;
-}
-
-/* 蚂蚁身体容器 */
-.fly-body {
-    width: 70px;
-    height: 40px;
-    position: relative;
-}
-
-/* 蚂蚁头部 */
-.fly-head {
-    position: absolute;
-    right: 0;
-    top: 12px;
-    width: 18px;
-    height: 18px;
-    background: radial-gradient(circle at 40% 40%, #3a3a3a, #1a1a1a);
-    border-radius: 50%;
-    z-index: 3;
-}
-
-/* 蚂蚁眼睛 */
-.fly-eye {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.5);
-}
-
-.fly-eye-left {
-    right: 3px;
-    top: 4px;
-}
-
-.fly-eye-right {
-    right: 3px;
-    bottom: 4px;
-}
-
-/* 蚂蚁触角 */
-.fly-antenna {
-    position: absolute;
-    width: 1px;
-    height: 12px;
-    background: #333;
-    right: -2px;
-}
-
-.fly-antenna-left {
-    top: 6px;
-    transform: rotate(-40deg);
-    transform-origin: bottom center;
-}
-
-.fly-antenna-right {
-    bottom: 6px;
-    transform: rotate(40deg);
-    transform-origin: top center;
-}
-
-.fly-antenna-left::after,
-.fly-antenna-right::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    width: 3px;
-    height: 3px;
-    background: #333;
-    border-radius: 50%;
-}
-
-/* 蚂蚁胸部 */
-.fly-thorax {
-    position: absolute;
-    right: 16px;
-    top: 14px;
-    width: 14px;
-    height: 16px;
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #2a2a2a 100%);
-    border-radius: 40% 40% 35% 35%;
-    box-shadow: inset -1px -1px 3px rgba(0,0,0,0.5);
-}
-
-/* 蚂蚁腹部 */
-.fly-abdomen {
-    position: absolute;
-    right: 28px;
-    top: 16px;
-    width: 28px;
-    height: 14px;
-    background: linear-gradient(90deg, #2a2a2a 0%, #3a3a3a 30%, #2a2a2a 70%, #1a1a1a 100%);
-    border-radius: 45% 35% 35% 45%;
-    box-shadow: inset -1px -1px 3px rgba(0,0,0,0.5);
-}
-
-/* 蚂蚁腹部条纹 */
-.fly-abdomen::before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 5px;
-    right: 6px;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 50%;
-}
-
-.fly-abdomen::after {
-    content: '';
-    position: absolute;
-    top: 7px;
-    left: 6px;
-    right: 8px;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-}
-
-/* 蚂蚁腿 */
-.fly-leg {
-    position: absolute;
-    width: 1px;
-    height: 8px;
-    background: #333;
-    transform-origin: top center;
-    z-index: 2;
-}
-
-.fly-leg1 {
-    right: 18px;
-    top: 16px;
-    transform: rotate(-55deg);
-    animation: antLegMove1 0.2s ease-in-out infinite;
-}
-
-.fly-leg2 {
-    right: 20px;
-    top: 22px;
-    transform: rotate(-75deg);
-    animation: antLegMove2 0.2s ease-in-out infinite;
-}
-
-.fly-leg3 {
-    right: 22px;
-    top: 28px;
-    transform: rotate(-95deg);
-    animation: antLegMove3 0.2s ease-in-out infinite;
-}
-
-.fly-leg4 {
-    right: 18px;
-    top: 16px;
-    transform: rotate(55deg);
-    animation: antLegMove1 0.2s ease-in-out infinite 0.1s;
-}
-
-.fly-leg5 {
-    right: 20px;
-    top: 22px;
-    transform: rotate(75deg);
-    animation: antLegMove2 0.2s ease-in-out infinite 0.1s;
-}
-
-.fly-leg6 {
-    right: 22px;
-    top: 28px;
-    transform: rotate(95deg);
-    animation: antLegMove3 0.2s ease-in-out infinite 0.1s;
-}
-
-@keyframes antLegMove1 {
-    0%, 100% { transform: rotate(-55deg); }
-    50% { transform: rotate(-65deg); }
-}
-
-@keyframes antLegMove2 {
-    0%, 100% { transform: rotate(-75deg); }
-    50% { transform: rotate(-85deg); }
-}
-
-@keyframes antLegMove3 {
-    0%, 100% { transform: rotate(-95deg); }
-    50% { transform: rotate(-105deg); }
-}
-
-/* 尾巴 */
-.pet-tail {
-    position: absolute;
-    right: -18px;
-    bottom: 30%;
-    width: 35px;
-    height: 18px;
-    background: linear-gradient(135deg, #ffca28 0%, #ff9800 100%);
-    border-radius: 50% 80% 80% 50%;
-    transform: rotate(35deg);
-    animation: tailWag 0.8s ease-in-out infinite;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
-}
-
-@keyframes tailWag {
-    0%, 100% { transform: rotate(35deg) scaleX(1); }
-    50% { transform: rotate(50deg) scaleX(1.15); }
-}
-
-/* 前爪 */
-.pet-paw-front-left,
-.pet-paw-front-right {
-    position: absolute;
-    bottom: 8px;
-    width: 20px;
-    height: 14px;
-    background: linear-gradient(to bottom, #ffe082 0%, #ffca28 100%);
-    border-radius: 50% 50% 45% 45%;
-    box-shadow: 
-        inset 0 3px 6px rgba(255,255,255,0.4),
-        0 2px 4px rgba(0,0,0,0.1);
-}
-
-.pet-paw-front-left {
-    left: 10px;
-}
-
-.pet-paw-front-right {
-    right: 10px;
-}
-
-/* 肉垫 */
-.pet-paw-front-left::after,
-.pet-paw-front-right::after {
-    content: '';
-    position: absolute;
-    bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 3px;
-}
-
-.pet-paw-front-left::after::before,
-.pet-paw-front-right::after::before {
-    content: '';
-    width: 4px;
-    height: 4px;
-    background: #ffab91;
-    border-radius: 50%;
-}
-
-/* 脸部区域 */
-.pet-face {
-    position: absolute;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 50px;
-}
-
-/* 眼睛 */
-.pet-eye-left,
-.pet-eye-right {
-    position: absolute;
-    top: 8px;
-    width: 14px;
-    height: 16px;
-    background: linear-gradient(to bottom, #2d3748 0%, #1a202c 100%);
-    border-radius: 50%;
-    animation: blink 4s ease-in-out infinite;
-    box-shadow: 
-        0 2px 4px rgba(0,0,0,0.2),
-        inset 0 2px 3px rgba(255,255,255,0.1);
-}
-.pet-eye-left {
-    left: 6px;
-}
-.pet-eye-right {
-    right: 6px;
-}
-
-/* 眼珠高光 */
-.pet-eye-left::after,
-.pet-eye-right::after {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 4px;
-    width: 5px;
-    height: 5px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 1px 2px rgba(255,255,255,0.8);
-}
-
-/* 第二高光点 */
-.pet-eye-left::before,
-.pet-eye-right::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 7px;
-    width: 2px;
-    height: 2px;
-    background: rgba(255,255,255,0.6);
-    border-radius: 50%;
-}
-
-/* 鼻子 */
-.pet-nose {
-    position: absolute;
-    top: 22px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 7px;
-    background: linear-gradient(to bottom, #4a5568 0%, #2d3748 100%);
-    border-radius: 50% 50% 45% 45%;
-    box-shadow: 
-        inset 0 1px 2px rgba(255,255,255,0.2),
-        0 1px 3px rgba(0,0,0,0.2);
-}
-
-/* 嘴巴 */
-.pet-mouth {
-    position: absolute;
-    top: 28px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 22px;
-    height: 12px;
-    border: 3px solid #2d3748;
-    border-top: none;
-    border-radius: 0 0 25px 25px;
-    animation: smile 2.5s ease-in-out infinite;
-}
-
-/* 腮红 */
-.pet-blush-left,
-.pet-blush-right {
-    position: absolute;
-    top: 18px;
-    width: 16px;
-    height: 10px;
-    background: radial-gradient(ellipse at center, rgba(255, 182, 193, 0.5) 0%, transparent 70%);
-    border-radius: 50%;
-}
-.pet-blush-left {
-    left: -4px;
-}
-.pet-blush-right {
-    right: -4px;
-}
-
-/* 胡须 */
-.pet-whisker-left,
-.pet-whisker-right {
-    position: absolute;
-    top: 24px;
-    width: 18px;
-    height: 2px;
-    background: #4a5568;
-    border-radius: 1px;
-}
-.pet-whisker-left {
-    left: -12px;
-    transform: rotate(-8deg);
-}
-.pet-whisker-right {
-    right: -12px;
-    transform: rotate(8deg);
-}
-
-/* 额外胡须 */
-.pet-whisker-left-2,
-.pet-whisker-right-2 {
-    position: absolute;
-    top: 30px;
-    width: 15px;
-    height: 2px;
-    background: #4a5568;
-    border-radius: 1px;
-}
-.pet-whisker-left-2 {
-    left: -10px;
-    transform: rotate(5deg);
-}
-.pet-whisker-right-2 {
-    right: -10px;
-    transform: rotate(-5deg);
-}
-
-/* 猫耳朵 */
-.pet-cat .pet-ear-left,
-.pet-cat .pet-ear-right {
-    position: absolute;
-    top: -12px;
-    width: 20px;
-    height: 24px;
-    background: linear-gradient(135deg, #ffe082 0%, #ffd54f 50%, #ffca28 100%);
-    border-radius: 50% 50% 30% 30%;
-    box-shadow: 
-        inset 0 3px 6px rgba(255,255,255,0.4),
-        inset 0 -3px 6px rgba(0,0,0,0.08);
-}
-.pet-cat .pet-ear-left {
-    left: -4px;
-    transform: rotate(-20deg) skewX(-5deg);
-}
-.pet-cat .pet-ear-right {
-    right: -4px;
-    transform: rotate(20deg) skewX(5deg);
-}
-.pet-cat .pet-ear-left::after,
-.pet-cat .pet-ear-right::after {
-    content: '';
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    right: 4px;
-    bottom: 4px;
-    background: linear-gradient(135deg, #ffcdd2 0%, #f48fb1 100%);
-    border-radius: 50% 50% 30% 30%;
-    opacity: 0.8;
-}
-
-/* 狗嘴巴 */
-.pet-dog .pet-mouth {
-    width: 18px;
-    height: 10px;
-    border-radius: 0 0 15px 15px;
-}
-
-/* 兔子耳朵 */
-.pet-rabbit .pet-ear-left,
-.pet-rabbit .pet-ear-right {
-    position: absolute;
-    top: -30px;
-    width: 14px;
-    height: 35px;
-    background: linear-gradient(to bottom, #fff9c4 0%, #fff59d 50%, #ffe082 100%);
-    border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
-    animation: earWiggle 1.5s ease-in-out infinite;
-}
-.pet-rabbit .pet-ear-left {
-    left: 10px;
-    transform: rotate(-8deg);
-}
-.pet-rabbit .pet-ear-right {
-    right: 10px;
-    transform: rotate(8deg);
-}
-.pet-rabbit .pet-ear-left::after,
-.pet-rabbit .pet-ear-right::after {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 2px;
-    right: 2px;
-    bottom: 5px;
-    background: linear-gradient(to bottom, #ffcdd2 0%, #f48fb1 60%, transparent 100%);
-    border-radius: inherit;
-    opacity: 0.6;
-}
-
-@keyframes earWiggle {
-    0%, 100% { transform: rotate(-8deg); }
-    50% { transform: rotate(-3deg); }
-}
-
-.pet-rabbit .pet-ear-right {
-    animation: earWiggleRight 1.5s ease-in-out infinite;
-}
-
-@keyframes earWiggleRight {
-    0%, 100% { transform: rotate(8deg); }
-    50% { transform: rotate(3deg); }
-}
-
-/* 熊 */
-.pet-bear .pet-ear-left,
-.pet-bear .pet-ear-right {
-    position: absolute;
-    top: -8px;
-    width: 20px;
-    height: 20px;
-    background: linear-gradient(135deg, #8b4513 0%, #654321 50%, #3d2914 100%);
-    border-radius: 50%;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
-}
-.pet-bear .pet-ear-left {
-    left: -6px;
-}
-.pet-bear .pet-ear-right {
-    right: -6px;
-}
-.pet-bear .pet-body {
-    background: 
-        radial-gradient(ellipse at 40% 20%, #deb887 0%, transparent 40%),
-        radial-gradient(ellipse at 30% 35%, #d2691e 0%, transparent 35%),
-        linear-gradient(135deg, #cd853f 0%, #8b4513 50%, #5d3a1a 100%);
-}
-.pet-bear .pet-tail {
-    background: linear-gradient(135deg, #8b4513 0%, #5d3a1a 100%);
-}
-.pet-bear .pet-paw-front-left,
-.pet-bear .pet-paw-front-right {
-    background: linear-gradient(to bottom, #deb887 0%, #cd853f 100%);
-}
-
-/* 熊猫 */
-.pet-panda .pet-eye-left,
-.pet-panda .pet-eye-right {
-    background: #1a202c;
-    border-radius: 50%;
-}
-.pet-panda .pet-eye-left::before,
-.pet-panda .pet-eye-right::before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 8px;
-    height: 8px;
-    background: white;
-    border-radius: 50%;
-}
-.pet-panda .pet-eye-left::after,
-.pet-panda .pet-eye-right::after {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 4px;
-    height: 4px;
-    background: #1a202c;
-    border-radius: 50%;
-}
-.pet-panda .pet-ear-left,
-.pet-panda .pet-ear-right {
-    position: absolute;
-    top: -10px;
-    width: 18px;
-    height: 18px;
-    background: #1a202c;
-    border-radius: 50%;
-}
-.pet-panda .pet-ear-left {
-    left: -4px;
-}
-.pet-panda .pet-ear-right {
-    right: -4px;
-}
-.pet-panda .pet-body {
-    background: 
-        radial-gradient(ellipse at 40% 20%, #ffffff 0%, transparent 40%),
-        linear-gradient(135deg, #fafafa 0%, #e8e8e8 50%, #d0d0d0 100%);
-}
-.pet-panda .pet-tail {
-    background: #1a202c;
-}
-.pet-panda .pet-paw-front-left,
-.pet-panda .pet-paw-front-right {
-    background: #1a202c;
-}
-
-/* 仓鼠 */
-.pet-hamster .pet-ear-left,
-.pet-hamster .pet-ear-right {
-    position: absolute;
-    top: -5px;
-    width: 16px;
-    height: 16px;
-    background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
-    border-radius: 50%;
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
-}
-.pet-hamster .pet-ear-left {
-    left: 2px;
-}
-.pet-hamster .pet-ear-right {
-    right: 2px;
-}
-.pet-hamster .pet-body {
-    background: 
-        radial-gradient(ellipse at 40% 20%, #fff8e1 0%, transparent 40%),
-        radial-gradient(ellipse at 30% 35%, #ffecb3 0%, transparent 35%),
-        linear-gradient(135deg, #ffeaa7 0%, #ffd93d 50%, #ff9500 100%);
-    border-radius: 50%;
-}
-.pet-hamster .pet-tail {
-    background: linear-gradient(135deg, #ffd93d 0%, #ff9500 100%);
-}
-.pet-hamster .pet-paw-front-left,
-.pet-hamster .pet-paw-front-right {
-    background: linear-gradient(to bottom, #ffeaa7 0%, #ffd93d 100%);
-}
-.pet-hamster .pet-whisker-left,
-.pet-hamster .pet-whisker-right {
-    top: 22px;
-}
-
-/* 宠物选择器 */
-.pet-selector {
-    display: flex;
-    gap: 8px;
-    padding: 8px 12px;
-    background: rgba(255,255,255,0.95);
-    border-radius: 25px;
-    box-shadow: 
-        0 4px 15px rgba(0,0,0,0.1),
-        0 2px 5px rgba(0,0,0,0.05);
-    backdrop-filter: blur(10px);
-}
-.pet-option {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0.55;
-    background: rgba(255,255,255,0.8);
-}
-.pet-option:hover {
-    opacity: 1;
-    transform: scale(1.25) translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-.pet-option.active {
-    opacity: 1;
-    background: linear-gradient(135deg, #fff9c4 0%, #ffe082 100%);
-    box-shadow: 
-        0 0 12px rgba(255, 215, 0, 0.4),
-        0 4px 10px rgba(255, 215, 0, 0.2);
-    transform: scale(1.15);
-}
-
-/* 开灯状态 */
-.toggle-btn.on .pet-body {
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 0 0 40px rgba(251, 191, 36, 0.4), 0 4px 8px rgba(0,0,0,0.2);
-}
-.toggle-btn.on .pet-mouth {
-    animation: smileOpen 2s ease-in-out infinite;
-}
-
-@keyframes swing {
-    0%, 100% { transform: translateY(-50%) rotate(0deg); }
-    25% { transform: translateY(-50%) rotate(-10deg); }
-    75% { transform: translateY(-50%) rotate(10deg); }
-}
-
-@keyframes petBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-@keyframes blink {
-    0%, 90%, 100% { transform: scaleY(1); }
-    95% { transform: scaleY(0.1); }
-}
-
-@keyframes smile {
-    0%, 100% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.1); }
-}
-
-@keyframes smileOpen {
-    0%, 100% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.15); }
-}
+/* 电子宠物样式已移除 */
 
 @keyframes sparkle {
     0%, 100% { transform: scale(1); opacity: 1; }
@@ -3119,16 +2356,16 @@ html, body {
 </div>
 
 <!-- 自定义弹窗组件 - 在所有页面外面，确保任何页面都能使用 -->
-<div class="custom-modal" id="customModal">
+<div class="custom-modal" id="customModal" style="display: none;">
     <div class="custom-modal-overlay"></div>
     <div class="custom-modal-content">
         <div class="custom-modal-header">
-            <span class="custom-modal-icon" id="customModalIcon">📢</span>
-            <h3 id="customModalTitle">提示</h3>
+            <span class="custom-modal-icon" id="customModalIcon">❓</span>
+            <h3 id="customModalTitle">确认</h3>
             <button class="custom-modal-close" id="customModalClose">✕</button>
         </div>
         <div class="custom-modal-body">
-            <p id="customModalMessage"></p>
+            <p id="customModalMessage">确定要删除卡片「删除空白行」吗？</p>
             <input type="text" id="customModalInput" style="display:none;" placeholder="请输入内容">
         </div>
         <div class="custom-modal-footer">
@@ -3299,44 +2536,13 @@ html, body {
 <div class="main" id="mainPage" style="display: flex;">
 
   <!-- 悬浮横幅 -->
-  <div class="floating-banner" id="floatingBanner">
+  <div class="floating-banner hidden" id="floatingBanner">
     <span class="floating-banner-text">渠道千万条，正确第一条，转单不规范，明儿心慌慌</span>
     <button class="floating-banner-close" onclick="document.getElementById('floatingBanner').classList.add('hidden')">✕</button>
   </div>
-  <div class="toggle-btn" id="toggleBtn" style="inset: 407.81px auto auto 1257.35px;">
-    <div class="pet-container">
-        <div class="pet-display">
-            <div class="pet pet-fly active" id="currentPet" style="transform: rotate(-162.76deg);">
-                <!-- 蚂蚁身体 -->
-                <div class="fly-body">
-                    <!-- 头部 -->
-                    <div class="fly-head">
-                        <!-- 眼睛 -->
-                        <div class="fly-eye fly-eye-left"></div>
-                        <div class="fly-eye fly-eye-right"></div>
-                        <!-- 触角 -->
-                        <div class="fly-antenna fly-antenna-left"></div>
-                        <div class="fly-antenna fly-antenna-right"></div>
-                    </div>
-                    <!-- 胸部 -->
-                    <div class="fly-thorax"></div>
-                    <!-- 腹部 -->
-                    <div class="fly-abdomen"></div>
-                    <!-- 腿 -->
-                    <div class="fly-leg fly-leg1"></div>
-                    <div class="fly-leg fly-leg2"></div>
-                    <div class="fly-leg fly-leg3"></div>
-                    <div class="fly-leg fly-leg4"></div>
-                    <div class="fly-leg fly-leg5"></div>
-                    <div class="fly-leg fly-leg6"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-  </div>
   <div class="content animation-slide">
-    <div class="tabs" id="tabs" style="transform: translateY(0px) scale(1);"><div class="tabs-progress-bg" id="tabs-progress-bg" style="width: 0%; background: linear-gradient(90deg, rgb(43, 238, 43), rgb(51, 238, 44), rgb(59, 239, 46), rgb(67, 239, 48), rgb(75, 240, 49), rgb(83, 240, 51), rgb(90, 240, 53), rgb(98, 241, 55), rgb(106, 241, 56), rgb(113, 242, 58), rgb(121, 242, 60), rgb(128, 242, 62), rgb(135, 243, 63), rgb(142, 243, 65), rgb(149, 244, 67), rgb(156, 244, 68), rgb(163, 244, 70), rgb(170, 245, 72), rgb(176, 245, 74), rgb(183, 245, 76), rgb(190, 246, 77), rgb(196, 246, 79), rgb(202, 246, 81), rgb(208, 247, 83), rgb(214, 247, 85), rgb(220, 247, 86), rgb(226, 248, 88), rgb(232, 248, 90), rgb(238, 248, 92), rgb(243, 248, 94), rgb(249, 249, 95), rgb(249, 244, 97), rgb(249, 239, 99), rgb(250, 235, 101), rgb(250, 230, 103), rgb(250, 226, 105), rgb(250, 222, 107), rgb(251, 217, 108), rgb(251, 213, 110), rgb(251, 209, 112), rgb(251, 206, 114), rgb(252, 202, 116), rgb(252, 198, 118), rgb(252, 195, 120), rgb(252, 191, 122), rgb(252, 188, 124), rgb(253, 185, 126), rgb(253, 182, 127), rgb(253, 179, 129), rgb(253, 176, 131), rgb(253, 173, 133), rgb(254, 171, 135), rgb(254, 168, 137), rgb(254, 166, 139), rgb(254, 164, 141), rgb(254, 162, 143), rgb(254, 160, 145), rgb(255, 158, 147), rgb(255, 156, 149), rgb(255, 154, 151), rgb(255, 153, 153)); opacity: 0.2;"></div><div class="tab home-tab active">🏠 首页</div><div class="tab" data-tab-index="0" data-tab-id="小包数据" draggable="true">小包数据<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '小包数据')">×</span></div><div class="tab" data-tab-index="1" data-tab-id="全量" draggable="true">全量<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '全量')">×</span></div><div class="tab" data-tab-index="2" data-tab-id="单量" draggable="true">单量<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '单量')">×</span></div><div class="tab" data-tab-index="3" data-tab-id="仓储 - 七月份" draggable="true">仓储 - 七月份<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '仓储 - 七月份')">×</span></div><div class="tab" data-tab-index="4" data-tab-id="异常登记" draggable="true">异常登记<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '异常登记')">×</span></div></div>
-    <div class="pages" id="pages"><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/coJEsFw0SGEz" data-id="小包数据" id="iframe-小包数据" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjHcYd3KIRkA" data-id="全量" id="iframe-全量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cmCAFEVsjJmy" data-id="仓储 - 七月份" id="iframe-仓储 - 七月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/coJEsFw0SGEz" data-id="小包数据" id="iframe-小包数据" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjHcYd3KIRkA" data-id="全量" id="iframe-全量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cmCAFEVsjJmy" data-id="仓储 - 七月份" id="iframe-仓储 - 七月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cdiNjSnC4i2E" data-id="单量" id="iframe-单量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="异常登记" style="display: none;"><div class="document-viewer" id="viewer-异常登记" data-tab-id="异常登记"><div class="viewer-content"><iframe src="https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYWBBxTkl" data-id="异常登记" id="iframe-异常登记" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据汇总夜" style="display: none;"><div class="document-viewer" id="viewer-小包数据汇总夜" data-tab-id="小包数据汇总夜"><div class="viewer-content"><iframe src="https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&amp;tab=000001" data-id="小包数据汇总夜" id="iframe-小包数据汇总夜" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div></div>
+    <div class="tabs" id="tabs" style="transform: translateY(0px) scale(1);"><div class="tabs-progress-bg" id="tabs-progress-bg" style="width: 0%; background: linear-gradient(90deg, rgb(43, 238, 43), rgb(51, 238, 44), rgb(59, 239, 46), rgb(67, 239, 48), rgb(75, 240, 49), rgb(83, 240, 51), rgb(90, 240, 53), rgb(98, 241, 55), rgb(106, 241, 56), rgb(113, 242, 58), rgb(121, 242, 60), rgb(128, 242, 62), rgb(135, 243, 63), rgb(142, 243, 65), rgb(149, 244, 67), rgb(156, 244, 68), rgb(163, 244, 70), rgb(170, 245, 72), rgb(176, 245, 74), rgb(183, 245, 76), rgb(190, 246, 77), rgb(196, 246, 79), rgb(202, 246, 81), rgb(208, 247, 83), rgb(214, 247, 85), rgb(220, 247, 86), rgb(226, 248, 88), rgb(232, 248, 90), rgb(238, 248, 92), rgb(243, 248, 94), rgb(249, 249, 95), rgb(249, 244, 97), rgb(249, 239, 99), rgb(250, 235, 101), rgb(250, 230, 103), rgb(250, 226, 105), rgb(250, 222, 107), rgb(251, 217, 108), rgb(251, 213, 110), rgb(251, 209, 112), rgb(251, 206, 114), rgb(252, 202, 116), rgb(252, 198, 118), rgb(252, 195, 120), rgb(252, 191, 122), rgb(252, 188, 124), rgb(253, 185, 126), rgb(253, 182, 127), rgb(253, 179, 129), rgb(253, 176, 131), rgb(253, 173, 133), rgb(254, 171, 135), rgb(254, 168, 137), rgb(254, 166, 139), rgb(254, 164, 141), rgb(254, 162, 143), rgb(254, 160, 145), rgb(255, 158, 147), rgb(255, 156, 149), rgb(255, 154, 151), rgb(255, 153, 153)); opacity: 0.2;"></div><div class="tab home-tab active">🏠 首页</div><div class="tab" data-tab-index="0" data-tab-id="小包数据" draggable="true">小包数据<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '小包数据')">×</span></div><div class="tab" data-tab-index="1" data-tab-id="专线 - 七月份" draggable="true">专线 - 七月份<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '专线 - 七月份')">×</span></div><div class="tab" data-tab-index="2" data-tab-id="全量" draggable="true">全量<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '全量')">×</span></div><div class="tab" data-tab-index="3" data-tab-id="仓储 - 七月份" draggable="true">仓储 - 七月份<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '仓储 - 七月份')">×</span></div><div class="tab" data-tab-index="4" data-tab-id="单量" draggable="true">单量<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '单量')">×</span></div><div class="tab" data-tab-index="5" data-tab-id="1" draggable="true">1<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '1')">×</span></div><div class="tab" data-tab-index="6" data-tab-id="每日留仓数量" draggable="true">每日留仓数量<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '每日留仓数量')">×</span></div><div class="tab" data-tab-index="7" data-tab-id="小包数据汇总夜" draggable="true">小包数据汇总夜<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '小包数据汇总夜')">×</span></div></div>
+    <div class="pages" id="pages"><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/coJEsFw0SGEz" data-id="小包数据" id="iframe-小包数据" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjHcYd3KIRkA" data-id="全量" id="iframe-全量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cmCAFEVsjJmy" data-id="仓储 - 七月份" id="iframe-仓储 - 七月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/coJEsFw0SGEz" data-id="小包数据" id="iframe-小包数据" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjHcYd3KIRkA" data-id="全量" id="iframe-全量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cmCAFEVsjJmy" data-id="仓储 - 七月份" id="iframe-仓储 - 七月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cdiNjSnC4i2E" data-id="单量" id="iframe-单量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="异常登记" style="display: none;"><div class="document-viewer" id="viewer-异常登记" data-tab-id="异常登记"><div class="viewer-content"><iframe src="https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYWBBxTkl" data-id="异常登记" id="iframe-异常登记" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据汇总夜" style="display: none;"><div class="document-viewer" id="viewer-小包数据汇总夜" data-tab-id="小包数据汇总夜"><div class="viewer-content"><iframe src="https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&amp;tab=000001" data-id="小包数据汇总夜" id="iframe-小包数据汇总夜" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="出库单" style="display: none;"><div class="document-viewer" id="viewer-出库单" data-tab-id="出库单"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/caRQJ7Gz4GYG" data-id="出库单" id="iframe-出库单" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="速量 - 六月份" style="display: none;"><div class="document-viewer" id="viewer-速量 - 六月份" data-tab-id="速量 - 六月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjyFHcqAyGuJ" data-id="速量 - 六月份" id="iframe-速量 - 六月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="人效" style="display: none;"><div class="document-viewer" id="viewer-人效" data-tab-id="人效"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/coByacPZqwoP" data-id="人效" id="iframe-人效" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 六月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 六月份" data-tab-id="仓储 - 六月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/ceSENEnBJ4ir" data-id="仓储 - 六月份" id="iframe-仓储 - 六月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="专线 - 六月份" style="display: none;"><div class="document-viewer" id="viewer-专线 - 六月份" data-tab-id="专线 - 六月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cpoXE2lCEZje" data-id="专线 - 六月份" id="iframe-专线 - 六月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cdiNjSnC4i2E" data-id="单量" id="iframe-单量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="泡比" style="display: none;"><div class="document-viewer" id="viewer-泡比" data-tab-id="泡比"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjZZGlQnBtmm" data-id="泡比" id="iframe-泡比" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="车辆" style="display: none;"><div class="document-viewer" id="viewer-车辆" data-tab-id="车辆"><div class="viewer-content"><iframe src="http://uc.dlysjg.td.gd.gov.cn/#/user_login" data-id="车辆" id="iframe-车辆" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/coJEsFw0SGEz" data-id="小包数据" id="iframe-小包数据" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据汇总夜" style="display: none;"><div class="document-viewer" id="viewer-小包数据汇总夜" data-tab-id="小包数据汇总夜"><div class="viewer-content"><iframe src="https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&amp;tab=000001" data-id="小包数据汇总夜" id="iframe-小包数据汇总夜" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储" style="display: none;"><div class="document-viewer" id="viewer-仓储" data-tab-id="仓储"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cnLDizeYKJ4K" data-id="仓储" id="iframe-仓储" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-全量 - 七月份" data-tab-id="全量 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjHcYd3KIRkA" data-id="全量 - 七月份" id="iframe-全量 - 七月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/coJEsFw0SGEz" data-id="小包数据" id="iframe-小包数据" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="专线 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-专线 - 七月份" data-tab-id="专线 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cd3DiyOuerT8" data-id="专线 - 七月份" id="iframe-专线 - 七月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjHcYd3KIRkA" data-id="全量" id="iframe-全量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cmCAFEVsjJmy" data-id="仓储 - 七月份" id="iframe-仓储 - 七月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="异常登记" style="display: none;"><div class="document-viewer" id="viewer-异常登记" data-tab-id="异常登记"><div class="viewer-content"><iframe src="https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYWBBxTkl" data-id="异常登记" id="iframe-异常登记" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cdiNjSnC4i2E" data-id="单量" id="iframe-单量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="1" style="display: none;"><div class="document-viewer" id="viewer-1" data-tab-id="1"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cd801DIXtOZx" data-id="1" id="iframe-1" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="每日留仓数量" style="display: none;"><div class="document-viewer" id="viewer-每日留仓数量" data-tab-id="每日留仓数量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/clrDVXP1277F" data-id="每日留仓数量" id="iframe-每日留仓数量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/coJEsFw0SGEz" data-id="小包数据" id="iframe-小包数据" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="专线 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-专线 - 七月份" data-tab-id="专线 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cd3DiyOuerT8" data-id="专线 - 七月份" id="iframe-专线 - 七月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjHcYd3KIRkA" data-id="全量" id="iframe-全量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cmCAFEVsjJmy" data-id="仓储 - 七月份" id="iframe-仓储 - 七月份" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cdiNjSnC4i2E" data-id="单量" id="iframe-单量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="1" style="display: none;"><div class="document-viewer" id="viewer-1" data-tab-id="1"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cd801DIXtOZx" data-id="1" id="iframe-1" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="每日留仓数量" style="display: none;"><div class="document-viewer" id="viewer-每日留仓数量" data-tab-id="每日留仓数量"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/clrDVXP1277F" data-id="每日留仓数量" id="iframe-每日留仓数量" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据汇总夜" style="display: none;"><div class="document-viewer" id="viewer-小包数据汇总夜" data-tab-id="小包数据汇总夜"><div class="viewer-content"><iframe src="https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&amp;tab=000001" data-id="小包数据汇总夜" id="iframe-小包数据汇总夜" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="车辆" style="display: none;"><div class="document-viewer" id="viewer-车辆" data-tab-id="车辆"><div class="viewer-content"><iframe src="http://uc.dlysjg.td.gd.gov.cn/#/user_login" data-id="车辆" id="iframe-车辆" class="viewer-iframe" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial;"></iframe></div><div class="viewer-overlay"></div></div></div></div>
     
     <div id="remove-empty-rows-page" class="page" style="display:none; padding:20px; height:100%; overflow-y:auto; background:#f0f2f5;">
       <div style="max-width: 800px; margin: 0 auto;">
@@ -3403,7 +2609,7 @@ html, body {
                 <span>学又学不会，睡又睡不着，干又干不完</span>
             </div>
             <div style="display: flex; gap: 16px; align-items: center;">
-                <div class="live-clock" id="liveClock">⏱️ 2026.07.03 周五 01:05:45</div>
+                <div class="live-clock" id="liveClock">⏱️ 2026.07.03 周五 20:55:55</div>
                 <div class="date-badge">    </div>
                 <button id="export-code-btn" style="padding: 8px 16px; background: #67c23a; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                     <span>📥</span><span>导出代码</span>
@@ -3412,30 +2618,30 @@ html, body {
         </div>
         <div class="func-grid">
             <div class="func-card" id="warehouse" draggable="true" data-index="0"><span class="func-emoji">🏭</span><span>仓储</span></div>
-            <div class="func-card" id="daily-storage" draggable="true" data-index="1"><span class="func-emoji">📦</span><span>每日留仓数量</span></div>
-            <div class="func-card" id="full" draggable="true" data-index="2"><span class="func-emoji">📊</span><span>全量</span></div>
-            <div class="func-card" id="order-count" draggable="true" data-index="3"><span class="func-emoji">📝</span><span>单量</span></div><div class="func-card" id="line" draggable="true" data-index="4"><span class="func-emoji">🚀</span><span>专线</span></div>
-            <div class="func-card" id="speed" draggable="true" data-index="5"><span class="func-emoji">⚡</span><span>速量</span></div>
-            <div class="func-card" id="bubble-ratio" draggable="true" data-index="6"><span class="func-emoji">📊</span><span>泡比</span></div>
-            <div class="func-card" id="package-count" draggable="true" data-index="7"><span class="func-emoji">📦</span><span>包数</span></div>
+            <div class="func-card" id="speed" draggable="true" data-index="1"><span class="func-emoji">⚡</span><span>速量</span></div><div class="func-card" id="line" draggable="true" data-index="2"><span class="func-emoji">🚀</span><span>专线</span></div><div class="func-card" id="order-count" draggable="true" data-index="3"><span class="func-emoji">📝</span><span>单量</span></div><div class="func-card" id="custom-1783083282546" draggable="true" data-index="4"><span class="func-emoji">⭐</span><span>文字版单量</span></div><div class="func-card" id="package-count" draggable="true" data-index="5"><span class="func-emoji">📦</span><span>包数</span></div><div class="func-card" id="daily-storage" draggable="true" data-index="6"><span class="func-emoji">📦</span><span>每日留仓数量</span></div><div class="func-card" id="bubble-ratio" draggable="true" data-index="7"><span class="func-emoji">📊</span><span>泡比</span></div><div class="func-card" id="person-efficiency" draggable="true" data-index="8"><span class="func-emoji">👤</span><span>人效</span></div><div class="func-card" id="small-package" draggable="true" data-index="9"><span class="func-emoji">📦📊</span><span>小包数据</span></div><div class="func-card" id="small-package-night" draggable="true" data-index="10"><span class="func-emoji">🌙</span><span>小包数据汇总夜</span></div><div class="func-card" id="full" draggable="true" data-index="11"><span class="func-emoji">📊</span><span>全量</span></div>
             
-            <div class="func-card" id="person-efficiency" draggable="true" data-index="8"><span class="func-emoji">👤</span><span>人效</span></div>
-            <div class="func-card" id="small-package" draggable="true" data-index="9"><span class="func-emoji">📦📊</span><span>小包数据</span></div>
-            <div class="func-card" id="illustration" draggable="true" data-index="10"><span class="func-emoji">🖼️</span><span>插图</span></div>
-            <div class="func-card" id="trans-order" draggable="true" data-index="11"><span class="func-emoji">📦</span><span>转单</span></div>
-            <div class="func-card" id="zip-search" draggable="true" data-index="12"><span class="func-emoji">📍</span><span>邮政编码查询</span></div>
-            <div class="func-card" id="channel-search" draggable="true" data-index="13"><span class="func-emoji">🔀</span><span>渠道查询</span></div>
-            <div class="func-card" id="name-register" draggable="true" data-index="14"><span class="func-emoji">📋</span><span>异常登记</span></div>
-            <div class="func-card" id="recheck" draggable="true" data-index="15"><span class="func-emoji">📐</span><span>复测</span></div>
-            <div class="func-card" id="check-arrival" draggable="true" data-index="16"><span class="func-emoji">📦📦</span><span>其他客户到货量</span></div>
-            <div class="func-card" id="exception-type" draggable="true" data-index="17"><span class="func-emoji">⚠️</span><span>异常类型</span></div>
-            <div class="func-card" id="missing-data" draggable="true" data-index="18"><span class="func-emoji">📉</span><span>漏数据</span></div>
-            <div class="func-card" id="cost-table" draggable="true" data-index="19"><span class="func-emoji">💰</span><span>成本表</span></div>
-            <div class="func-card" id="exception-register" draggable="true" data-index="20"><span class="func-emoji">📝</span><span>异常登记</span></div>
-            <div class="func-card" id="remove-empty-rows" draggable="true" data-index="21"><span class="func-emoji">🗑️</span><span>删除空白行</span></div>
-            <div class="func-card" id="vehicle" draggable="true" data-index="22"><span class="func-emoji">🚗</span><span>车辆</span></div>
-            <div class="func-card" id="outbound-order" draggable="true" data-index="23"><span class="func-emoji">📤</span><span>出库单</span></div>
-            <div class="func-card" id="small-package-night" draggable="true" data-index="24"><span class="func-emoji">🌙</span><span>小包数据汇总夜</span></div>
+            
+            
+            
+            
+            
+            
+            
+            <div class="func-card" id="illustration" draggable="true" data-index="12"><span class="func-emoji">🖼️</span><span>插图</span></div>
+            <div class="func-card" id="trans-order" draggable="true" data-index="13"><span class="func-emoji">📦</span><span>转单</span></div>
+            <div class="func-card" id="zip-search" draggable="true" data-index="14"><span class="func-emoji">📍</span><span>邮政编码查询</span></div>
+            
+            <div class="func-card" id="channel-search" draggable="true" data-index="15"><span class="func-emoji">🔀</span><span>渠道查询</span></div><div class="func-card" id="name-register" draggable="true" data-index="16"><span class="func-emoji">📋</span><span>异常登记</span></div>
+            <div class="func-card" id="recheck" draggable="true" data-index="17"><span class="func-emoji">📐</span><span>复测</span></div>
+            <div class="func-card" id="check-arrival" draggable="true" data-index="18"><span class="func-emoji">📦📦</span><span>其他客户到货量</span></div>
+            <div class="func-card" id="exception-type" draggable="true" data-index="19"><span class="func-emoji">⚠️</span><span>异常类型</span></div>
+            <div class="func-card" id="missing-data" draggable="true" data-index="20"><span class="func-emoji">📉</span><span>漏数据</span></div>
+            <div class="func-card" id="cost-table" draggable="true" data-index="21"><span class="func-emoji">💰</span><span>成本表</span></div>
+            <div class="func-card" id="exception-register" draggable="true" data-index="22"><span class="func-emoji">📝</span><span>异常登记</span></div>
+            
+            <div class="func-card" id="vehicle" draggable="true" data-index="23"><span class="func-emoji">🚗</span><span>车辆</span></div>
+            <div class="func-card" id="outbound-order" draggable="true" data-index="24"><span class="func-emoji">📤</span><span>出库单</span></div>
+            
             <div class="func-card add-card" id="add-new-card"><span class="func-emoji">➕</span><span>添加卡片</span></div>
             <div class="zip-subgroup" id="zip-subgroup" style="display: none;">
                 <div class="zip-subcard" id="zip-btn1">🇦🇺 澳洲地址查询</div>
@@ -3443,7 +2649,7 @@ html, body {
             </div>
         </div>
         
-        <div class="context-menu" id="context-menu" style="left: 340.969px; top: 524.667px;">
+        <div class="context-menu" id="context-menu" style="left: 192.479px; top: 524.667px;">
             <div class="context-menu-item" id="menu-edit-link">✏️ 修改链接</div>
             <div class="context-menu-item" id="menu-open-link">🔗 在新窗口打开</div>
             <div class="context-menu-item separator"></div>
@@ -3691,7 +2897,7 @@ html, body {
       </div>
     </div>
 
-    <div id="vehicle-page" class="page" style="display:none; padding:20px; overflow-y:auto; height:100%;">
+    <div id="vehicle-page" class="page" style="display: none; padding: 20px; overflow-y: auto; height: 100%;">
       <div style="max-width:1200px; margin:0 auto;">
         <h2 style="color:#333; margin-bottom:20px; font-size:24px; display:flex; align-items:center; gap:10px;">
           🚗 车辆管理系统
@@ -3794,7 +3000,7 @@ html, body {
           </table>
         </div>
         
-        <div id="vehicleModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center; z-index:9999;">
+        <div id="vehicleModal" style="position: fixed; inset: 0px; background: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: center; z-index: 9999;">
           <div style="background:white; border-radius:12px; padding:24px; width:400px;">
             <h3 style="margin:0 0 20px 0; font-size:18px; color:#333;">{{isEdit ? '编辑车辆' : '添加车辆'}}</h3>
             
@@ -4355,7 +3561,6 @@ const App = {
     this.switchTab(this.activeId);
     this.initIllustrationFunction();
     this.initUserPanel();
-    this.initDragPet();
   },
 
   initUserPanel() {
@@ -5652,211 +4857,7 @@ const App = {
     this.renderTabs();
   },
 
-  initDragPet() {
-    const toggleBtn = document.getElementById('toggleBtn');
-    if (!toggleBtn) return;
-    
-    let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
-    let mouseX = 0;
-    let mouseY = 0;
-    let isFollowingMouse = false;
-    let followMouseInterval = null;
-    
-    // 记录鼠标位置
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
-    
-    const handleMouseDown = (e) => {
-      isDragging = true;
-      const rect = toggleBtn.getBoundingClientRect();
-      offsetX = e.clientX - rect.left;
-      offsetY = e.clientY - rect.top;
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      e.preventDefault();
-    };
-    
-    const handleMouseMove = (e) => {
-      if (!isDragging) return;
-      
-      let newX = e.clientX - offsetX;
-      let newY = e.clientY - offsetY;
-      
-      const maxX = window.innerWidth - toggleBtn.offsetWidth;
-      const maxY = window.innerHeight - toggleBtn.offsetHeight;
-      
-      newX = Math.max(0, Math.min(newX, maxX));
-      newY = Math.max(0, Math.min(newY, maxY));
-      
-      toggleBtn.style.left = newX + 'px';
-      toggleBtn.style.top = newY + 'px';
-      toggleBtn.style.bottom = 'auto';
-    };
-    
-    const handleMouseUp = () => {
-      isDragging = false;
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-    
-    toggleBtn.addEventListener('mousedown', handleMouseDown);
-    
-    // 开始蚂蚁自动移动
-    this.startFlyMovement(toggleBtn, () => mouseX, () => mouseY, (val) => isFollowingMouse = val);
-  },
-  
-  flyInterval: null,
-  flyTargetX: 100,
-  flyTargetY: 200,
-  isFlyMoving: false,
-  flyCurrentRotation: 0,
-  
-  startFlyMovement(toggleBtn, getMouseX, getMouseY, setFollowing) {
-    if (this.flyInterval) return;
-    
-    if (!toggleBtn) return;
-    
-    this.isFlyMoving = true;
-    
-    // 初始化位置
-    toggleBtn.style.left = '100px';
-    toggleBtn.style.top = '200px';
-    toggleBtn.style.right = 'auto';
-    toggleBtn.style.bottom = 'auto';
-    
-    let isFollowingMouse = false;
-    let followAnimationFrame = null;
-    let isMouseHovering = false;
-    
-    const stopFollowing = () => {
-      isFollowingMouse = false;
-      setFollowing(false);
-      if (followAnimationFrame) {
-        cancelAnimationFrame(followAnimationFrame);
-        followAnimationFrame = null;
-      }
-      // 只有鼠标不在hover时才决定下一次移动
-      if (!isMouseHovering) {
-        decideNextMove();
-      }
-    };
-    
-    const followMouse = () => {
-      if (!isFollowingMouse) return;
-      
-      const targetX = getMouseX() - 35;
-      const targetY = getMouseY() - 20;
-      const currentX = parseFloat(toggleBtn.style.left) || 100;
-      const currentY = parseFloat(toggleBtn.style.top) || 200;
-      
-      // 缓慢靠近鼠标
-      const newX = currentX + (targetX - currentX) * 0.08;
-      const newY = currentY + (targetY - currentY) * 0.08;
-      
-      toggleBtn.style.left = newX + 'px';
-      toggleBtn.style.top = newY + 'px';
-      
-      // 让蚂蚁朝向鼠标 - 头朝前面
-      const angle = Math.atan2(targetY - currentY, targetX - currentX) * 180 / Math.PI;
-      this.flyCurrentRotation = angle;
-      
-      const flyPet = toggleBtn.querySelector('.pet-fly');
-      if (flyPet) {
-        flyPet.style.transform = `rotate(${this.flyCurrentRotation}deg)`;
-      }
-      
-      followAnimationFrame = requestAnimationFrame(followMouse);
-    };
-    
-    const decideNextMove = () => {
-      if (!this.isFlyMoving) return;
-      if (isMouseHovering) return; // 鼠标hover时不随机移动
-      
-      isFollowingMouse = false;
-      setFollowing(false);
-      // 随机生成新的目标位置
-      const padding = 50;
-      const maxX = window.innerWidth - toggleBtn.offsetWidth - padding;
-      const maxY = window.innerHeight - toggleBtn.offsetHeight - padding;
-      
-      this.flyTargetX = Math.random() * maxX + padding / 2;
-      this.flyTargetY = Math.random() * maxY + padding / 2;
-      
-      // 平滑移动到新位置
-      this.moveFlySmoothly(toggleBtn, this.flyTargetX, this.flyTargetY, decideNextMove);
-    };
-    
-    // 鼠标hover时跟随
-    toggleBtn.addEventListener('mouseenter', () => {
-      isMouseHovering = true;
-      isFollowingMouse = true;
-      setFollowing(true);
-      if (followAnimationFrame) {
-        cancelAnimationFrame(followAnimationFrame);
-      }
-      followMouse();
-    });
-    
-    // 鼠标离开时停止跟随
-    toggleBtn.addEventListener('mouseleave', () => {
-      isMouseHovering = false;
-      stopFollowing();
-    });
-    
-    // 开始第一次移动
-    setTimeout(decideNextMove, 1000);
-  },
-  
-  moveFlySmoothly(toggleBtn, targetX, targetY, callback) {
-    const currentX = parseFloat(toggleBtn.style.left) || 100;
-    const currentY = parseFloat(toggleBtn.style.top) || 200;
-    
-    // 计算朝向目标的角度 - 苍蝇默认朝右，所以直接使用这个角度
-    const angle = Math.atan2(targetY - currentY, targetX - currentX) * 180 / Math.PI;
-    this.flyCurrentRotation = angle;
-    
-    const duration = 3000 + Math.random() * 3000; // 3-6秒移动时间
-    const startTime = Date.now();
-    
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      // 缓动效果 - 更平滑的慢进慢出
-      const easeInOut = progress < 0.5 
-        ? 2 * progress * progress 
-        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-      
-      const newX = currentX + (targetX - currentX) * easeInOut;
-      const newY = currentY + (targetY - currentY) * easeInOut;
-      
-      toggleBtn.style.left = newX + 'px';
-      toggleBtn.style.top = newY + 'px';
-      
-      // 应用旋转，让苍蝇朝向移动方向
-      const flyPet = toggleBtn.querySelector('.pet-fly');
-      if (flyPet) {
-        flyPet.style.transform = `rotate(${this.flyCurrentRotation}deg)`;
-      }
-      
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else if (callback) {
-        // 移动完成后，等待一段时间再决定下一次移动
-        setTimeout(callback, 1000 + Math.random() * 2000);
-      }
-    };
-    
-    animate();
-  },
-  
-
-
-  openPage(name, url) {
+openPage(name, url) {
     try {
       const id = name;
       
@@ -8460,5 +7461,42 @@ function selectFullMonth(name, url) {
           <button class="floating-btn" title="文档工具">⚙️</button>
         </div>
     
+    
+  
+
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
     
   </body></html>
