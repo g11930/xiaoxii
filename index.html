@@ -2573,6 +2573,240 @@ html, body {
 .sys-settings-info-row-value.blue {
     color: #409eff;
 }
+
+/* EXPORT_CSS_START */
+/* 导出预览弹窗样式 */
+.export-preview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100000;
+    backdrop-filter: blur(4px);
+}
+.export-preview-modal.show {
+    display: flex;
+}
+.export-preview-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+.export-preview-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 24px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.export-preview-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+.export-preview-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.export-preview-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+.export-preview-body {
+    padding: 24px;
+}
+.export-preview-section {
+    margin-bottom: 20px;
+}
+.export-preview-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.export-preview-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+}
+.export-preview-stat {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+}
+.export-preview-stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #4f46e5;
+    margin-bottom: 4px;
+}
+.export-preview-stat-label {
+    font-size: 12px;
+    color: #6b7280;
+}
+.export-preview-list {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 12px;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+}
+.export-preview-list-item {
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    background: white;
+    font-size: 13px;
+    color: #374151;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.export-preview-list-item:last-child {
+    margin-bottom: 0;
+}
+.export-preview-list-count {
+    background: #667eea;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.export-preview-footer {
+    padding: 16px 24px;
+    background: #f9fafb;
+    border-radius: 0 0 16px 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid #e5e7eb;
+}
+.export-preview-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.export-preview-btn-cancel {
+    background: #e5e7eb;
+    color: #4b5563;
+}
+.export-preview-btn-cancel:hover {
+    background: #d1d5db;
+}
+.export-preview-btn-confirm {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    flex: 1;
+}
+.export-preview-btn-confirm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+.export-preview-tip {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 10px;
+    padding: 10px;
+    background: #fef3c7;
+    border-radius: 8px;
+    border: 1px solid #fde68a;
+}
+.export-preview-tip strong {
+    color: #92400e;
+}
+/* 导出进度弹窗 */
+.export-progress-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100001;
+}
+.export-progress-modal.show {
+    display: flex;
+}
+.export-progress-content {
+    background: white;
+    border-radius: 16px;
+    padding: 40px 50px;
+    text-align: center;
+    min-width: 350px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+.export-progress-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+.export-progress-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 12px;
+}
+.export-progress-bar {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+.export-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+.export-progress-text {
+    font-size: 14px;
+    color: #6b7280;
+}
+.export-success-check {
+    font-size: 64px;
+    margin-bottom: 16px;
+    animation: popIn 0.4s ease;
+}
+@keyframes popIn {
+    0% { transform: scale(0); }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+/* EXPORT_CSS_END */
 </style>
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.3.0/dist/exceljs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
@@ -2666,7 +2900,7 @@ html, body {
             <button class="custom-modal-close" id="customModalClose">✕</button>
         </div>
         <div class="custom-modal-body">
-            <p id="customModalMessage">确定要删除卡片「转单」吗？</p>
+            <p id="customModalMessage">确定要删除卡片「其他客户到货量」吗？</p>
             <input type="text" id="customModalInput" style="display:none;" placeholder="请输入内容">
         </div>
         <div class="custom-modal-footer">
@@ -2799,6 +3033,9 @@ html, body {
                 <span class="sys-settings-info-row-value" id="info-storage">获取中...</span>
             </div>
         </div>
+        <div class="sys-settings-group">
+            <button onclick="window.open('/admin/login.html', '_blank')" style="width:100%;padding:14px;border:none;border-radius:10px;background:#67c23a;color:#fff;font-size:16px;cursor:pointer;transition:all 0.2s;">🖥️ 进入服务器面板</button>
+        </div>
     </div>
 </div>
 
@@ -2879,6 +3116,7 @@ html, body {
                 <button class="btn-cancel" id="settingsCancel">取消</button>
                 <button class="btn-save" id="settingsSave">保存</button>
                 <button class="btn-clear" id="clearStorage">清除存储数据</button>
+                <button class="btn-save" style="background:#67c23a;" onclick="window.open('/admin/login.html', '_blank')">🖥️ 进入服务器面板</button>
             </div>
         </div>
     </div>
@@ -2928,8 +3166,8 @@ html, body {
     <button class="floating-banner-close" onclick="document.getElementById('floatingBanner').classList.add('hidden')">✕</button>
   </div>
   <div class="content animation-slide">
-    <div class="tabs" id="tabs" style="transform: translateY(0px) scale(1);"><div class="tabs-progress-bg" id="tabs-progress-bg" style="width: 0%; background: linear-gradient(90deg, rgb(43, 238, 43), rgb(51, 238, 44), rgb(59, 239, 46), rgb(67, 239, 48), rgb(75, 240, 49), rgb(83, 240, 51), rgb(90, 240, 53), rgb(98, 241, 55), rgb(106, 241, 56), rgb(113, 242, 58), rgb(121, 242, 60), rgb(128, 242, 62), rgb(135, 243, 63), rgb(142, 243, 65), rgb(149, 244, 67), rgb(156, 244, 68), rgb(163, 244, 70), rgb(170, 245, 72), rgb(176, 245, 74), rgb(183, 245, 76), rgb(190, 246, 77), rgb(196, 246, 79), rgb(202, 246, 81), rgb(208, 247, 83), rgb(214, 247, 85), rgb(220, 247, 86), rgb(226, 248, 88), rgb(232, 248, 90), rgb(238, 248, 92), rgb(243, 248, 94), rgb(249, 249, 95), rgb(249, 244, 97), rgb(249, 239, 99), rgb(250, 235, 101), rgb(250, 230, 103), rgb(250, 226, 105), rgb(250, 222, 107), rgb(251, 217, 108), rgb(251, 213, 110), rgb(251, 209, 112), rgb(251, 206, 114), rgb(252, 202, 116), rgb(252, 198, 118), rgb(252, 195, 120), rgb(252, 191, 122), rgb(252, 188, 124), rgb(253, 185, 126), rgb(253, 182, 127), rgb(253, 179, 129), rgb(253, 176, 131), rgb(253, 173, 133), rgb(254, 171, 135), rgb(254, 168, 137), rgb(254, 166, 139), rgb(254, 164, 141), rgb(254, 162, 143), rgb(254, 160, 145), rgb(255, 158, 147), rgb(255, 156, 149), rgb(255, 154, 151), rgb(255, 153, 153)); opacity: 0.2;"></div><div class="tab home-tab active">🏠 首页</div></div>
-    <div class="pages" id="pages"><div class="page" id="小包数据" style="display: none;"></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"></div><div class="page" id="小包数据" style="display: none;"></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"></div><div class="page" id="单量" style="display: none;"></div><div class="page" id="异常登记" style="display: none;"><div class="document-viewer" id="viewer-异常登记" data-tab-id="异常登记"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据汇总夜" style="display: none;"></div><div class="page" id="出库单" style="display: none;"></div><div class="page" id="速量 - 六月份" style="display: none;"><div class="document-viewer" id="viewer-速量 - 六月份" data-tab-id="速量 - 六月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="人效" style="display: none;"><div class="document-viewer" id="viewer-人效" data-tab-id="人效"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 六月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 六月份" data-tab-id="仓储 - 六月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="专线 - 六月份" style="display: none;"><div class="document-viewer" id="viewer-专线 - 六月份" data-tab-id="专线 - 六月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"></div><div class="page" id="泡比" style="display: none;"><div class="document-viewer" id="viewer-泡比" data-tab-id="泡比"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="车辆" style="display: none;"></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据汇总夜" style="display: none;"></div><div class="page" id="仓储" style="display: none;"><div class="document-viewer" id="viewer-仓储" data-tab-id="仓储"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-全量 - 七月份" data-tab-id="全量 - 七月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="专线 - 七月份" style="display: none;"></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="异常登记" style="display: none;"><div class="document-viewer" id="viewer-异常登记" data-tab-id="异常登记"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="1" style="display: none;"><div class="document-viewer" id="viewer-1" data-tab-id="1"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="每日留仓数量" style="display: none;"><div class="document-viewer" id="viewer-每日留仓数量" data-tab-id="每日留仓数量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="专线 - 七月份" style="display: none;"></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="1" style="display: none;"><div class="document-viewer" id="viewer-1" data-tab-id="1"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="每日留仓数量" style="display: none;"><div class="document-viewer" id="viewer-每日留仓数量" data-tab-id="每日留仓数量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据汇总夜" style="display: none;"></div><div class="page" id="车辆" style="display: none;"></div><div class="page" id="全量 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-全量 - 七月份" data-tab-id="全量 - 七月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="速量 - 五月份" style="display: none;"><div class="document-viewer" id="viewer-速量 - 五月份" data-tab-id="速量 - 五月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="车辆" style="display: none;"></div><div class="page" id="出库单" style="display: none;"></div><div class="page" id="小包数据汇总夜" style="display: none;"></div><div class="page" id="速量 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-速量 - 七月份" data-tab-id="速量 - 七月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div></div>
+    <div class="tabs" id="tabs" style="transform: translateY(0px) scale(1);"><div class="tabs-progress-bg" id="tabs-progress-bg" style="width: 0%; background: linear-gradient(90deg, rgb(43, 238, 43), rgb(51, 238, 44), rgb(59, 239, 46), rgb(67, 239, 48), rgb(75, 240, 49), rgb(83, 240, 51), rgb(90, 240, 53), rgb(98, 241, 55), rgb(106, 241, 56), rgb(113, 242, 58), rgb(121, 242, 60), rgb(128, 242, 62), rgb(135, 243, 63), rgb(142, 243, 65), rgb(149, 244, 67), rgb(156, 244, 68), rgb(163, 244, 70), rgb(170, 245, 72), rgb(176, 245, 74), rgb(183, 245, 76), rgb(190, 246, 77), rgb(196, 246, 79), rgb(202, 246, 81), rgb(208, 247, 83), rgb(214, 247, 85), rgb(220, 247, 86), rgb(226, 248, 88), rgb(232, 248, 90), rgb(238, 248, 92), rgb(243, 248, 94), rgb(249, 249, 95), rgb(249, 244, 97), rgb(249, 239, 99), rgb(250, 235, 101), rgb(250, 230, 103), rgb(250, 226, 105), rgb(250, 222, 107), rgb(251, 217, 108), rgb(251, 213, 110), rgb(251, 209, 112), rgb(251, 206, 114), rgb(252, 202, 116), rgb(252, 198, 118), rgb(252, 195, 120), rgb(252, 191, 122), rgb(252, 188, 124), rgb(253, 185, 126), rgb(253, 182, 127), rgb(253, 179, 129), rgb(253, 176, 131), rgb(253, 173, 133), rgb(254, 171, 135), rgb(254, 168, 137), rgb(254, 166, 139), rgb(254, 164, 141), rgb(254, 162, 143), rgb(254, 160, 145), rgb(255, 158, 147), rgb(255, 156, 149), rgb(255, 154, 151), rgb(255, 153, 153)); opacity: 0.2;"></div><div class="tab home-tab active">🏠 首页</div><div class="tab" data-tab-index="0" data-tab-id="仓储 - 七月份" draggable="true">仓储 - 七月份<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '仓储 - 七月份')">×</span></div><div class="tab" data-tab-index="1" data-tab-id="速量 - 七月份" draggable="true">速量 - 七月份<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '速量 - 七月份')">×</span></div><div class="tab" data-tab-index="2" data-tab-id="专线 - 七月份" draggable="true">专线 - 七月份<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '专线 - 七月份')">×</span></div><div class="tab" data-tab-index="3" data-tab-id="泡比" draggable="true">泡比<span class="close" onclick="event.stopPropagation(); App.closeTab(event, '泡比')">×</span></div></div>
+    <div class="pages" id="pages"><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="异常登记" style="display: none;"><div class="document-viewer" id="viewer-异常登记" data-tab-id="异常登记"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据汇总夜" style="display: none;"></div><div class="page" id="出库单" style="display: none;"></div><div class="page" id="速量 - 六月份" style="display: none;"><div class="document-viewer" id="viewer-速量 - 六月份" data-tab-id="速量 - 六月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="人效" style="display: none;"><div class="document-viewer" id="viewer-人效" data-tab-id="人效"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 六月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 六月份" data-tab-id="仓储 - 六月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="专线 - 六月份" style="display: none;"><div class="document-viewer" id="viewer-专线 - 六月份" data-tab-id="专线 - 六月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="泡比" style="display: none;"><div class="document-viewer" id="viewer-泡比" data-tab-id="泡比"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="车辆" style="display: none;"></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据汇总夜" style="display: none;"></div><div class="page" id="仓储" style="display: none;"><div class="document-viewer" id="viewer-仓储" data-tab-id="仓储"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="全量 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-全量 - 七月份" data-tab-id="全量 - 七月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="专线 - 七月份" style="display: none;"></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="异常登记" style="display: none;"><div class="document-viewer" id="viewer-异常登记" data-tab-id="异常登记"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="1" style="display: none;"><div class="document-viewer" id="viewer-1" data-tab-id="1"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="每日留仓数量" style="display: none;"><div class="document-viewer" id="viewer-每日留仓数量" data-tab-id="每日留仓数量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据" style="display: none;"><div class="document-viewer" id="viewer-小包数据" data-tab-id="小包数据"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="专线 - 七月份" style="display: none;"></div><div class="page" id="全量" style="display: none;"><div class="document-viewer" id="viewer-全量" data-tab-id="全量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="单量" style="display: none;"><div class="document-viewer" id="viewer-单量" data-tab-id="单量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="1" style="display: none;"><div class="document-viewer" id="viewer-1" data-tab-id="1"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="每日留仓数量" style="display: none;"><div class="document-viewer" id="viewer-每日留仓数量" data-tab-id="每日留仓数量"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="小包数据汇总夜" style="display: none;"></div><div class="page" id="车辆" style="display: none;"></div><div class="page" id="全量 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-全量 - 七月份" data-tab-id="全量 - 七月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="速量 - 五月份" style="display: none;"><div class="document-viewer" id="viewer-速量 - 五月份" data-tab-id="速量 - 五月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="车辆" style="display: none;"></div><div class="page" id="出库单" style="display: none;"></div><div class="page" id="小包数据汇总夜" style="display: none;"><div class="document-viewer" id="viewer-小包数据汇总夜" data-tab-id="小包数据汇总夜"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="速量 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-速量 - 七月份" data-tab-id="速量 - 七月份"><div class="viewer-content"></div><div class="viewer-overlay"></div></div></div><div class="page" id="仓储 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-仓储 - 七月份" data-tab-id="仓储 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cmCAFEVsjJmy" data-id="仓储 - 七月份" id="iframe-仓储 - 七月份" class="viewer-iframe" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: none;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="速量 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-速量 - 七月份" data-tab-id="速量 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjHcYd3KIRkA" data-id="速量 - 七月份" id="iframe-速量 - 七月份" class="viewer-iframe" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: none;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="专线 - 七月份" style="display: none;"><div class="document-viewer" id="viewer-专线 - 七月份" data-tab-id="专线 - 七月份"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cd3DiyOuerT8" data-id="专线 - 七月份" id="iframe-专线 - 七月份" class="viewer-iframe" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: none;"></iframe></div><div class="viewer-overlay"></div></div></div><div class="page" id="泡比" style="display: none;"><div class="document-viewer" id="viewer-泡比" data-tab-id="泡比"><div class="viewer-content"><iframe src="https://www.kdocs.cn/l/cjZZGlQnBtmm" data-id="泡比" id="iframe-泡比" class="viewer-iframe" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" allow="clipboard-read clipboard-write camera microphone geolocation notifications payment" allowfullscreen="" style="width: 100%; height: 100%; border-width: medium; border-style: none; border-color: currentcolor; border-image: none;"></iframe></div><div class="viewer-overlay"></div></div></div></div>
     
     <div id="remove-empty-rows-page" class="page" style="display:none; padding:20px; height:100%; overflow-y:auto; background:#f0f2f5;">
       <div style="max-width: 800px; margin: 0 auto;">
@@ -2988,7 +3226,7 @@ html, body {
       </div>
     </div>
     
-    <div id="home-page" class="page bg-anim-flow active" style="display: block; padding: 0px; height: 100%; overflow-y: auto;">
+    <div id="home-page" class="page active" style="display: block; padding: 0px; height: 100%; overflow-y: auto; background: transparent;">
       <div class="dashboard">
         <div class="header-card" style="background: rgba(255, 255, 255, 0.1);">
             <div class="logo-area">
@@ -2996,9 +3234,9 @@ html, body {
                 <span>自由拖动卡片 添加卡片 右键可修改卡片属性</span>
             </div>
             <div style="display: flex; gap: 16px; align-items: center;">
-                <div class="live-clock" id="liveClock">⏱️ 2026.08.02 周日 09:25:41</div>
+                <div class="live-clock" id="liveClock">⏱️ 2026.07.30 周四 16:03:39</div>
                 <div class="date-badge">    </div>
-                <div id="memory-display" style="padding: 8px 16px; background: rgba(64, 158, 255, 0.1); border: 1px solid rgba(64, 158, 255, 0.3); border-radius: 8px; font-size: 13px; color: #409eff; font-family: monospace; min-width: 220px; white-space: nowrap;">📊 运存: 3.93 MB / 4.79 MB (0.1%)</div>
+                <div id="memory-display" style="padding: 8px 16px; background: rgba(64, 158, 255, 0.1); border: 1px solid rgba(64, 158, 255, 0.3); border-radius: 8px; font-size: 13px; color: #409eff; font-family: monospace; min-width: 220px; white-space: nowrap;">📊 运存: 6.54 MB / 9.04 MB (0.2%)</div>
                 <button id="clear-memory-btn" style="padding: 8px 16px; background: #f56c6c; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                     <span>🧹</span><span>清理运存</span>
                 </button>
@@ -3011,11 +3249,18 @@ html, body {
                 <button id="export-code-btn" style="padding: 8px 16px; background: #67c23a; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                     <span>📥</span><span>导出代码</span>
                 </button>
+                <button id="export-data-btn" style="padding: 8px 16px; background: #e6a23c; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <span>💾</span><span>导出数据</span>
+                </button>
+                <button id="import-data-btn" style="padding: 8px 16px; background: #409eff; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <span>📂</span><span>导入数据</span>
+                </button>
+                <input type="file" id="import-data-file" accept=".json" style="display: none;">
             </div>
         </div>
         <div class="func-grid">
             <div class="func-card" id="warehouse" draggable="true" data-index="0" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">🏭</span><span>仓储</span></div>
-            <div class="func-card" id="speed" draggable="true" data-index="1" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">⚡</span><span>速量</span></div><div class="func-card" id="line" draggable="true" data-index="2" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">🚀</span><span>专线</span></div><div class="func-card" id="name-register" draggable="true" data-index="3" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📋</span><span>异常登记</span></div><div class="func-card" id="order-count" draggable="true" data-index="4" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📝</span><span>单量</span></div><div class="func-card" id="text-order-count" draggable="true" data-index="5" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📊</span><span>文字版单量</span></div><div class="func-card" id="package-count" draggable="true" data-index="6" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📦</span><span>包数</span></div><div class="func-card" id="bubble-ratio" draggable="true" data-index="7" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📊</span><span>泡比</span></div><div class="func-card" id="person-efficiency" draggable="true" data-index="8" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">👤</span><span>人效</span></div><div class="func-card" id="missing-data" draggable="true" data-index="9" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📉</span><span>漏数据</span></div><div class="func-card" id="daily-storage" draggable="true" data-index="10" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📦</span><span>每日留仓数量</span></div><div class="func-card" id="small-package" draggable="true" data-index="11" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📦📊</span><span>小包数据</span></div><div class="func-card" id="small-package-night" draggable="true" data-index="12" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">🌙</span><span>小包数据汇总夜</span></div>
+            <div class="func-card" id="speed" draggable="true" data-index="1" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">⚡</span><span>速量</span></div><div class="func-card" id="line" draggable="true" data-index="2" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">🚀</span><span>专线</span></div><div class="func-card" id="name-register" draggable="true" data-index="3" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📋</span><span>异常登记</span></div><div class="func-card" id="order-count" draggable="true" data-index="4" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📝</span><span>单量</span></div><div class="func-card" id="text-order-count" draggable="true" data-index="5" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📊</span><span>文字版单量</span></div><div class="func-card" id="package-count" draggable="true" data-index="6" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📦</span><span>包数</span></div><div class="func-card" id="bubble-ratio" draggable="true" data-index="7" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📊</span><span>泡比</span></div><div class="func-card" id="person-efficiency" draggable="true" data-index="8" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">👤</span><span>人效</span></div><div class="func-card" id="missing-data" draggable="true" data-index="9" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📉</span><span>漏数据</span></div><div class="func-card" id="daily-storage" draggable="true" data-index="10" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📦</span><span>每日留仓数量</span></div><div class="func-card" id="trans-order" draggable="true" data-index="11" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📦</span><span>转单</span></div><div class="func-card" id="small-package" draggable="true" data-index="12" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📦📊</span><span>小包数据</span></div><div class="func-card" id="vehicle" draggable="true" data-index="13" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">🚗</span><span>车辆</span></div><div class="func-card" id="small-package-night" draggable="true" data-index="14" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">🌙</span><span>小包数据汇总夜</span></div>
             
             
             
@@ -3024,7 +3269,11 @@ html, body {
             
             
             
-            <div class="func-card" id="illustration" draggable="true" data-index="13" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">🖼️</span><span>插图</span></div>
+            <div class="func-card" id="illustration" draggable="true" data-index="15" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">🖼️</span><span>插图</span></div>
+            
+            <div class="func-card" id="zip-search" draggable="true" data-index="16" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">📍</span><span>邮政编码查询</span></div>
+            
+            <div class="func-card" id="channel-search" draggable="true" data-index="17" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">🔀</span><span>渠道查询</span></div>
             
             
             
@@ -3035,11 +3284,7 @@ html, body {
             
             
             
-            
-            
-            
-            
-            <div class="func-card" id="system-settings" draggable="true" data-index="14" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">⚙️</span><span>系统设置</span></div>
+            <div class="func-card" id="system-settings" draggable="true" data-index="18" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">⚙️</span><span>系统设置</span></div>
             
             <div class="func-card add-card" id="add-new-card" style="background: rgba(255, 255, 255, 0.1);"><span class="func-emoji">➕</span><span>添加卡片</span></div>
             <div class="zip-subgroup" id="zip-subgroup" style="display: none;">
@@ -3048,7 +3293,7 @@ html, body {
             </div>
         </div>
         
-        <div class="context-menu" id="context-menu" style="left: 1713.05px; top: 321.364px;">
+        <div class="context-menu" id="context-menu" style="left: 1081.37px; top: 422.673px;">
             <div class="context-menu-item" id="menu-edit-link">✏️ 修改链接</div>
             <div class="context-menu-item" id="menu-open-link">🔗 在新窗口打开</div>
             <div class="context-menu-item separator"></div>
@@ -3567,6 +3812,29 @@ const App = {
       if (homePage) {
         console.log('home-page found, displaying it...');
         homePage.style.display = 'block';
+        // 恢复保存的背景设置
+        try {
+          var bgSetting = JSON.parse(localStorage.getItem('backgroundSetting') || 'null');
+          if (bgSetting) {
+            // 清除HTML中可能残留的视频背景
+            homePage.querySelectorAll('.bg-video-layer').forEach(function(v) {
+              try { v.pause(); v.src = ''; } catch(e) {}
+              v.remove();
+            });
+            homePage.querySelectorAll('.dynamic-bg-layer').forEach(function(l) { l.remove(); });
+            homePage.classList.remove('bg-anim-flow', 'bg-anim-stars', 'bg-anim-wave', 'bg-anim-bubbles', 'bg-anim-aurora', 'bg-anim-grid');
+            if (bgSetting.type === 'color') {
+              homePage.style.setProperty('background', bgSetting.value, 'important');
+            } else if (bgSetting.type === 'image') {
+              homePage.style.setProperty('background', bgSetting.value + ' center/cover no-repeat', 'important');
+            } else if (bgSetting.type === 'anim') {
+              homePage.style.removeProperty('background');
+              homePage.style.background = '';
+              homePage.classList.add(bgSetting.value);
+            }
+            console.log('[restore] 背景已恢复:', bgSetting.type);
+          }
+        } catch(e) { console.warn('恢复背景失败:', e); }
       } else {
         console.error('home-page element not found!');
       }
@@ -6356,6 +6624,11 @@ App.initHomePage = function() {
       newCards.forEach((card, index) => {
         card.dataset.index = index;
       });
+      // 保存卡片排序到 localStorage
+      try {
+        const order = Array.from(newCards).map(c => c.id);
+        localStorage.setItem('cardOrder', JSON.stringify(order));
+      } catch(e) {}
     }
 
     funcGrid.addEventListener('click', (e) => {
@@ -6700,6 +6973,26 @@ App.initHomePage = function() {
           delete buttonLinks[cardId];
           currentCard.remove();
           updateCardIndexes();
+          // 从 localStorage 中删除
+          try {
+            let savedCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+            savedCards = savedCards.filter(c => c.id !== cardId);
+            localStorage.setItem('customCards', JSON.stringify(savedCards));
+          } catch (e) {}
+          // 从 cardLinks 中也删除
+          try {
+            let cardLinks = JSON.parse(localStorage.getItem('cardLinks') || '{}');
+            delete cardLinks[cardId];
+            localStorage.setItem('cardLinks', JSON.stringify(cardLinks));
+          } catch(e) {}
+          // 保存被删除的卡片ID列表
+          try {
+            let deletedCards = JSON.parse(localStorage.getItem('deletedCards') || '[]');
+            if (!deletedCards.includes(cardId)) {
+              deletedCards.push(cardId);
+              localStorage.setItem('deletedCards', JSON.stringify(deletedCards));
+            }
+          } catch(e) {}
         }
       }
     });
@@ -6735,6 +7028,27 @@ App.initHomePage = function() {
             buttonLinks[cardId].url = newUrl;
           }
           buttonLinks[cardId].target = target;
+          // 同步更新 localStorage 中的自定义卡片
+          try {
+            let savedCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+            const idx = savedCards.findIndex(c => c.id === cardId);
+            if (idx >= 0) {
+              if (newName) savedCards[idx].name = newName;
+              if (newUrl) savedCards[idx].url = newUrl;
+              savedCards[idx].target = target;
+              localStorage.setItem('customCards', JSON.stringify(savedCards));
+            }
+          } catch (e) {}
+          // 保存所有卡片链接修改（包括内置卡片）到 localStorage
+          try {
+            let cardLinks = JSON.parse(localStorage.getItem('cardLinks') || '{}');
+            cardLinks[cardId] = {
+              name: buttonLinks[cardId].name,
+              url: buttonLinks[cardId].url,
+              target: buttonLinks[cardId].target
+            };
+            localStorage.setItem('cardLinks', JSON.stringify(cardLinks));
+          } catch(e) {}
         }
       }
       if (editLinkMask) editLinkMask.style.display = 'none';
@@ -6744,19 +7058,517 @@ App.initHomePage = function() {
 
   // ========== 导出网页代码功能 ==========
   const exportCodeBtn = document.getElementById('export-code-btn');
+  
+  // 收集所有 localStorage 数据
+  function collectAllLocalStorageData() {
+    const data = {};
+    try {
+      const len = localStorage.length;
+      for (let i = 0; i < len; i++) {
+        try {
+          const key = localStorage.key(i);
+          if (key) {
+            const value = localStorage.getItem(key);
+            if (value !== null && value !== undefined && value !== '') {
+              data[key] = value;
+            }
+          }
+        } catch(e) {}
+      }
+      if (Object.keys(data).length === 0 && localStorage._store) {
+        Object.keys(localStorage._store).forEach(function(key) {
+          const value = localStorage._store[key];
+          if (value !== null && value !== undefined && value !== '') {
+            data[key] = String(value);
+          }
+        });
+      }
+    } catch(e) {
+      console.error('[export] 收集 localStorage 失败:', e);
+    }
+    return data;
+  }
+
+  // 收集导出预览信息
+  function collectExportPreviewInfo() {
+    const info = {
+      tabs: [],
+      cards: [],
+      storageCount: 0,
+      storageKeys: [],
+      dynamicData: {}
+    };
+
+    // 收集当前标签页
+    if (typeof App !== 'undefined' && App.tabs) {
+      info.tabs = App.tabs.map(t => ({
+        name: t.name,
+        url: t.url ? (t.url.length > 50 ? t.url.substring(0, 50) + '...' : t.url) : '自定义页面'
+      }));
+    }
+
+    // 收集功能卡片（包括自定义卡片）
+    const funcGrid = document.querySelector('.func-grid');
+    if (funcGrid) {
+      const cards = funcGrid.querySelectorAll('.func-card');
+      cards.forEach(card => {
+        if (card.id && card.id !== 'add-new-card') {
+          const nameSpan = card.querySelector('span:last-child');
+          const name = nameSpan ? nameSpan.textContent : card.id;
+          info.cards.push({
+            id: card.id,
+            name: name.trim(),
+            isCustom: card.id.startsWith('custom-') || !['warehouse', 'speed', 'line', 'name-register', 'order-count', 'text-order-count', 'package-count', 'bubble-ratio', 'person-efficiency', 'missing-data', 'daily-storage', 'trans-order', 'small-package', 'vehicle', 'small-package-night', 'illustration', 'zip-search', 'channel-search', 'system-settings'].includes(card.id)
+          });
+        }
+      });
+    }
+
+    // 收集存储数据信息
+    const savedData = collectAllLocalStorageData();
+    info.storageCount = Object.keys(savedData).length;
+    info.storageKeys = Object.keys(savedData);
+
+    // 统计额外月份（详细信息）
+    const extraMonthsList = [];
+    const monthTypeNames = {
+      'speedExtraMonths': '速量',
+      'warehouseExtraMonths': '仓储',
+      'lineExtraMonths': '专线',
+      'fullExtraMonths': '全功能'
+    };
+    ['speedExtraMonths', 'warehouseExtraMonths', 'lineExtraMonths', 'fullExtraMonths'].forEach(key => {
+      try {
+        const months = JSON.parse(localStorage.getItem(key) || '[]');
+        if (months.length > 0) {
+          const typeName = monthTypeNames[key] || key.replace('ExtraMonths', '');
+          months.forEach(m => {
+            extraMonthsList.push({
+              type: typeName,
+              name: m.name || m,
+              url: m.url || ''
+            });
+          });
+        }
+      } catch(e) {}
+    });
+    info.dynamicData.extraMonthsList = extraMonthsList;
+    info.dynamicData.extraMonthsCount = extraMonthsList.length;
+
+    // 统计自定义卡片
+    try {
+      const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+      info.dynamicData.customCards = customCards.length;
+    } catch(e) {
+      info.dynamicData.customCards = 0;
+    }
+
+    return info;
+  }
+
+  // 显示导出预览弹窗
+  function showExportPreview() {
+    const modal = document.getElementById('exportPreviewModal');
+    const statsEl = document.getElementById('exportPreviewStats');
+    const tabsSection = document.getElementById('exportPreviewTabsSection');
+    const tabsList = document.getElementById('exportPreviewTabsList');
+    const cardsSection = document.getElementById('exportPreviewCardsSection');
+    const cardsList = document.getElementById('exportPreviewCardsList');
+    const monthsSection = document.getElementById('exportPreviewMonthsSection');
+    const monthsList = document.getElementById('exportPreviewMonthsList');
+    const storageSection = document.getElementById('exportPreviewStorageSection');
+    const storageList = document.getElementById('exportPreviewStorageList');
+
+    const info = collectExportPreviewInfo();
+
+    // 填充统计数据
+    statsEl.innerHTML = `
+      <div class="export-preview-stat">
+        <div class="export-preview-stat-value">${info.tabs.length}</div>
+        <div class="export-preview-stat-label">标签页</div>
+      </div>
+      <div class="export-preview-stat">
+        <div class="export-preview-stat-value">${info.cards.length}</div>
+        <div class="export-preview-stat-label">功能卡片</div>
+      </div>
+      <div class="export-preview-stat">
+        <div class="export-preview-stat-value">${info.dynamicData.extraMonthsCount}</div>
+        <div class="export-preview-stat-label">添加的月份</div>
+      </div>
+      <div class="export-preview-stat">
+        <div class="export-preview-stat-value">${info.storageCount}</div>
+        <div class="export-preview-stat-label">存储数据项</div>
+      </div>
+    `;
+
+    // 填充标签页列表
+    if (info.tabs.length > 0) {
+      tabsSection.style.display = 'block';
+      tabsList.innerHTML = info.tabs.map(t => `
+        <div class="export-preview-list-item">
+          <span>${t.name}</span>
+          <span style="color:#9ca3af; font-size:11px;">${t.url || ''}</span>
+        </div>
+      `).join('');
+    } else {
+      tabsSection.style.display = 'none';
+    }
+
+    // 填充卡片列表
+    if (info.cards.length > 0) {
+      cardsSection.style.display = 'block';
+      cardsList.innerHTML = info.cards.map(c => `
+        <div class="export-preview-list-item">
+          <span>${c.name}</span>
+          ${c.isCustom ? '<span class="export-preview-list-count">自定义</span>' : '<span style="color:#9ca3af; font-size:11px;">内置</span>'}
+        </div>
+      `).join('');
+    } else {
+      cardsSection.style.display = 'none';
+    }
+
+    // 填充动态月份列表
+    if (info.dynamicData.extraMonthsList.length > 0) {
+      monthsSection.style.display = 'block';
+      monthsList.innerHTML = info.dynamicData.extraMonthsList.map(m => {
+        const typeColor = m.type === '速量' ? '#3b82f6' : m.type === '仓储' ? '#10b981' : m.type === '专线' ? '#f59e0b' : '#8b5cf6';
+        return `<div class="export-preview-list-item">
+          <span><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${typeColor};margin-right:8px;"></span>${m.name}</span>
+          <span style="color:#9ca3af; font-size:11px;">${m.type}</span>
+        </div>`;
+      }).join('');
+    } else {
+      monthsSection.style.display = 'none';
+    }
+
+    // 填充存储数据列表
+    if (info.storageKeys.length > 0) {
+      storageSection.style.display = 'block';
+      const displayKeys = info.storageKeys.slice(0, 10);
+      storageList.innerHTML = displayKeys.map(k => `
+        <div class="export-preview-list-item">
+          <span>${k}</span>
+        </div>
+      `).join('') + (info.storageKeys.length > 10 ? `<div style="text-align:center; color:#9ca3af; font-size:12px; padding:8px;">还有 ${info.storageKeys.length - 10} 项数据...</div>` : '');
+    } else {
+      storageSection.style.display = 'none';
+    }
+
+    modal.classList.add('show');
+  }
+
+  // 隐藏导出预览弹窗
+  function hideExportPreview() {
+    const modal = document.getElementById('exportPreviewModal');
+    modal.classList.remove('show');
+  }
+
+  // 显示导出进度
+  function showExportProgress(show) {
+    const modal = document.getElementById('exportProgressModal');
+    if (show) {
+      modal.classList.add('show');
+    } else {
+      modal.classList.remove('show');
+    }
+  }
+
+  // 更新导出进度
+  function updateExportProgress(percent, text, isSuccess) {
+    const fill = document.getElementById('exportProgressFill');
+    const textEl = document.getElementById('exportProgressText');
+    const icon = document.getElementById('exportProgressIcon');
+    const title = document.getElementById('exportProgressTitle');
+    
+    if (fill) fill.style.width = percent + '%';
+    if (textEl) textEl.textContent = text || '';
+    if (icon && isSuccess !== undefined) {
+      if (isSuccess) {
+        icon.innerHTML = '✅';
+        icon.className = 'export-success-check';
+        title.textContent = '导出成功！';
+      } else {
+        icon.className = 'export-progress-icon';
+      }
+    }
+  }
+
+  // 执行实际导出
+  function doExport() {
+    hideExportPreview();
+    updateExportProgress(10, '正在收集数据...');
+
+    setTimeout(() => {
+      try {
+        updateExportProgress(30, '正在生成HTML...');
+
+        // 先获取完整outerHTML字符串（不影响实时DOM）
+        const rawHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+        // 用DOMParser解析成独立文档，在解析后的文档上移除弹窗元素
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(rawHtml, 'text/html');
+        
+        // 移除导出弹窗元素
+        ['exportPreviewModal', 'exportProgressModal'].forEach(function(id) {
+          const el = doc.getElementById(id);
+          if (el && el.parentNode) {
+            el.parentNode.removeChild(el);
+          }
+        });
+
+        // 序列化清理后的文档
+        const cleanHtml = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+
+        // 显示进度弹窗（此时已获取完HTML）
+        showExportProgress(true);
+
+        updateExportProgress(60, '正在嵌入数据...');
+
+        // 处理HTML：移除可能的服务器注入脚本
+        let finalHtml = cleanHtml;
+        finalHtml = finalHtml.replace(/<script>\(function\(\)\{[\s\S]*?__PAGE_NAME__[\s\S]*?<\/script>/g, '');
+        finalHtml = finalHtml.replace(/<script>\s*\(function\(\)\{\s*var __savedData__[\s\S]*?<\/script>/g, '');
+
+        // 移除弹窗相关的CSS样式块（使用注释标记）
+        const cssStart = '/* EXPORT_CSS_START */';
+        const cssEnd = '/* EXPORT_CSS_END */';
+        let cssStartPos = finalHtml.indexOf(cssStart);
+        let cssEndPos = finalHtml.indexOf(cssEnd);
+        if (cssStartPos !== -1 && cssEndPos !== -1 && cssEndPos > cssStartPos) {
+          cssEndPos += cssEnd.length;
+          finalHtml = finalHtml.substring(0, cssStartPos) + finalHtml.substring(cssEndPos);
+        }
+
+        // 收集所有 localStorage 数据
+        const savedData = collectAllLocalStorageData();
+
+        // 构造数据恢复脚本
+        const dataScript = '\n<script>\n' +
+          '(function(){\n' +
+          '  var __savedData__ = ' + JSON.stringify(savedData) + ';\n' +
+          '  Object.keys(__savedData__).forEach(function(k){\n' +
+          '    try { localStorage.setItem(k, __savedData__[k]); } catch(e){}\n' +
+          '  });\n' +
+          '  console.log("[export] 已恢复 " + Object.keys(__savedData__).length + " 项数据");\n' +
+          '})();\n' +
+          '<\/script>\n';
+
+        // 将恢复脚本插入到 </head> 之前
+        if (finalHtml.includes('</head>')) {
+          finalHtml = finalHtml.replace('</head>', dataScript + '</head>');
+        } else {
+          finalHtml = dataScript + finalHtml;
+        }
+
+        updateExportProgress(85, '正在创建文件...');
+
+        // 创建下载
+        const blob = new Blob([finalHtml], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = '小东控制台.html';
+        document.body.appendChild(a);
+        
+        updateExportProgress(95, '准备下载...');
+        
+        setTimeout(() => {
+          a.click();
+          document.body.removeChild(a);
+          
+          updateExportProgress(100, '导出完成！', true);
+          
+          setTimeout(() => {
+            showExportProgress(false);
+            setTimeout(() => {
+              URL.revokeObjectURL(url);
+            }, 1000);
+          }, 1500);
+        }, 300);
+
+      } catch (error) {
+        console.error('[export] 导出失败:', error);
+        showExportProgress(false);
+        alert('导出失败: ' + error.message);
+      }
+    }, 300);
+  }
+
   if (exportCodeBtn) {
     exportCodeBtn.addEventListener('click', () => {
-      // 直接导出完整的 HTML 代码，不做任何修改
-      const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      showExportPreview();
+    });
+  }
+
+  // 绑定预览弹窗的按钮事件
+  const closeBtn = document.getElementById('exportPreviewClose');
+  const cancelBtn = document.getElementById('exportPreviewCancel');
+  const confirmBtn = document.getElementById('exportPreviewConfirm');
+
+  if (closeBtn) closeBtn.addEventListener('click', hideExportPreview);
+  if (cancelBtn) cancelBtn.addEventListener('click', hideExportPreview);
+  if (confirmBtn) confirmBtn.addEventListener('click', doExport);
+
+  // 点击遮罩关闭
+  const modal = document.getElementById('exportPreviewModal');
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) hideExportPreview();
+    });
+  }
+
+  // ========== 导出/导入动态数据功能 ==========
+  
+  // 需要导出的动态数据key列表
+  const EXPORT_DATA_KEYS = [
+    'speedExtraMonths', 'warehouseExtraMonths', 'lineExtraMonths', 'fullExtraMonths',
+    'customCards', 'cardLinks', 'cardOrder', 'deletedCards',
+    'tabs', 'currentTabId',
+    'theme', 'bgOpacity', 'bgImage', 'bgVideo',
+    'buttonLinks', 'cardConfigs'
+  ];
+
+  // 导出动态数据
+  function exportDynamicData() {
+    try {
+      const exportData = {
+        version: '1.0',
+        exportTime: new Date().toISOString(),
+        data: {}
+      };
+
+      // 收集所有动态数据
+      EXPORT_DATA_KEYS.forEach(function(key) {
+        try {
+          const value = localStorage.getItem(key);
+          if (value !== null && value !== undefined && value !== '') {
+            exportData.data[key] = value;
+          }
+        } catch(e) {}
+      });
+
+      // 统计数据量
+      const dataCount = Object.keys(exportData.data).length;
+      if (dataCount === 0) {
+        alert('没有可导出的数据！');
+        return;
+      }
+
+      // 显示确认弹窗
+      const confirmMsg = '将导出以下 ' + dataCount + ' 项数据：\n\n' +
+        Object.keys(exportData.data).map(k => '• ' + k).join('\n') +
+        '\n\n是否继续？';
+      
+      if (!confirm(confirmMsg)) return;
+
+      // 生成JSON文件
+      const jsonString = JSON.stringify(exportData, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = '小东控制台.html';
+      
+      const dateStr = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+      a.download = '小东控制台-动态数据-' + dateStr + '.json';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+
+      // 成功提示
+      showToast('导出成功！共导出 ' + dataCount + ' 项数据');
+    } catch (error) {
+      console.error('[export-data] 导出失败:', error);
+      alert('导出失败: ' + error.message);
+    }
+  }
+
+  // 导入动态数据
+  function importDynamicData(file) {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const jsonString = e.target.result;
+        const importData = JSON.parse(jsonString);
+
+        // 验证数据格式
+        if (!importData || !importData.data || typeof importData.data !== 'object') {
+          alert('文件格式错误！请选择正确的导出数据文件。');
+          return;
+        }
+
+        const dataCount = Object.keys(importData.data).length;
+        
+        // 显示确认弹窗
+        const confirmMsg = '将导入以下 ' + dataCount + ' 项数据：\n\n' +
+          Object.keys(importData.data).map(k => '• ' + k).join('\n') +
+          '\n\n导入后将覆盖现有数据，是否继续？';
+        
+        if (!confirm(confirmMsg)) return;
+
+        // 确认覆盖
+        if (!confirm('⚠️ 警告：此操作不可撤销！确定要导入并覆盖现有数据吗？')) return;
+
+        // 恢复数据
+        let restoredCount = 0;
+        Object.keys(importData.data).forEach(function(key) {
+          try {
+            localStorage.setItem(key, importData.data[key]);
+            restoredCount++;
+          } catch(e) {
+            console.warn('[import-data] 恢复 ' + key + ' 失败:', e);
+          }
+        });
+
+        // 重新加载页面以应用数据
+        alert('导入成功！共恢复 ' + restoredCount + ' 项数据。\n页面即将刷新以应用更改...');
+        location.reload();
+
+      } catch (error) {
+        console.error('[import-data] 导入失败:', error);
+        alert('导入失败: ' + error.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // 显示简单提示
+  function showToast(message) {
+    const toast = document.createElement('div');
+    toast.style.cssText = 'position:fixed;top:30px;left:50%;transform:translateX(-50%);background:#67c23a;color:white;padding:12px 24px;border-radius:8px;z-index:99999;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,0.2);';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(function() {
+      toast.style.opacity = '0';
+      toast.style.transition = 'opacity 0.3s';
+      setTimeout(function() { toast.remove(); }, 300);
+    }, 2000);
+  }
+
+  // 绑定导入/导出按钮事件
+  const exportDataBtn = document.getElementById('export-data-btn');
+  const importDataBtn = document.getElementById('import-data-btn');
+  const importDataFile = document.getElementById('import-data-file');
+
+  if (exportDataBtn) {
+    exportDataBtn.addEventListener('click', exportDynamicData);
+  }
+
+  if (importDataBtn && importDataFile) {
+    importDataBtn.addEventListener('click', function() {
+      importDataFile.click();
+    });
+    
+    importDataFile.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        importDynamicData(file);
+        // 重置input，允许重复选择同一文件
+        importDataFile.value = '';
+      }
     });
   }
 
@@ -6843,6 +7655,8 @@ App.initHomePage = function() {
       if (bgVideoInput) bgVideoInput.value = '';
       if (addBgMask) addBgMask.style.display = 'none';
       if (addBgModal) addBgModal.style.display = 'none';
+      // 清除保存的背景设置
+      try { localStorage.removeItem('backgroundSetting'); } catch(e) {}
     });
   }
 
@@ -6857,6 +7671,8 @@ App.initHomePage = function() {
       currentBgVideo = '';
       homePage.style.removeProperty('background');
       homePage.style.setProperty('background', currentBgStyle, 'important');
+      // 持久化保存
+      try { localStorage.setItem('backgroundSetting', JSON.stringify({ type: 'color', value: currentBgStyle })); } catch(e) {}
     });
   });
 
@@ -6874,6 +7690,8 @@ App.initHomePage = function() {
       homePage.style.removeProperty('background');
       // 添加动画类
       homePage.classList.add('bg-anim-' + animType);
+      // 持久化保存
+      try { localStorage.setItem('backgroundSetting', JSON.stringify({ type: 'anim', value: 'bg-anim-' + animType })); } catch(e) {}
     });
   });
 
@@ -6974,6 +7792,8 @@ App.initHomePage = function() {
             homePage.style.backgroundSize = 'cover';
             homePage.style.backgroundPosition = 'center';
             homePage.style.backgroundRepeat = 'no-repeat';
+            // 持久化保存（图片压缩后保存）
+            try { localStorage.setItem('backgroundSetting', JSON.stringify({ type: 'image', value: currentBgImage })); } catch(e) { console.warn('背景图片过大，无法保存:', e); }
           };
           img.src = event.target.result;
         };
@@ -7101,6 +7921,13 @@ App.initHomePage = function() {
         funcGrid.insertBefore(newCard, addCardBtnEl);
         updateCardIndexes();
       }
+
+      // 保存自定义卡片到 localStorage
+      try {
+        let savedCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+        savedCards.push({ id: newCardId, name: name, url: url, emoji: emoji, target: target });
+        localStorage.setItem('customCards', JSON.stringify(savedCards));
+      } catch (e) { console.warn('保存卡片失败:', e); }
 
       if (addCardMask) addCardMask.style.display = 'none';
       if (addCardModal) addCardModal.style.display = 'none';
@@ -7864,7 +8691,8 @@ function showSpeedMonthSelector() {
   if (document.getElementById('speedMonthSelector')) return;
   const months = [
     { name: '六月份', url: 'https://www.kdocs.cn/l/cjyFHcqAyGuJ' },
-    { name: '七月份', url: 'https://www.kdocs.cn/l/cjHcYd3KIRkA' }
+    { name: '七月份', url: 'https://www.kdocs.cn/l/cjHcYd3KIRkA' },
+    { name: '八月份', url: 'https://www.kdocs.cn/l/crOQghRV870B' }
   ];
   
   const allMonths = [...months, ...window.speedExtraMonths];
@@ -7877,14 +8705,18 @@ function showSpeedMonthSelector() {
   `;
   
   allMonths.forEach((month, index) => {
+    const isExtra = index >= months.length;
     selectorHTML += `
-      <button 
-        style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
-        onclick="selectSpeedMonth('速量 - ${month.name}','${month.url}')"
-      >
-        <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
-        <span>${month.name}</span>
-      </button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button 
+          style="flex:1;padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
+          onclick="selectSpeedMonth('速量 - ${month.name}','${month.url}')"
+        >
+          <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
+          <span>${month.name}</span>
+        </button>
+        ${isExtra ? `<button onclick="deleteSpeedMonth(${index - months.length})" style="padding:8px 12px;border:none;border-radius:8px;background:#fef0f0;color:#f56c6c;font-size:18px;cursor:pointer;transition:all 0.2s;" title="删除">🗑️</button>` : ''}
+      </div>
     `;
   });
   
@@ -7944,6 +8776,8 @@ function confirmAddSpeedMonth() {
   }
   
   window.speedExtraMonths.push({ name: monthName, url: monthUrl });
+  // 持久化保存
+  try { localStorage.setItem('speedExtraMonths', JSON.stringify(window.speedExtraMonths)); } catch(e) {}
   
   const monthList = document.getElementById('speed-month-list');
   const newBtn = document.createElement('button');
@@ -7972,7 +8806,8 @@ function showWarehouseMonthSelector() {
   if (document.getElementById('warehouseMonthSelector')) return;
   const months = [
     { name: '六月份', url: 'https://www.kdocs.cn/l/ceSENEnBJ4ir' },
-    { name: '七月份', url: 'https://www.kdocs.cn/l/cmCAFEVsjJmy' }
+    { name: '七月份', url: 'https://www.kdocs.cn/l/cmCAFEVsjJmy' },
+    { name: '八月份', url: 'https://www.kdocs.cn/l/cgntSpc9VeOu' }
   ];
   
   const allMonths = [...months, ...window.warehouseExtraMonths];
@@ -7985,14 +8820,18 @@ function showWarehouseMonthSelector() {
   `;
   
   allMonths.forEach((month, index) => {
+    const isExtra = index >= months.length;
     selectorHTML += `
-      <button 
-        style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
-        onclick="selectWarehouseMonth('仓储 - ${month.name}','${month.url}')"
-      >
-        <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
-        <span>${month.name}</span>
-      </button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button 
+          style="flex:1;padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
+          onclick="selectWarehouseMonth('仓储 - ${month.name}','${month.url}')"
+        >
+          <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
+          <span>${month.name}</span>
+        </button>
+        ${isExtra ? `<button onclick="deleteWarehouseMonth(${index - months.length})" style="padding:8px 12px;border:none;border-radius:8px;background:#fef0f0;color:#f56c6c;font-size:18px;cursor:pointer;transition:all 0.2s;" title="删除">🗑️</button>` : ''}
+      </div>
     `;
   });
   
@@ -8052,6 +8891,8 @@ function confirmAddWarehouseMonth() {
   }
   
   window.warehouseExtraMonths.push({ name: monthName, url: monthUrl });
+  // 持久化保存
+  try { localStorage.setItem('warehouseExtraMonths', JSON.stringify(window.warehouseExtraMonths)); } catch(e) {}
   
   const monthList = document.getElementById('warehouse-month-list');
   const newBtn = document.createElement('button');
@@ -8080,7 +8921,8 @@ function showLineMonthSelector() {
   if (document.getElementById('lineMonthSelector')) return;
   const months = [
     { name: '六月份', url: 'https://www.kdocs.cn/l/cpoXE2lCEZje' },
-    { name: '七月份', url: 'https://www.kdocs.cn/l/cd3DiyOuerT8' }
+    { name: '七月份', url: 'https://www.kdocs.cn/l/cd3DiyOuerT8' },
+    { name: '八月份', url: 'https://www.kdocs.cn/l/cj0gbTltowGd' }
   ];
   
   const allMonths = [...months, ...window.lineExtraMonths];
@@ -8093,14 +8935,18 @@ function showLineMonthSelector() {
   `;
   
   allMonths.forEach((month, index) => {
+    const isExtra = index >= months.length;
     selectorHTML += `
-      <button 
-        style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
-        onclick="selectLineMonth('专线 - ${month.name}','${month.url}')"
-      >
-        <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
-        <span>${month.name}</span>
-      </button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button 
+          style="flex:1;padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
+          onclick="selectLineMonth('专线 - ${month.name}','${month.url}')"
+        >
+          <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
+          <span>${month.name}</span>
+        </button>
+        ${isExtra ? `<button onclick="deleteLineMonth(${index - months.length})" style="padding:8px 12px;border:none;border-radius:8px;background:#fef0f0;color:#f56c6c;font-size:18px;cursor:pointer;transition:all 0.2s;" title="删除">🗑️</button>` : ''}
+      </div>
     `;
   });
   
@@ -8160,6 +9006,8 @@ function confirmAddLineMonth() {
   }
   
   window.lineExtraMonths.push({ name: monthName, url: monthUrl });
+  // 持久化保存
+  try { localStorage.setItem('lineExtraMonths', JSON.stringify(window.lineExtraMonths)); } catch(e) {}
   
   const monthList = document.getElementById('line-month-list');
   const newBtn = document.createElement('button');
@@ -8200,14 +9048,18 @@ function showFullMonthSelector() {
   `;
   
   allMonths.forEach((month, index) => {
+    const isExtra = index >= months.length;
     selectorHTML += `
-      <button 
-        style="padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
-        onclick="selectFullMonth('全量 - ${month.name}','${month.url}')"
-      >
-        <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
-        <span>${month.name}</span>
-      </button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button 
+          style="flex:1;padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
+          onclick="selectFullMonth('全量 - ${month.name}','${month.url}')"
+        >
+          <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
+          <span>${month.name}</span>
+        </button>
+        ${isExtra ? `<button onclick="deleteFullMonth(${index - months.length})" style="padding:8px 12px;border:none;border-radius:8px;background:#fef0f0;color:#f56c6c;font-size:18px;cursor:pointer;transition:all 0.2s;" title="删除">🗑️</button>` : ''}
+      </div>
     `;
   });
   
@@ -8267,6 +9119,8 @@ function confirmAddFullMonth() {
   }
   
   window.fullExtraMonths.push({ name: monthName, url: monthUrl });
+  // 持久化保存
+  try { localStorage.setItem('fullExtraMonths', JSON.stringify(window.fullExtraMonths)); } catch(e) {}
   
   const monthList = document.getElementById('full-month-list');
   const newBtn = document.createElement('button');
@@ -8288,6 +9142,43 @@ function selectFullMonth(name, url) {
   } else {
     openPage(name, url);
   }
+}
+
+// ========== 删除额外月份功能 ==========
+function deleteSpeedMonth(idx) {
+  if (!confirm('确定删除该月份吗？')) return;
+  window.speedExtraMonths.splice(idx, 1);
+  try { localStorage.setItem('speedExtraMonths', JSON.stringify(window.speedExtraMonths)); } catch(e) {}
+  var sel = document.getElementById('speedMonthSelector');
+  if (sel) sel.remove();
+  showSpeedMonthSelector();
+}
+
+function deleteWarehouseMonth(idx) {
+  if (!confirm('确定删除该月份吗？')) return;
+  window.warehouseExtraMonths.splice(idx, 1);
+  try { localStorage.setItem('warehouseExtraMonths', JSON.stringify(window.warehouseExtraMonths)); } catch(e) {}
+  var sel = document.getElementById('warehouseMonthSelector');
+  if (sel) sel.remove();
+  showWarehouseMonthSelector();
+}
+
+function deleteLineMonth(idx) {
+  if (!confirm('确定删除该月份吗？')) return;
+  window.lineExtraMonths.splice(idx, 1);
+  try { localStorage.setItem('lineExtraMonths', JSON.stringify(window.lineExtraMonths)); } catch(e) {}
+  var sel = document.getElementById('lineMonthSelector');
+  if (sel) sel.remove();
+  showLineMonthSelector();
+}
+
+function deleteFullMonth(idx) {
+  if (!confirm('确定删除该月份吗？')) return;
+  window.fullExtraMonths.splice(idx, 1);
+  try { localStorage.setItem('fullExtraMonths', JSON.stringify(window.fullExtraMonths)); } catch(e) {}
+  var sel = document.getElementById('fullMonthSelector');
+  if (sel) sel.remove();
+  showFullMonthSelector();
 }
 
 // 全局函数
@@ -8467,12 +9358,254 @@ function selectFullMonth(name, url) {
     
 
   
+<script>
+// ========== 持久化恢复：页面加载时恢复自定义卡片、额外月份、背景设置 ==========
+(function() {
+  function restoreCustomCards() {
+    try {
+      const savedCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+      if (!savedCards.length) return;
+      const funcGrid = document.querySelector('.func-grid');
+      const addCardBtnEl = document.getElementById('add-new-card');
+      if (!funcGrid || !addCardBtnEl) return;
+      // 确保不重复添加
+      const existingIds = Array.from(funcGrid.querySelectorAll('.func-card')).map(c => c.id);
+      savedCards.forEach(card => {
+        if (existingIds.includes(card.id)) return;
+        const newCard = document.createElement('div');
+        newCard.className = 'func-card';
+        newCard.id = card.id;
+        newCard.setAttribute('draggable', 'true');
+        newCard.innerHTML = '<span class="func-emoji">' + (card.emoji || '⭐') + '</span><span>' + card.name + '</span>';
+        if (typeof buttonLinks !== 'undefined') {
+          buttonLinks[card.id] = { name: card.name, url: card.url, target: card.target || 'iframe' };
+        }
+        funcGrid.insertBefore(newCard, addCardBtnEl);
+      });
+      if (typeof updateCardIndexes === 'function') updateCardIndexes();
+      console.log('[restore] 恢复了 ' + savedCards.length + ' 个自定义卡片');
+    } catch (e) { console.warn('恢复卡片失败:', e); }
+  }
 
-    
-  
-    
-  
-    
-  
-    
-  </body></html>
+  function restoreDeletedCards() {
+    try {
+      const deletedCards = JSON.parse(localStorage.getItem('deletedCards') || '[]');
+      if (!deletedCards.length) return;
+      deletedCards.forEach(function(cardId) {
+        // 从 DOM 中移除
+        var cardEl = document.getElementById(cardId);
+        if (cardEl) cardEl.remove();
+        // 从 buttonLinks 中移除
+        try {
+          if (typeof buttonLinks !== 'undefined' && buttonLinks[cardId]) {
+            delete buttonLinks[cardId];
+          }
+        } catch(e) {}
+      });
+      // 更新排序
+      try {
+        if (typeof updateCardIndexes === 'function') updateCardIndexes();
+      } catch(e) {}
+      console.log('[restore] 删除了 ' + deletedCards.length + ' 个已删除卡片');
+    } catch (e) { console.warn('恢复删除卡片失败:', e); }
+  }
+
+  function restoreCardLinks() {
+    try {
+      // 确保 buttonLinks 可用
+      if (typeof buttonLinks === 'undefined') {
+        console.log('[restore] buttonLinks 未就绪，跳过链接恢复');
+        return;
+      }
+      const cardLinks = JSON.parse(localStorage.getItem('cardLinks') || '{}');
+      const keys = Object.keys(cardLinks);
+      if (!keys.length) return;
+      keys.forEach(function(cardId) {
+        if (buttonLinks[cardId]) {
+          // 覆盖内置卡片的链接
+          buttonLinks[cardId].name = cardLinks[cardId].name;
+          buttonLinks[cardId].url = cardLinks[cardId].url;
+          buttonLinks[cardId].target = cardLinks[cardId].target;
+          // 更新卡片显示名称
+          var cardEl = document.getElementById(cardId);
+          if (cardEl) {
+            var nameSpan = cardEl.querySelector('span:last-child');
+            if (nameSpan && cardLinks[cardId].name) nameSpan.textContent = cardLinks[cardId].name;
+          }
+        }
+      });
+      console.log('[restore] 恢复了 ' + keys.length + ' 个卡片链接修改');
+    } catch (e) { console.warn('恢复卡片链接失败:', e); }
+  }
+
+  function restoreCardOrder() {
+    try {
+      const order = JSON.parse(localStorage.getItem('cardOrder') || '[]');
+      if (!order.length) return;
+      const funcGrid = document.querySelector('.func-grid');
+      if (!funcGrid) return;
+      const addCardBtn = document.getElementById('add-new-card');
+      // 按 saved order 重排卡片
+      order.forEach(function(cardId) {
+        const card = document.getElementById(cardId);
+        if (card && funcGrid.contains(card)) {
+          if (addCardBtn) {
+            funcGrid.insertBefore(card, addCardBtn);
+          } else {
+            funcGrid.appendChild(card);
+          }
+        }
+      });
+      if (typeof updateCardIndexes === 'function') updateCardIndexes();
+      console.log('[restore] 恢复了卡片排序: ' + order.length + ' 个卡片');
+    } catch (e) { console.warn('恢复卡片排序失败:', e); }
+  }
+
+  function restoreExtraMonths() {
+    if (window.__monthsRestored) return;
+    window.__monthsRestored = true;
+    try {
+      // 速量
+      const speedMonths = JSON.parse(localStorage.getItem('speedExtraMonths') || '[]');
+      if (window.speedExtraMonths && speedMonths.length) {
+        window.speedExtraMonths.push(...speedMonths);
+      }
+      // 仓储
+      const warehouseMonths = JSON.parse(localStorage.getItem('warehouseExtraMonths') || '[]');
+      if (window.warehouseExtraMonths && warehouseMonths.length) {
+        window.warehouseExtraMonths.push(...warehouseMonths);
+      }
+      // 专线
+      const lineMonths = JSON.parse(localStorage.getItem('lineExtraMonths') || '[]');
+      if (window.lineExtraMonths && lineMonths.length) {
+        window.lineExtraMonths.push(...lineMonths);
+      }
+      // 全量
+      const fullMonths = JSON.parse(localStorage.getItem('fullExtraMonths') || '[]');
+      if (window.fullExtraMonths && fullMonths.length) {
+        window.fullExtraMonths.push(...fullMonths);
+      }
+      console.log('[restore] 恢复了额外月份: 速量' + speedMonths.length + ', 仓储' + warehouseMonths.length + ', 专线' + lineMonths.length + ', 全量' + fullMonths.length);
+    } catch (e) { console.warn('恢复月份失败:', e); }
+  }
+
+  function restoreBackground() {
+    try {
+      const bgSetting = JSON.parse(localStorage.getItem('backgroundSetting') || 'null');
+      if (!bgSetting) return;
+      const homePage = document.getElementById('home-page');
+      if (!homePage) return;
+      // 清除现有背景
+      homePage.querySelectorAll('.dynamic-bg-layer, .bg-video-layer').forEach(l => {
+        if (l.tagName === 'VIDEO') { l.pause(); l.src = ''; }
+        l.remove();
+      });
+      homePage.classList.remove('bg-anim-flow', 'bg-anim-stars', 'bg-anim-wave', 'bg-anim-bubbles', 'bg-anim-aurora', 'bg-anim-grid');
+      
+      if (bgSetting.type === 'color' && bgSetting.value) {
+        homePage.style.setProperty('background', bgSetting.value, 'important');
+      } else if (bgSetting.type === 'image' && bgSetting.value) {
+        homePage.style.setProperty('background', bgSetting.value + ' center/cover no-repeat', 'important');
+      } else if (bgSetting.type === 'anim' && bgSetting.value) {
+        homePage.style.removeProperty('background');
+        homePage.style.background = '';
+        homePage.classList.add(bgSetting.value);
+      }
+      console.log('[restore] 恢复了背景设置: ' + bgSetting.type);
+    } catch (e) { console.warn('恢复背景失败:', e); }
+  }
+
+  // 执行恢复：多次执行确保覆盖所有初始化时机
+  function doRestore() {
+    // 1. 先恢复自定义卡片（添加新卡片到 DOM）
+    restoreCustomCards();
+    // 2. 恢复卡片链接修改（需要 buttonLinks 就绪）
+    restoreCardLinks();
+    // 3. 恢复被删除的卡片（从 DOM 移除）
+    restoreDeletedCards();
+    // 4. 恢复卡片排序
+    restoreCardOrder();
+    // 5. 恢复额外月份
+    restoreExtraMonths();
+    // 6. 恢复背景
+    restoreBackground();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      doRestore();
+      // 1秒后再执行一次，确保在 App.init() 之后
+      setTimeout(doRestore, 1000);
+      // 3秒后再执行一次，确保所有动画和初始化完成
+      setTimeout(doRestore, 3000);
+    });
+  } else {
+    doRestore();
+    setTimeout(doRestore, 1000);
+    setTimeout(doRestore, 3000);
+  }
+})();
+</script>
+
+<!-- 导出预览弹窗 -->
+<div class="export-preview-modal" id="exportPreviewModal">
+    <div class="export-preview-content">
+        <div class="export-preview-header">
+            <h3>📦 导出代码预览</h3>
+            <button class="export-preview-close" id="exportPreviewClose">✕</button>
+        </div>
+        <div class="export-preview-body">
+            <div class="export-preview-section">
+                <div class="export-preview-section-title">📊 数据统计</div>
+                <div class="export-preview-stats" id="exportPreviewStats">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+            <div class="export-preview-section" id="exportPreviewTabsSection" style="display:none;">
+                <div class="export-preview-section-title">📑 当前标签页</div>
+                <div class="export-preview-list" id="exportPreviewTabsList">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+            <div class="export-preview-section" id="exportPreviewCardsSection" style="display:none;">
+                <div class="export-preview-section-title">🃏 功能卡片</div>
+                <div class="export-preview-list" id="exportPreviewCardsList">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+            <div class="export-preview-section" id="exportPreviewMonthsSection" style="display:none;">
+                <div class="export-preview-section-title">📅 动态添加的月份</div>
+                <div class="export-preview-list" id="exportPreviewMonthsList">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+            <div class="export-preview-section" id="exportPreviewStorageSection" style="display:none;">
+                <div class="export-preview-section-title">💾 本地存储数据</div>
+                <div class="export-preview-list" id="exportPreviewStorageList">
+                    <!-- 动态填充 -->
+                </div>
+            </div>
+            <div class="export-preview-tip">
+                <strong>💡 提示：</strong>点击确认导出后，将生成包含所有当前页面配置、标签页、功能卡片、添加的月份和本地存储数据的完整HTML文件。打开导出的文件会自动恢复所有数据。
+            </div>
+        </div>
+        <div class="export-preview-footer">
+            <button class="export-preview-btn export-preview-btn-cancel" id="exportPreviewCancel">取消</button>
+            <button class="export-preview-btn export-preview-btn-confirm" id="exportPreviewConfirm">✅ 确认导出</button>
+        </div>
+    </div>
+</div>
+
+<!-- 导出进度弹窗 -->
+<div class="export-progress-modal" id="exportProgressModal">
+    <div class="export-progress-content">
+        <div class="export-progress-icon" id="exportProgressIcon">📦</div>
+        <div class="export-progress-title" id="exportProgressTitle">正在生成导出文件...</div>
+        <div class="export-progress-bar">
+            <div class="export-progress-fill" id="exportProgressFill" style="width: 0%;"></div>
+        </div>
+        <div class="export-progress-text" id="exportProgressText">准备中...</div>
+    </div>
+</div>
+
+</body></html>
