@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2616,7 +2616,315 @@ html, body {
         .menu-btn:not(.add-function-btn):not([style*="background:#f56c6c"]):hover {
           background: #505a6c !important;
         }
-      </style></head>
+      </style>
+<script>
+(function(){
+  var __savedData__ = {"microphonePermission":"denied","savedTabs":"[{\"id\":\"泡比\",\"name\":\"泡比\",\"url\":\"https://www.kdocs.cn/l/cjZZGlQnBtmm\"}]","accounts":"[{\"name\":\"老大\",\"role\":\" \"},{\"name\":\"小弟\",\"role\":\" \"},{\"name\":\"小弟\",\"role\":\"  \"}]","activeTab":"home"};
+  Object.keys(__savedData__).forEach(function(k){
+    try { localStorage.setItem(k, __savedData__[k]); } catch(e){}
+  });
+  console.log("[export] 已恢复 " + Object.keys(__savedData__).length + " 项数据");
+})();
+</script>
+<style>
+/* ===== 顶部胶囊导航（复刻参考图） ===== */
+.nav-capsule-wrap {
+    position: fixed;
+    bottom: 14px;
+    left: 14px;
+    z-index: 9998;
+    max-width: calc(100vw - 28px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.nav-capsule {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.65);
+    border-radius: 28px;
+    padding: 6px 8px;
+    box-shadow: 0 10px 30px rgba(15,23,42,0.18), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(255,255,255,0.3);
+    overflow-x: auto;
+    scrollbar-width: none;
+    max-width: calc(100vw - 28px);
+    transition: transform .32s cubic-bezier(.22,.61,.36,1), opacity .32s ease;
+}
+/* 液态玻璃滑动指示器 */
+.nav-pill {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 0;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+        0 6px 18px rgba(15,23,42,0.16),
+        inset 0 1px 0 rgba(255,255,255,0.9),
+        inset 1.5px 0 0 rgba(255,120,170,0.28),
+        inset -1.5px 0 0 rgba(90,200,255,0.28);
+    transition: transform .42s cubic-bezier(.22,1.25,.36,1), width .42s cubic-bezier(.22,1.25,.36,1), opacity .25s ease;
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+.nav-pill.show { opacity: 1; }
+.nav-capsule.dragging .nav-pill { transition: none; }
+.nav-capsule > .nav-item,
+.nav-capsule > .nav-slots > .nav-slot,
+.nav-capsule > .nav-more { position: relative; z-index: 1; }
+/* 收起态：动态标签、分隔线、收纳钮向左隐藏，仅留首页按钮 */
+.nav-slots, .nav-divider, .nav-more {
+    transition: max-width .32s cubic-bezier(.22,.61,.36,1), width .32s cubic-bezier(.22,.61,.36,1), opacity .28s ease, transform .32s cubic-bezier(.22,.61,.36,1), margin .32s ease, padding .32s ease;
+}
+.nav-capsule-wrap.collapsed .nav-slots,
+.nav-capsule-wrap.collapsed .nav-divider,
+.nav-capsule-wrap.collapsed .nav-more {
+    max-width: 0;
+    opacity: 0;
+    transform: translateX(-24px);
+    pointer-events: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    overflow: hidden;
+}
+.nav-capsule-wrap.collapsed .nav-divider,
+.nav-capsule-wrap.collapsed .nav-more { width: 0; }
+.nav-capsule::-webkit-scrollbar { display: none; }
+.nav-item {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-width: 62px;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    border-radius: 22px;
+    cursor: pointer;
+    color: #3a4356;
+    font-size: 12px;
+    line-height: 1;
+    transition: background .2s ease, color .2s ease, box-shadow .2s ease, transform .15s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.nav-item svg { width: 22px; height: 22px; display: block; }
+.nav-item:hover { color: #1f2937; }
+.nav-item.active {
+    color: #2563eb;
+    font-weight: 600;
+}
+.nav-divider {
+    flex: 0 0 auto;
+    width: 1px;
+    height: 28px;
+    background: rgba(0,0,0,0.12);
+    margin: 0 4px;
+}
+.nav-more {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #3a4356;
+    transition: background .2s ease, color .2s ease;
+}
+.nav-more svg { width: 22px; height: 22px; display: block; }
+.nav-more:hover { background: rgba(0,0,0,0.06); color: #1f2937; }
+.nav-more.active { background: #ffffff; color: #2563eb; box-shadow: 0 4px 14px rgba(15,23,42,0.14); }
+
+/* 动态标签槽 */
+.nav-slots {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    overflow: hidden;
+}
+.nav-slot {
+    flex: 0 0 62px;
+    width: 62px;
+    max-width: 62px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 8px 6px;
+    border: none;
+    background: transparent;
+    border-radius: 22px;
+    cursor: pointer;
+    color: #3a4356;
+    font-size: 11px;
+    line-height: 1;
+    transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.nav-slot .slot-emoji { font-size: 22px; line-height: 1; }
+.nav-slot .slot-name {
+    max-width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.nav-slot:hover { color: #1f2937; }
+.nav-slot.active {
+    color: #2563eb;
+    font-weight: 600;
+}
+.nav-slot .slot-close {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    width: 14px;
+    height: 14px;
+    border: none;
+    background: rgba(0,0,0,0.08);
+    border-radius: 50%;
+    color: #64748b;
+    font-size: 10px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nav-slot .slot-close:hover { background: #f56c6c; color: #fff; }
+.nav-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: #f56c6c;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nav-badge[hidden] { display: none !important; }
+.nav-more { position: relative; }
+
+/* 全部功能抽屉 */
+.nav-drawer-mask {
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.42);
+    z-index: 10001;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+}
+.nav-drawer-mask.show { opacity: 1; pointer-events: auto; }
+.nav-drawer {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%) translateY(100%);
+    width: min(560px, 96vw);
+    max-height: 72vh;
+    background: #ffffff;
+    border-radius: 28px 28px 0 0;
+    z-index: 10002;
+    display: flex;
+    flex-direction: column;
+    transition: transform .3s cubic-bezier(.22,.61,.36,1);
+    box-shadow: 0 -12px 40px rgba(15,23,42,0.25);
+}
+.nav-drawer.show { transform: translateX(-50%) translateY(0); }
+.nav-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 12px;
+}
+.nav-drawer-header h3 { font-size: 17px; color: #0b1b33; }
+.nav-drawer-close {
+    width: 32px; height: 32px;
+    border: none; background: #f1f5f9; border-radius: 50%;
+    cursor: pointer; color: #475569; font-size: 15px;
+}
+.nav-drawer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+    padding: 12px 24px 28px;
+    overflow-y: auto;
+}
+.nav-drawer-item {
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
+    border-radius: 20px;
+    padding: 18px 10px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    font-size: 13px;
+    color: #1f2937;
+    transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+}
+.nav-drawer-item:hover { background: #eef4ff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37,99,235,0.12); }
+.nav-drawer-item.active { background: #eef4ff; border-color: #bfdbfe; color: #2563eb; font-weight: 600; }
+.nav-drawer-item .nav-drawer-emoji { font-size: 24px; display: block; margin-bottom: 6px; }
+.nav-drawer-item .nav-drawer-name {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.nav-drawer-item .nav-drawer-close-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 18px;
+    height: 18px;
+    border: none;
+    background: rgba(0,0,0,0.06);
+    border-radius: 50%;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1;
+    cursor: pointer;
+}
+.nav-drawer-item .nav-drawer-close-btn:hover { background: #f56c6c; color: #fff; }
+.nav-drawer-item { position: relative; }
+.nav-drawer-empty { padding: 40px 24px; text-align: center; color: #94a3b8; font-size: 14px; }
+
+/* 底部悬浮栏避让 */
+.content { padding-bottom: 88px; }
+/* 旧标签栏由顶部胶囊接管，隐藏 */
+.content > .tabs { display: none !important; }
+@media (max-width: 640px) {
+    .nav-item { min-width: 54px; padding: 8px 9px; }
+    .nav-item svg { width: 20px; height: 20px; }
+}
+</style>
+</head>
 <body>
 
 <div class="custom-modal" id="customModal" style="display: none;">
@@ -2880,6 +3188,33 @@ html, body {
             <span>退出登录</span>
         </div>
     </div>
+</div>
+
+<!-- ===== 底部悬浮液态玻璃导航 ===== -->
+<div class="nav-capsule-wrap" id="navWrap">
+  <div class="nav-capsule" id="navCapsule">
+    <span class="nav-pill" id="navPill"></span>
+    <button class="nav-item active" id="navHomeBtn" data-key="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
+      <span>首页</span>
+    </button>
+    <div class="nav-slots" id="navSlots"></div>
+    <div class="nav-divider"></div>
+    <button class="nav-more" id="navMoreBtn" title="收纳的功能">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.8"/><rect x="13" y="4" width="7" height="7" rx="1.8"/><rect x="4" y="13" width="7" height="7" rx="1.8"/><rect x="13" y="13" width="7" height="7" rx="1.8"/></svg>
+      <span class="nav-badge" id="navBadge" hidden></span>
+    </button>
+  </div>
+</div>
+
+<!-- 收纳抽屉 -->
+<div class="nav-drawer-mask" id="navDrawerMask"></div>
+<div class="nav-drawer" id="navDrawer">
+  <div class="nav-drawer-header">
+    <h3>已收纳功能</h3>
+    <button class="nav-drawer-close" id="navDrawerClose">✕</button>
+  </div>
+  <div class="nav-drawer-grid" id="navDrawerGrid"></div>
 </div>
 
 <div class="main" id="mainPage" style="display: flex;">
@@ -5974,7 +6309,7 @@ App.initHomePage = function() {
   // 异常登记
   if (nameRegisterBtn) {
     nameRegisterBtn.addEventListener('click', () => {
-      window.open('https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYWBBxTkl');
+      window.open('https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYWBBxTkl', '_blank');
       if (zipSubgroup) zipSubgroup.style.display = 'none';
       closeAllModal();
     });
@@ -6051,7 +6386,7 @@ App.initHomePage = function() {
   // 小包数据汇总夜
   if (smallPackageNightBtn) {
     smallPackageNightBtn.addEventListener('click', () => {
-      App.openPage('小包数据汇总夜', 'https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001');
+      window.open('https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001', '_blank');
       if (zipSubgroup) zipSubgroup.style.display = 'none';
       closeAllModal();
     });
@@ -6088,11 +6423,11 @@ App.initHomePage = function() {
   // ========== 按钮链接数据 ==========
   // __BUTTON_LINKS_START__
   const buttonLinks = {
-    'warehouse': { name: '仓储', url: 'https://www.kdocs.cn/l/cnLDizeYKJ4K', target: 'iframe' },
+    'warehouse': { name: '仓储 11月', url: 'https://www.kdocs.cn/l/cfTqDrtWwu6T', target: 'iframe' },
     'daily-storage': { name: '每日留仓数量', url: 'https://www.kdocs.cn/l/clrDVXP1277F', target: 'iframe' },
     'full': { name: '全量', url: 'https://www.kdocs.cn/l/cjHcYd3KIRkA', target: 'iframe' },
-    'line': { name: '专线', url: 'https://www.kdocs.cn/l/cbWVlaTOmyEe', target: 'iframe' },
-    'speed': { name: '速量', url: 'https://www.kdocs.cn/l/ch5xdUJYMzbH', target: 'iframe' },
+    'line': { name: '专线 11月', url: 'https://www.kdocs.cn/l/cenQA3qvwL1K', target: 'iframe' },
+    'speed': { name: '速量 11月', url: 'https://www.kdocs.cn/l/ccMgOeYJdF6R', target: 'iframe' },
     'bubble-ratio': { name: '泡比', url: 'https://www.kdocs.cn/l/cjZZGlQnBtmm', target: 'iframe' },
     'package-count': { name: '包数', url: 'https://www.kdocs.cn/l/cbJs05zRewYZ', target: 'iframe' },
     'order-count': { name: '单量', url: 'https://www.kdocs.cn/l/cdiNjSnC4i2E', target: 'iframe' },
@@ -6102,18 +6437,18 @@ App.initHomePage = function() {
     'trans-order': { name: '转单', url: 'http://120.77.151.112:16321/module/index?mv=index', target: 'iframe' },
     'zip-search': { name: '邮政编码查询', url: 'zip', target: 'iframe' },
     'channel-search': { name: '渠道查询', url: 'channel', target: 'iframe' },
-    'name-register': { name: '异常登记', url: 'https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYWBBxTkl', target: 'iframe' },
+    'name-register': { name: '异常登记', url: 'https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYWBBxTkl', target: 'blank' },
     'recheck': { name: '复测', url: 'modal:recheck', target: 'iframe' },
     'check-arrival': { name: '其他客户到货量', url: 'modal:arrival', target: 'iframe' },
     'exception-type': { name: '异常类型', url: 'modal:exception', target: 'iframe' },
-    'missing-data': { name: '漏数据', url: 'https://doc.weixin.qq.com/sheet/e3_AagALQa5AHMCN52GkF71eR1GtvBBh?scode=AGMAxAeNAHY1LY1ShtATMAqQaKAPU&tab=BB08J2', target: 'iframe' },
-    'cost-table': { name: '成本表', url: 'https://doc.weixin.qq.com/sheet/e3_AQYAHgbXAKkNrDKGbk1STm236e58J?scode=AGMAxAeNAHYa2G9O85ATMAqQaKAPU&tab=oqiig0', target: 'iframe' },
-    'exception-register': { name: '异常登记', url: 'https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYP2S6hbNATMAqQaKAPU&tab=5v7cyc', target: 'iframe' },
+    'missing-data': { name: '漏数据', url: 'https://doc.weixin.qq.com/sheet/e3_AagALQa5AHMCN52GkF71eR1GtvBBh?scode=AGMAxAeNAHY1LY1ShtATMAqQaKAPU&tab=BB08J2', target: 'blank' },
+    'cost-table': { name: '成本表', url: 'https://doc.weixin.qq.com/sheet/e3_AQYAHgbXAKkNrDKGbk1STm236e58J?scode=AGMAxAeNAHYa2G9O85ATMAqQaKAPU&tab=oqiig0', target: 'blank' },
+    'exception-register': { name: '异常登记', url: 'https://doc.weixin.qq.com/sheet/e3_AYIASAYIAIw0t7m5oMlSIm4JaBk0e?scode=AGMAxAeNAHYP2S6hbNATMAqQaKAPU&tab=5v7cyc', target: 'blank' },
     'remove-empty-rows': { name: '删除空白行', url: 'remove-empty', target: 'iframe' },
     'vehicle': { name: '车辆', url: 'https://uc.dlysjg.td.gd.gov.cn/#/securityCenter/postSearchCenter', target: 'blank' },
     'outbound-order': { name: '出库单', url: 'https://www.kdocs.cn/l/caRQJ7Gz4GYG', target: 'iframe' },
     'text-order-count': { name: '文字版单量', url: 'https://www.kdocs.cn/l/cd801DIXtOZx', target: 'iframe' },
-    'small-package-night': { name: '小包数据汇总夜', url: 'https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001', target: 'iframe' },
+    'small-package-night': { name: '小包数据汇总夜', url: 'https://doc.weixin.qq.com/sheet/e3_ARQAwwb0AB0CNMU08XMcER66ABtO7?scode=AGMAxAeNAHYRv3U4Z8ATMAqQaKAPU&tab=000001', target: 'blank' },
     'system-settings': { name: '系统设置', url: 'modal:system-settings', target: 'iframe' }
   };
   // __BUTTON_LINKS_END__
@@ -6213,22 +6548,12 @@ App.initHomePage = function() {
       
       if (linkData && linkData.url) {
         const url = linkData.url;
-        
-        if (cardId === 'warehouse') {
-          window._monthSelectorTarget = linkData.target || 'iframe';
-          showWarehouseMonthSelector();
+        const openBlank = linkData.target === 'blank' || /weixin\.qq\.com/.test(url);
+
+        if (cardId === 'warehouse' || cardId === 'speed' || cardId === 'line') {
           const zipSubgroup = document.getElementById('zip-subgroup');
           if (zipSubgroup) zipSubgroup.style.display = 'none';
-        } else if (cardId === 'speed') {
-          window._monthSelectorTarget = linkData.target || 'iframe';
-          showSpeedMonthSelector();
-          const zipSubgroup = document.getElementById('zip-subgroup');
-          if (zipSubgroup) zipSubgroup.style.display = 'none';
-        } else if (cardId === 'line') {
-          window._monthSelectorTarget = linkData.target || 'iframe';
-          showLineMonthSelector();
-          const zipSubgroup = document.getElementById('zip-subgroup');
-          if (zipSubgroup) zipSubgroup.style.display = 'none';
+          openPage(linkData.name, url);
         } else if (cardId === 'full') {
           window._monthSelectorTarget = linkData.target || 'iframe';
           showFullMonthSelector();
@@ -6269,7 +6594,7 @@ App.initHomePage = function() {
             removeEmptyPage.style.display = 'block';
           }
         } else {
-          if (linkData.target === 'blank') {
+          if (openBlank) {
             window.open(url, '_blank');
           } else {
             openPage(linkData.name, url);
@@ -8583,7 +8908,7 @@ function deleteFullMonth(idx) {
           // 覆盖内置卡片的链接
           buttonLinks[cardId].name = cardLinks[cardId].name;
           buttonLinks[cardId].url = cardLinks[cardId].url;
-          buttonLinks[cardId].target = cardLinks[cardId].target;
+          buttonLinks[cardId].target = /weixin\.qq\.com/.test(cardLinks[cardId].url) ? 'blank' : cardLinks[cardId].target;
           // 更新卡片显示名称
           var cardEl = document.getElementById(cardId);
           if (cardEl) {
@@ -8701,6 +9026,295 @@ function deleteFullMonth(idx) {
     doRestore();
     setTimeout(doRestore, 1000);
     setTimeout(doRestore, 3000);
+  }
+})();
+</script>
+
+<script>
+/* ===== 顶部胶囊动态标签栏：打开即上栏，超出 5 个收进网格菜单 ===== */
+(function () {
+  var MAX_VISIBLE = 5;
+  var slots = document.getElementById('navSlots');
+  var drawerGrid = document.getElementById('navDrawerGrid');
+  var badge = document.getElementById('navBadge');
+  var moreBtn = document.getElementById('navMoreBtn');
+  var homeBtn = document.getElementById('navHomeBtn');
+  var mask = document.getElementById('navDrawerMask');
+  var drawer = document.getElementById('navDrawer');
+  var closeBtn = document.getElementById('navDrawerClose');
+
+  function app() { return (typeof App !== 'undefined') ? App : null; }
+
+  // 从首页功能卡片按名称匹配 emoji，匹配不到用默认图钉
+  function emojiFor(name) {
+    var cards = document.querySelectorAll('.func-card');
+    for (var i = 0; i < cards.length; i++) {
+      var spans = cards[i].querySelectorAll('span');
+      var label = spans[spans.length - 1];
+      if (label && label.textContent.trim() === name) {
+        var em = cards[i].querySelector('.func-emoji');
+        if (em && em.textContent.trim()) return em.textContent.trim();
+      }
+    }
+    return '📌';
+  }
+
+  function getTabs() { var a = app(); return (a && a.tabs) || []; }
+  function getActive() { var a = app(); return (a && a.activeId) || 'home'; }
+
+  var pill = document.getElementById('navPill');
+  // 液态玻璃指示器滑动到激活标签
+  function movePill() {
+    if (!pill) return;
+    var el = (homeBtn && homeBtn.classList.contains('active')) ? homeBtn : slots.querySelector('.nav-slot.active');
+    if (!el) { pill.classList.remove('show'); return; }
+    pill.style.width = el.offsetWidth + 'px';
+    pill.style.transform = 'translateX(' + el.offsetLeft + 'px)';
+    pill.classList.add('show');
+  }
+
+  function render() {
+    if (!slots) return;
+    var tabs = getTabs();
+    var active = getActive();
+    var visible = tabs.slice(0, MAX_VISIBLE);
+    var stored = tabs.slice(MAX_VISIBLE);
+
+    // 首页激活态
+    if (homeBtn) homeBtn.classList.toggle('active', active === 'home' || active === null);
+
+    // 可见标签槽
+    slots.innerHTML = '';
+    visible.forEach(function (t) {
+      var btn = document.createElement('button');
+      btn.className = 'nav-slot' + (t.id === active ? ' active' : '');
+      var em = document.createElement('span');
+      em.className = 'slot-emoji';
+      em.textContent = emojiFor(t.name);
+      var nm = document.createElement('span');
+      nm.className = 'slot-name';
+      nm.textContent = t.name;
+      var cl = document.createElement('span');
+      cl.className = 'slot-close';
+      cl.title = '关闭';
+      cl.textContent = '×';
+      btn.appendChild(em); btn.appendChild(nm); btn.appendChild(cl);
+      btn.onclick = function () { if (suppressClick) { suppressClick = false; return; } var a = app(); if (a) a.switchTab(t.id); };
+      cl.onclick = function (e) { e.stopPropagation(); if (suppressClick) { suppressClick = false; return; } var a = app(); if (a) a.closeTab(e, t.id); };
+      slots.appendChild(btn);
+    });
+
+    // 收纳角标
+    if (badge) {
+      if (stored.length > 0) { badge.hidden = false; badge.textContent = stored.length; }
+      else { badge.hidden = true; }
+    }
+
+    // 收纳抽屉列表
+    if (drawerGrid) {
+      drawerGrid.innerHTML = '';
+      if (stored.length === 0) {
+        var empty = document.createElement('div');
+        empty.className = 'nav-drawer-empty';
+        empty.textContent = '暂无收纳的功能';
+        drawerGrid.appendChild(empty);
+      } else {
+        stored.forEach(function (t) {
+          var item = document.createElement('button');
+          item.className = 'nav-drawer-item' + (t.id === active ? ' active' : '');
+          var em = document.createElement('span');
+          em.className = 'nav-drawer-emoji';
+          em.textContent = emojiFor(t.name);
+          var nm = document.createElement('span');
+          nm.className = 'nav-drawer-name';
+          nm.textContent = t.name;
+          var cl = document.createElement('span');
+          cl.className = 'nav-drawer-close-btn';
+          cl.title = '关闭';
+          cl.textContent = '×';
+          item.appendChild(em); item.appendChild(nm); item.appendChild(cl);
+          item.onclick = function () { var a = app(); if (a) a.switchTab(t.id); closeDrawer(); };
+          cl.onclick = function (e) { e.stopPropagation(); var a = app(); if (a) a.closeTab(e, t.id); };
+          drawerGrid.appendChild(item);
+        });
+      }
+    }
+    movePill();
+  }
+
+  function openDrawer() {
+    if (mask) mask.classList.add('show');
+    if (drawer) drawer.classList.add('show');
+    if (moreBtn) moreBtn.classList.add('active');
+  }
+  function closeDrawer() {
+    if (mask) mask.classList.remove('show');
+    if (drawer) drawer.classList.remove('show');
+    if (moreBtn) moreBtn.classList.remove('active');
+  }
+
+  if (moreBtn) moreBtn.onclick = function () {
+    if (drawer && drawer.classList.contains('show')) closeDrawer(); else openDrawer();
+  };
+  if (closeBtn) closeBtn.onclick = closeDrawer;
+  if (mask) mask.onclick = closeDrawer;
+  var suppressClick = false;
+  if (homeBtn) homeBtn.onclick = function () { if (suppressClick) { suppressClick = false; return; } var a = app(); if (a) a.switchTab('home'); };
+
+  // ===== 闲置自动向左收起；鼠标悬停自动展开 =====
+  var wrap = document.getElementById('navWrap');
+  var IDLE_MS = 4000;
+  var idleTimer = null;
+
+  function collapse() { if (wrap) wrap.classList.add('collapsed'); }
+  function expand() { if (wrap) wrap.classList.remove('collapsed'); resetIdle(); }
+
+  function resetIdle() {
+    if (idleTimer) clearTimeout(idleTimer);
+    idleTimer = setTimeout(function () {
+      if (drawer && drawer.classList.contains('show')) return; // 抽屉打开时不收起
+      collapse();
+    }, IDLE_MS);
+  }
+
+  // 点击/触摸操作时不收起
+  ['pointerdown', 'click', 'touchstart'].forEach(function (ev) {
+    document.addEventListener(ev, resetIdle, { passive: true });
+  });
+  // 鼠标悬停在栏上自动展开，移出后重新计时收起
+  if (wrap) {
+    wrap.addEventListener('mouseenter', expand);
+    wrap.addEventListener('mouseleave', resetIdle);
+  }
+
+  // ===== 左右滑动切换相邻标签页 =====
+  function orderSeq() { return ['home'].concat(getTabs().map(function (t) { return t.id; })); }
+  function go(delta) {
+    var a = app(); if (!a) return;
+    var order = orderSeq();
+    var cur = getActive();
+    var idx = order.indexOf(cur);
+    if (idx === -1) idx = 0;
+    var next = idx + delta;
+    if (next < 0 || next >= order.length) return;
+    a.switchTab(order[next]);
+  }
+
+  var startX = null, startY = null, tracking = false;
+  function onDown(e) {
+    if (drawer && drawer.classList.contains('show')) return;
+    var p = e.touches ? e.touches[0] : e;
+    startX = p.clientX; startY = p.clientY; tracking = true;
+  }
+  function onUp(e) {
+    if (!tracking) return;
+    tracking = false;
+    var p = e.changedTouches ? e.changedTouches[0] : e;
+    var dx = p.clientX - startX, dy = p.clientY - startY;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+      if (dx < 0) go(1); else go(-1);
+    }
+  }
+  var contentEl = document.querySelector('.content') || document.body;
+  var gestureTargets = [contentEl].filter(Boolean);
+  gestureTargets.forEach(function (el) {
+    el.addEventListener('pointerdown', onDown, { passive: true });
+    el.addEventListener('pointerup', onUp, { passive: true });
+    el.addEventListener('touchstart', onDown, { passive: true });
+    el.addEventListener('touchend', onUp, { passive: true });
+  });
+
+  // ===== 拖拽玻璃指示器：跟手平滑平移，松手吸附最近标签 =====
+  var capsule = document.getElementById('navCapsule');
+  var drag = { active: false, moved: false, startX: 0, baseLeft: 0, baseW: 0, idx: 0, target: 0 };
+
+  function dragSlotEls() {
+    var els = [];
+    if (homeBtn) els.push(homeBtn);
+    if (slots) slots.querySelectorAll('.nav-slot').forEach(function (b) { els.push(b); });
+    return els;
+  }
+  function dragOrder() { return ['home'].concat(getTabs().map(function (t) { return t.id; })); }
+
+  function onCapDown(e) {
+    if (drawer && drawer.classList.contains('show')) return;
+    var p = e.touches ? e.touches[0] : e;
+    drag.active = true; drag.moved = false;
+    drag.startX = p.clientX;
+    var order = dragOrder(); var cur = getActive();
+    drag.idx = order.indexOf(cur); if (drag.idx === -1) drag.idx = 0;
+    drag.target = drag.idx;
+    var els = dragSlotEls(); var el = els[drag.idx];
+    drag.baseLeft = el ? el.offsetLeft : 0;
+    drag.baseW = el ? el.offsetWidth : 62;
+    if (capsule) capsule.classList.add('dragging');
+  }
+  function onCapMove(e) {
+    if (!drag.active) return;
+    var p = e.touches ? e.touches[0] : e;
+    var dx = p.clientX - drag.startX;
+    if (Math.abs(dx) > 8) drag.moved = true;
+    // 玻璃胶囊跟手平滑平移，不跳变
+    if (pill) {
+      pill.style.width = drag.baseW + 'px';
+      pill.style.transform = 'translateX(' + (drag.baseLeft + dx) + 'px)';
+    }
+    // 预测目标：胶囊中心落入哪个标签区间
+    var els = dragSlotEls(); var order = dragOrder();
+    var center = drag.baseLeft + drag.baseW / 2 + dx;
+    var t = drag.idx;
+    for (var i = 0; i < els.length; i++) {
+      if (center >= els[i].offsetLeft && center <= els[i].offsetLeft + els[i].offsetWidth) { t = i; break; }
+    }
+    drag.target = Math.max(0, Math.min(order.length - 1, t));
+  }
+  function onCapUp() {
+    if (!drag.active) return;
+    drag.active = false;
+    if (capsule) capsule.classList.remove('dragging');
+    var order = dragOrder();
+    if (drag.moved && drag.target !== drag.idx) {
+      var a = app(); if (a) a.switchTab(order[drag.target]);
+      suppressClick = true;
+    }
+    movePill();
+  }
+  if (capsule) {
+    capsule.addEventListener('pointerdown', onCapDown, { passive: true });
+    capsule.addEventListener('touchstart', onCapDown, { passive: true });
+    capsule.addEventListener('mousedown', onCapDown, { passive: true });
+    capsule.addEventListener('pointermove', onCapMove, { passive: false });
+    capsule.addEventListener('touchmove', onCapMove, { passive: false });
+    capsule.addEventListener('mousemove', onCapMove, { passive: false });
+    capsule.addEventListener('pointerup', onCapUp, { passive: true });
+    capsule.addEventListener('pointercancel', onCapUp, { passive: true });
+    capsule.addEventListener('touchend', onCapUp, { passive: true });
+    capsule.addEventListener('mouseup', onCapUp, { passive: true });
+    capsule.addEventListener('mouseleave', onCapUp, { passive: true });
+  }
+
+  window.addEventListener('resize', movePill);
+  setTimeout(movePill, 300);
+  setTimeout(movePill, 1000);
+
+  resetIdle();
+
+  // 包装现有方法，保持标签栏与页签状态同步
+  function hook() {
+    var a = app();
+    if (!a || a.__navHooked) return;
+    a.__navHooked = true;
+    var _rt = a.renderTabs.bind(a);
+    a.renderTabs = function () { _rt(); render(); };
+    var _st = a.switchTab.bind(a);
+    a.switchTab = function (id) { _st(id); render(); };
+    render();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { hook(); setTimeout(render, 300); setTimeout(render, 1000); });
+  } else {
+    hook(); setTimeout(render, 300); setTimeout(render, 1000);
   }
 })();
 </script>
