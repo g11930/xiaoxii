@@ -1,8 +1,14 @@
 {
   "v": 1,
-  "updatedAt": "2026-11-24T01:43:18.280Z",
+  "updatedAt": "2026-11-24T01:44:08.572Z",
   "customCards": [],
-  "cardLinks": {},
+  "cardLinks": {
+    "daily-storage": {
+      "name": "111",
+      "url": "https://www.kdocs.cn/l/clrDVXP1277F",
+      "target": "iframe"
+    }
+  },
   "deletedCards": [
     "custom-1795484486898",
     "custom-1795484561418"
