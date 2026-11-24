@@ -1,6 +1,6 @@
 {
-  "v": 3,
-  "updatedAt": "2026-11-24T03:49:54.697Z",
+  "v": 4,
+  "updatedAt": "2026-11-24T05:20:40.059Z",
   "customCards": [
     {
       "id": "custom-1795486052823",
@@ -68,5 +68,11 @@
     }
   ],
   "lineExtraMonths": [],
-  "fullExtraMonths": []
+  "fullExtraMonths": [],
+  "defaultMonths": {
+    "warehouse": {
+      "name": "十一月份",
+      "url": "https://www.kdocs.cn/l/cfTqDrtWwu6T"
+    }
+  }
 }
