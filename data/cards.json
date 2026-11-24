@@ -1,8 +1,37 @@
 {
   "v": 1,
-  "updatedAt": "2026-11-24T01:36:25.626Z",
-  "customCards": [],
+  "updatedAt": "2026-11-24T01:41:33.178Z",
+  "customCards": [
+    {
+      "id": "custom-1795484486898",
+      "name": "111",
+      "url": "",
+      "emoji": "⭐",
+      "target": "iframe"
+    }
+  ],
   "cardLinks": {},
   "deletedCards": [],
-  "cardOrder": []
+  "cardOrder": [
+    "warehouse",
+    "speed",
+    "line",
+    "name-register",
+    "order-count",
+    "text-order-count",
+    "package-count",
+    "bubble-ratio",
+    "person-efficiency",
+    "missing-data",
+    "daily-storage",
+    "trans-order",
+    "small-package",
+    "vehicle",
+    "small-package-night",
+    "illustration",
+    "zip-search",
+    "channel-search",
+    "system-settings",
+    "custom-1795484486898"
+  ]
 }
