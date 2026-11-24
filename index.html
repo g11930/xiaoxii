@@ -6767,7 +6767,11 @@ App.initHomePage = function() {
         if (cardId === 'warehouse' || cardId === 'speed' || cardId === 'line') {
           const zipSubgroup = document.getElementById('zip-subgroup');
           if (zipSubgroup) zipSubgroup.style.display = 'none';
-          openPage(linkData.name, url);
+          // 改为月份选择器：可自由添加月份，列表可滚动
+          window._monthSelectorTarget = linkData.target || 'iframe';
+          if (cardId === 'warehouse') { showWarehouseMonthSelector(); }
+          else if (cardId === 'speed') { showSpeedMonthSelector(); }
+          else { showLineMonthSelector(); }
         } else if (cardId === 'full') {
           window._monthSelectorTarget = linkData.target || 'iframe';
           showFullMonthSelector();
@@ -8392,7 +8396,8 @@ function showSpeedMonthSelector() {
     { name: '六月份', url: 'https://www.kdocs.cn/l/cjyFHcqAyGuJ' },
     { name: '七月份', url: 'https://www.kdocs.cn/l/cjHcYd3KIRkA' },
     { name: '九月份', url: 'https://www.kdocs.cn/l/chBg0qPgZGXd' },
-    { name: '十月份', url: 'https://www.kdocs.cn/l/cqAEUobY9hIe' }
+    { name: '十月份', url: 'https://www.kdocs.cn/l/cqAEUobY9hIe' },
+    { name: '十一月份', url: 'https://www.kdocs.cn/l/ccMgOeYJdF6R' }
   ];
   
   const allMonths = [...months, ...window.speedExtraMonths];
@@ -8401,7 +8406,7 @@ function showSpeedMonthSelector() {
     <div id="speedMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
       <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
         <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div id="speed-month-list" style="display:flex;flex-direction:column;gap:12px;">
+        <div id="speed-month-list" style="display:flex;flex-direction:column;gap:12px;max-height:52vh;overflow-y:auto;padding-right:4px;">
   `;
   
   allMonths.forEach((month, index) => {
@@ -8508,7 +8513,8 @@ function showWarehouseMonthSelector() {
     { name: '六月份', url: 'https://www.kdocs.cn/l/ceSENEnBJ4ir' },
     { name: '七月份', url: 'https://www.kdocs.cn/l/cmCAFEVsjJmy' },
     { name: '九月份', url: 'https://www.kdocs.cn/l/cbbJRjINx17M' },
-    { name: '十月份', url: 'https://www.kdocs.cn/l/ck5zez9zIQ2p' }
+    { name: '十月份', url: 'https://www.kdocs.cn/l/ck5zez9zIQ2p' },
+    { name: '十一月份', url: 'https://www.kdocs.cn/l/cfTqDrtWwu6T' }
   ];
   
   const allMonths = [...months, ...window.warehouseExtraMonths];
@@ -8517,7 +8523,7 @@ function showWarehouseMonthSelector() {
     <div id="warehouseMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
       <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
         <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div id="warehouse-month-list" style="display:flex;flex-direction:column;gap:12px;">
+        <div id="warehouse-month-list" style="display:flex;flex-direction:column;gap:12px;max-height:52vh;overflow-y:auto;padding-right:4px;">
   `;
   
   allMonths.forEach((month, index) => {
@@ -8624,7 +8630,8 @@ function showLineMonthSelector() {
     { name: '六月份', url: 'https://www.kdocs.cn/l/cpoXE2lCEZje' },
     { name: '七月份', url: 'https://www.kdocs.cn/l/cd3DiyOuerT8' },
     { name: '九月份', url: 'https://www.kdocs.cn/l/cggj67gnJGFe' },
-    { name: '十月份', url: 'https://www.kdocs.cn/l/cc6bft8XP51V' }
+    { name: '十月份', url: 'https://www.kdocs.cn/l/cc6bft8XP51V' },
+    { name: '十一月份', url: 'https://www.kdocs.cn/l/cenQA3qvwL1K' }
   ];
   
   const allMonths = [...months, ...window.lineExtraMonths];
@@ -8633,7 +8640,7 @@ function showLineMonthSelector() {
     <div id="lineMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
       <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
         <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div id="line-month-list" style="display:flex;flex-direction:column;gap:12px;">
+        <div id="line-month-list" style="display:flex;flex-direction:column;gap:12px;max-height:52vh;overflow-y:auto;padding-right:4px;">
   `;
   
   allMonths.forEach((month, index) => {
@@ -8746,7 +8753,7 @@ function showFullMonthSelector() {
     <div id="fullMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
       <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
         <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div id="full-month-list" style="display:flex;flex-direction:column;gap:12px;">
+        <div id="full-month-list" style="display:flex;flex-direction:column;gap:12px;max-height:52vh;overflow-y:auto;padding-right:4px;">
   `;
   
   allMonths.forEach((month, index) => {
@@ -9794,14 +9801,18 @@ function deleteFullMonth(idx) {
   function collect() {
     function g(k, d) { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } }
     return {
-      v: 2,
+      v: 3,
       updatedAt: new Date().toISOString(),
       customCards: g('customCards', []),
       cardLinks: g('cardLinks', {}),
       deletedCards: g('deletedCards', []),
       cardOrder: g('cardOrder', []),
       siteTitle: localStorage.getItem('siteTitle') || '',
-      siteSubtitle: localStorage.getItem('siteSubtitle') || ''
+      siteSubtitle: localStorage.getItem('siteSubtitle') || '',
+      speedExtraMonths: g('speedExtraMonths', []),
+      warehouseExtraMonths: g('warehouseExtraMonths', []),
+      lineExtraMonths: g('lineExtraMonths', []),
+      fullExtraMonths: g('fullExtraMonths', [])
     };
   }
   function applyRemote(data) {
@@ -9812,6 +9823,9 @@ function deleteFullMonth(idx) {
       if (data.cardOrder) localStorage.setItem('cardOrder', JSON.stringify(data.cardOrder));
       if (typeof data.siteTitle === 'string' && data.siteTitle) localStorage.setItem('siteTitle', data.siteTitle);
       if (typeof data.siteSubtitle === 'string' && data.siteSubtitle) localStorage.setItem('siteSubtitle', data.siteSubtitle);
+      ['speedExtraMonths', 'warehouseExtraMonths', 'lineExtraMonths', 'fullExtraMonths'].forEach(function (k) {
+        if (Array.isArray(data[k])) localStorage.setItem(k, JSON.stringify(data[k]));
+      });
       localStorage.setItem(LS_APPLIED, data.updatedAt || '');
     } catch (e) {}
   }
