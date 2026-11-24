@@ -1,7 +1,15 @@
 {
   "v": 1,
-  "updatedAt": "2026-11-24T01:44:08.572Z",
-  "customCards": [],
+  "updatedAt": "2026-11-24T01:48:25.741Z",
+  "customCards": [
+    {
+      "id": "custom-1795484900130",
+      "name": "数据",
+      "url": "https://doc.weixin.qq.com/sheet/e3_AQUARQb9AJkCNXKoFB79cQgaFHfbg?scode=AGMAxAeNAHYHWW8GsrATMAqQaKAPU&tab=000005",
+      "emoji": "⭐",
+      "target": "blank"
+    }
+  ],
   "cardLinks": {
     "daily-storage": {
       "name": "111",
@@ -32,6 +40,7 @@
     "illustration",
     "zip-search",
     "channel-search",
-    "system-settings"
+    "system-settings",
+    "custom-1795484900130"
   ]
 }
