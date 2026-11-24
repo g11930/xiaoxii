@@ -7549,6 +7549,11 @@ App.initHomePage = function() {
         if (title) title.textContent = titleValue || 'xiao OS';
         if (subtitle) subtitle.textContent = subtitleValue || '自由拖动卡片 添加卡片 右键可修改卡片属性';
       }
+      // 持久化标题/副标题，供刷新与云同步使用
+      try {
+        localStorage.setItem('siteTitle', updateTitleInput ? updateTitleInput.value : '');
+        localStorage.setItem('siteSubtitle', updateSubtitleInput ? updateSubtitleInput.value : '');
+      } catch (e) {}
       if (updateContentMask) updateContentMask.style.display = 'none';
       if (updateContentModal) updateContentModal.style.display = 'none';
     });
@@ -9211,7 +9216,22 @@ function deleteFullMonth(idx) {
   }
 
   // 执行恢复：多次执行确保覆盖所有初始化时机
+  function restoreSiteText() {
+    try {
+      var t = localStorage.getItem('siteTitle');
+      var s = localStorage.getItem('siteSubtitle');
+      var area = document.querySelector('.logo-area');
+      if (!area) return;
+      var h1 = area.querySelector('h1');
+      var sub = area.querySelector('span');
+      if (h1 && t !== null && t !== '') h1.textContent = t;
+      if (sub && s !== null && s !== '') sub.textContent = s;
+    } catch (e) {}
+  }
+
   function doRestore() {
+    // 0. 标题/副标题
+    restoreSiteText();
     // 1. 先恢复自定义卡片（添加新卡片到 DOM）
     restoreCustomCards();
     // 2. 恢复卡片链接修改（需要 buttonLinks 就绪）
@@ -9728,7 +9748,7 @@ function deleteFullMonth(idx) {
     };
   }
   // 用带 #tok= 的链接打开时，自动把 Token 存进本机配置（Token 不写进仓库文件）
-  (function seedTokenFromHash() {
+  function seedTokenFromHash() {
     try {
       var m = (location.hash || '').match(/tok=([^&]+)/);
       if (!m) return;
@@ -9742,7 +9762,9 @@ function deleteFullMonth(idx) {
       }));
       history.replaceState(null, '', location.pathname + location.search);
     } catch (e) {}
-  })();
+  }
+  seedTokenFromHash();
+  window.addEventListener('hashchange', seedTokenFromHash);
   function b64enc(str) {
     var bytes = new TextEncoder().encode(str), bin = '';
     for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
@@ -9756,12 +9778,14 @@ function deleteFullMonth(idx) {
   function collect() {
     function g(k, d) { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } }
     return {
-      v: 1,
+      v: 2,
       updatedAt: new Date().toISOString(),
       customCards: g('customCards', []),
       cardLinks: g('cardLinks', {}),
       deletedCards: g('deletedCards', []),
-      cardOrder: g('cardOrder', [])
+      cardOrder: g('cardOrder', []),
+      siteTitle: localStorage.getItem('siteTitle') || '',
+      siteSubtitle: localStorage.getItem('siteSubtitle') || ''
     };
   }
   function applyRemote(data) {
@@ -9770,6 +9794,8 @@ function deleteFullMonth(idx) {
       localStorage.setItem('cardLinks', JSON.stringify(data.cardLinks || {}));
       localStorage.setItem('deletedCards', JSON.stringify(data.deletedCards || []));
       if (data.cardOrder) localStorage.setItem('cardOrder', JSON.stringify(data.cardOrder));
+      if (typeof data.siteTitle === 'string' && data.siteTitle) localStorage.setItem('siteTitle', data.siteTitle);
+      if (typeof data.siteSubtitle === 'string' && data.siteSubtitle) localStorage.setItem('siteSubtitle', data.siteSubtitle);
       localStorage.setItem(LS_APPLIED, data.updatedAt || '');
     } catch (e) {}
   }
