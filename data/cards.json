@@ -1,10 +1,11 @@
 {
   "v": 1,
-  "updatedAt": "2026-11-24T01:42:05.997Z",
+  "updatedAt": "2026-11-24T01:43:18.280Z",
   "customCards": [],
   "cardLinks": {},
   "deletedCards": [
-    "custom-1795484486898"
+    "custom-1795484486898",
+    "custom-1795484561418"
   ],
   "cardOrder": [
     "warehouse",
