@@ -1,6 +1,6 @@
 {
   "v": 4,
-  "updatedAt": "2026-11-24T06:10:37.349Z",
+  "updatedAt": "2026-11-24T07:08:22.040Z",
   "customCards": [
     {
       "id": "custom-1795486052823",
@@ -27,6 +27,11 @@
       "name": "单量",
       "url": "https://www.kdocs.cn/l/cdiNjSnC4i2E",
       "target": "iframe"
+    },
+    "trans-order": {
+      "name": "转单",
+      "url": "http://120.77.151.112:16321/module/index?mv=index",
+      "target": "blank"
     }
   },
   "deletedCards": [
