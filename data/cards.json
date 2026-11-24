@@ -1,6 +1,6 @@
 {
-  "v": 1,
-  "updatedAt": "2026-11-24T01:48:25.741Z",
+  "v": 2,
+  "updatedAt": "2026-11-24T01:54:26.805Z",
   "customCards": [
     {
       "id": "custom-1795484900130",
@@ -14,6 +14,11 @@
     "daily-storage": {
       "name": "111",
       "url": "https://www.kdocs.cn/l/clrDVXP1277F",
+      "target": "iframe"
+    },
+    "order-count": {
+      "name": "单量",
+      "url": "https://www.kdocs.cn/l/cdiNjSnC4i2E",
       "target": "iframe"
     }
   },
@@ -42,5 +47,7 @@
     "channel-search",
     "system-settings",
     "custom-1795484900130"
-  ]
+  ],
+  "siteTitle": "xiao OS 2",
+  "siteSubtitle": "自由拖动卡片 添加卡片 右键可修改卡片属性"
 }
