@@ -1,6 +1,6 @@
 {
   "v": 2,
-  "updatedAt": "2026-11-24T01:54:26.805Z",
+  "updatedAt": "2026-11-24T02:02:12.073Z",
   "customCards": [
     {
       "id": "custom-1795484900130",
@@ -48,6 +48,6 @@
     "system-settings",
     "custom-1795484900130"
   ],
-  "siteTitle": "xiao OS 2",
+  "siteTitle": "xiao OS",
   "siteSubtitle": "自由拖动卡片 添加卡片 右键可修改卡片属性"
 }
