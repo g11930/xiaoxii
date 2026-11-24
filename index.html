@@ -9723,10 +9723,26 @@ function deleteFullMonth(idx) {
       repo: (c.repo || DEF.repo || '').trim(),
       branch: (c.branch || DEF.branch || 'main').trim(),
       path: (c.path || DEF.path || 'data/cards.json').trim(),
-      token: (c.token || '').trim(),
+      token: (c.token || DEF.token || '').trim(),
       auto: (typeof c.auto === 'boolean') ? c.auto : DEF.auto
     };
   }
+  // 用带 #tok= 的链接打开时，自动把 Token 存进本机配置（Token 不写进仓库文件）
+  (function seedTokenFromHash() {
+    try {
+      var m = (location.hash || '').match(/tok=([^&]+)/);
+      if (!m) return;
+      var c = cfg();
+      localStorage.setItem(LS_CFG, JSON.stringify({
+        repo: c.repo || DEF.repo || '',
+        branch: c.branch || DEF.branch || 'main',
+        path: c.path || DEF.path || 'data/cards.json',
+        token: decodeURIComponent(m[1]),
+        auto: (typeof c.auto === 'boolean') ? c.auto : DEF.auto
+      }));
+      history.replaceState(null, '', location.pathname + location.search);
+    } catch (e) {}
+  })();
   function b64enc(str) {
     var bytes = new TextEncoder().encode(str), bin = '';
     for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
@@ -9814,7 +9830,7 @@ function deleteFullMonth(idx) {
     elRepo.value = c.repo || DEF.repo || '';
     elBranch.value = c.branch || DEF.branch || 'main';
     elPath.value = c.path || DEF.path || 'data/cards.json';
-    elToken.value = c.token || '';
+    elToken.value = c.token || DEF.token || '';
     elAuto.checked = (typeof c.auto === 'boolean') ? c.auto : DEF.auto;
     status('');
     if (mask) mask.style.display = 'block';
