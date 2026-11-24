@@ -1,6 +1,6 @@
 {
   "v": 2,
-  "updatedAt": "2026-11-24T02:26:53.001Z",
+  "updatedAt": "2026-11-24T02:29:04.310Z",
   "customCards": [
     {
       "id": "custom-1795486052823",
@@ -19,7 +19,7 @@
   ],
   "cardLinks": {
     "daily-storage": {
-      "name": "111",
+      "name": "留仓",
       "url": "https://www.kdocs.cn/l/clrDVXP1277F",
       "target": "iframe"
     },
