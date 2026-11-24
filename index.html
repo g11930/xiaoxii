@@ -2653,7 +2653,7 @@ body {
 /* ===== 顶部胶囊导航（复刻参考图） ===== */
 .nav-capsule-wrap {
     position: fixed;
-    bottom: 14px;
+    bottom: 34px;
     left: 14px;
     z-index: 9998;
     max-width: calc(100vw - 28px);
@@ -9520,6 +9520,7 @@ function deleteFullMonth(idx) {
     if (idleTimer) clearTimeout(idleTimer);
     idleTimer = setTimeout(function () {
       if (drawer && drawer.classList.contains('show')) return; // 抽屉打开时不收起
+      if (wrap && wrap.matches(':hover')) return; // 鼠标还在栏上时不收起
       collapse();
     }, IDLE_MS);
   }
@@ -9528,10 +9529,20 @@ function deleteFullMonth(idx) {
   ['pointerdown', 'click', 'touchstart'].forEach(function (ev) {
     document.addEventListener(ev, resetIdle, { passive: true });
   });
-  // 鼠标悬停在栏上自动展开，移出后重新计时收起
+  // 鼠标移开即收起（留 180ms 容错，避免鼠标划过缝隙反复开合）
+  var leaveTimer = null;
   if (wrap) {
-    wrap.addEventListener('mouseenter', expand);
-    wrap.addEventListener('mouseleave', resetIdle);
+    wrap.addEventListener('mouseenter', function () {
+      if (leaveTimer) { clearTimeout(leaveTimer); leaveTimer = null; }
+      expand();
+    });
+    wrap.addEventListener('mouseleave', function () {
+      if (leaveTimer) clearTimeout(leaveTimer);
+      leaveTimer = setTimeout(function () {
+        if (drawer && drawer.classList.contains('show')) return; // 抽屉打开时不收起
+        collapse();
+      }, 180);
+    });
   }
 
   // ===== 左右滑动切换相邻标签页 =====
