@@ -9423,11 +9423,8 @@ function deleteFullMonth(idx) {
     var ifr = preview.querySelector('iframe');
     if (!ifr) return;
     var w = preview.clientWidth || 184;
-    var h = preview.clientHeight || 116;
     var s = w / 1280;
     ifr.style.transform = 'scale(' + s + ')';
-    // 让缩放后的 iframe 精确铺满预览区（大预览时撑满整页高度）
-    ifr.style.height = Math.round(h / s) + 'px';
   }
 
   // 铣栏宽度/卡片高度变化后，重算所有缩略 iframe 的缩放
