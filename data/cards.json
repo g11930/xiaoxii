@@ -1,6 +1,6 @@
 {
   "v": 2,
-  "updatedAt": "2026-11-24T02:29:04.310Z",
+  "updatedAt": "2026-11-24T02:32:01.804Z",
   "customCards": [
     {
       "id": "custom-1795486052823",
@@ -58,6 +58,6 @@
     "system-settings",
     "custom-1795486052823"
   ],
-  "siteTitle": "xiao OS2",
-  "siteSubtitle": "添加新链接，云同步可自己更新网站的内容"
+  "siteTitle": "添加新链接，云同步可自己更新网站的内容",
+  "siteSubtitle": ""
 }
