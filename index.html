@@ -8388,16 +8388,35 @@ function getLocalIPs(callback) {
   banner.addEventListener('selectstart', (e) => e.preventDefault());
 })();
 
-// 速量月份选择器
-function showSpeedMonthSelector() {
-  if (document.getElementById('speedMonthSelector')) return;
-  const months = [
+// 月份基础数据（三张卡共用一份，供选择器与悬停浮层使用）
+window.__MONTH_SETS = {
+  warehouse: [
+    { name: '六月份', url: 'https://www.kdocs.cn/l/ceSENEnBJ4ir' },
+    { name: '七月份', url: 'https://www.kdocs.cn/l/cmCAFEVsjJmy' },
+    { name: '九月份', url: 'https://www.kdocs.cn/l/cbbJRjINx17M' },
+    { name: '十月份', url: 'https://www.kdocs.cn/l/ck5zez9zIQ2p' },
+    { name: '十一月份', url: 'https://www.kdocs.cn/l/cfTqDrtWwu6T' }
+  ],
+  speed: [
     { name: '六月份', url: 'https://www.kdocs.cn/l/cjyFHcqAyGuJ' },
     { name: '七月份', url: 'https://www.kdocs.cn/l/cjHcYd3KIRkA' },
     { name: '九月份', url: 'https://www.kdocs.cn/l/chBg0qPgZGXd' },
     { name: '十月份', url: 'https://www.kdocs.cn/l/cqAEUobY9hIe' },
     { name: '十一月份', url: 'https://www.kdocs.cn/l/ccMgOeYJdF6R' }
-  ];
+  ],
+  line: [
+    { name: '六月份', url: 'https://www.kdocs.cn/l/cpoXE2lCEZje' },
+    { name: '七月份', url: 'https://www.kdocs.cn/l/cd3DiyOuerT8' },
+    { name: '九月份', url: 'https://www.kdocs.cn/l/cggj67gnJGFe' },
+    { name: '十月份', url: 'https://www.kdocs.cn/l/cc6bft8XP51V' },
+    { name: '十一月份', url: 'https://www.kdocs.cn/l/cenQA3qvwL1K' }
+  ]
+};
+
+// 速量月份选择器
+function showSpeedMonthSelector() {
+  if (document.getElementById('speedMonthSelector')) return;
+  const months = window.__MONTH_SETS.speed;
   
   const allMonths = [...months, ...window.speedExtraMonths];
   
@@ -8508,13 +8527,7 @@ function selectSpeedMonth(name, url) {
 // 仓储月份选择器
 function showWarehouseMonthSelector() {
   if (document.getElementById('warehouseMonthSelector')) return;
-  const months = [
-    { name: '六月份', url: 'https://www.kdocs.cn/l/ceSENEnBJ4ir' },
-    { name: '七月份', url: 'https://www.kdocs.cn/l/cmCAFEVsjJmy' },
-    { name: '九月份', url: 'https://www.kdocs.cn/l/cbbJRjINx17M' },
-    { name: '十月份', url: 'https://www.kdocs.cn/l/ck5zez9zIQ2p' },
-    { name: '十一月份', url: 'https://www.kdocs.cn/l/cfTqDrtWwu6T' }
-  ];
+  const months = window.__MONTH_SETS.warehouse;
   
   const allMonths = [...months, ...window.warehouseExtraMonths];
   
@@ -8625,13 +8638,7 @@ function selectWarehouseMonth(name, url) {
 // 专线月份选择器
 function showLineMonthSelector() {
   if (document.getElementById('lineMonthSelector')) return;
-  const months = [
-    { name: '六月份', url: 'https://www.kdocs.cn/l/cpoXE2lCEZje' },
-    { name: '七月份', url: 'https://www.kdocs.cn/l/cd3DiyOuerT8' },
-    { name: '九月份', url: 'https://www.kdocs.cn/l/cggj67gnJGFe' },
-    { name: '十月份', url: 'https://www.kdocs.cn/l/cc6bft8XP51V' },
-    { name: '十一月份', url: 'https://www.kdocs.cn/l/cenQA3qvwL1K' }
-  ];
+  const months = window.__MONTH_SETS.line;
   
   const allMonths = [...months, ...window.lineExtraMonths];
   
@@ -9831,7 +9838,7 @@ function deleteFullMonth(idx) {
   function collect() {
     function g(k, d) { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } }
     return {
-      v: 3,
+      v: 4,
       updatedAt: new Date().toISOString(),
       customCards: g('customCards', []),
       cardLinks: g('cardLinks', {}),
@@ -9842,7 +9849,8 @@ function deleteFullMonth(idx) {
       speedExtraMonths: g('speedExtraMonths', []),
       warehouseExtraMonths: g('warehouseExtraMonths', []),
       lineExtraMonths: g('lineExtraMonths', []),
-      fullExtraMonths: g('fullExtraMonths', [])
+      fullExtraMonths: g('fullExtraMonths', []),
+      defaultMonths: g('defaultMonths', {})
     };
   }
   function applyRemote(data) {
@@ -9856,6 +9864,9 @@ function deleteFullMonth(idx) {
       ['speedExtraMonths', 'warehouseExtraMonths', 'lineExtraMonths', 'fullExtraMonths'].forEach(function (k) {
         if (Array.isArray(data[k])) localStorage.setItem(k, JSON.stringify(data[k]));
       });
+      if (data.defaultMonths && typeof data.defaultMonths === 'object') {
+        localStorage.setItem('defaultMonths', JSON.stringify(data.defaultMonths));
+      }
       localStorage.setItem(LS_APPLIED, data.updatedAt || '');
     } catch (e) {}
   }
@@ -9969,6 +9980,183 @@ function deleteFullMonth(idx) {
       location.reload();
     } catch (e) { /* 静默失败，不影响本地使用 */ }
   })();
+})();
+</script>
+<script>
+/* ===== 月份快速浮层：悬停图标自动出现月份，可固定默认月份 ===== */
+(function () {
+  var CATS = {
+    warehouse: { label: '仓储', extra: 'warehouseExtraMonths', winArr: function () { return window.warehouseExtraMonths || []; } },
+    speed: { label: '速量', extra: 'speedExtraMonths', winArr: function () { return window.speedExtraMonths || []; } },
+    line: { label: '专线', extra: 'lineExtraMonths', winArr: function () { return window.lineExtraMonths || []; } }
+  };
+  var fly = null, showTimer = null, hideTimer = null, curCat = null, stuck = false;
+
+  function loadDefaults() {
+    try { return JSON.parse(localStorage.getItem('defaultMonths') || '{}') || {}; } catch (e) { return {}; }
+  }
+  function saveDefaults(o) {
+    try { localStorage.setItem('defaultMonths', JSON.stringify(o)); } catch (e) {}
+  }
+  function monthList(cat) {
+    var base = (window.__MONTH_SETS || {})[cat] || [];
+    var extra = CATS[cat].winArr();
+    return base.concat(extra.map(function (m) { return { name: m.name, url: m.url }; }));
+  }
+
+  function el(tag, css, text) {
+    var e = document.createElement(tag);
+    if (css) e.style.cssText = css;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function ensureFly() {
+    if (fly) return fly;
+    fly = el('div', 'position:fixed;z-index:9994;width:224px;background:rgba(255,255,255,0.97);border-radius:14px;' +
+      'box-shadow:0 18px 44px rgba(15,23,42,0.28);border:1px solid rgba(15,23,42,0.08);padding:10px;display:none;' +
+      'backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);');
+    fly.id = 'monthFlyout';
+    fly.addEventListener('mouseenter', function () { clearTimeout(hideTimer); });
+    fly.addEventListener('mouseleave', function () { scheduleHide(); });
+    document.body.appendChild(fly);
+    return fly;
+  }
+
+  function position(card) {
+    var r = card.getBoundingClientRect();
+    var w = 224, h = fly.offsetHeight || 320;
+    var left = r.right + 10;
+    if (left + w > window.innerWidth - 8) left = Math.max(8, r.left - w - 10);
+    var top = r.top + r.height / 2 - 30;
+    if (top + h > window.innerHeight - 8) top = Math.max(8, window.innerHeight - h - 8);
+    if (top < 8) top = 8;
+    fly.style.left = Math.round(left) + 'px';
+    fly.style.top = Math.round(top) + 'px';
+  }
+
+  function render(cat, card) {
+    ensureFly();
+    curCat = cat;
+    var defaults = loadDefaults();
+    var def = defaults[cat];
+    var months = monthList(cat);
+    fly.innerHTML = '';
+
+    var head = el('div', 'display:flex;align-items:center;gap:6px;padding:2px 6px 8px;');
+    head.appendChild(el('span', 'font-size:13px;font-weight:600;color:#334155;', CATS[cat].label + ' · 选择月份'));
+    if (def) {
+      var tip = el('span', 'margin-left:auto;font-size:11px;color:#409eff;', '已固定');
+      head.appendChild(tip);
+    }
+    fly.appendChild(head);
+
+    var list = el('div', 'display:flex;flex-direction:column;gap:6px;max-height:52vh;overflow-y:auto;padding-right:2px;');
+    months.forEach(function (m) {
+      var row = el('div', 'display:flex;align-items:center;gap:6px;border-radius:10px;padding:2px;' +
+        (def && def.name === m.name && def.url === m.url ? 'background:#eef5ff;' : ''));
+      var btn = el('button', 'flex:1;text-align:left;border:none;background:#f4f6fa;color:#334155;font-size:13px;' +
+        'padding:9px 12px;border-radius:9px;cursor:pointer;display:flex;align-items:center;gap:8px;' +
+        (def && def.name === m.name && def.url === m.url ? 'box-shadow:inset 0 0 0 1px rgba(64,158,255,.55);' : ''), null);
+      btn.appendChild(el('span', 'font-size:13px;', '📄'));
+      btn.appendChild(el('span', 'flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;', m.name));
+      if (def && def.name === m.name && def.url === m.url) btn.appendChild(el('span', 'font-size:11px;color:#409eff;', '默认'));
+      btn.onclick = function (e) { e.stopPropagation(); openMonth(cat, m); close(); };
+      row.appendChild(btn);
+
+      var pin = el('button', 'flex:0 0 auto;width:28px;height:28px;border:none;border-radius:8px;cursor:pointer;font-size:13px;' +
+        (def && def.name === m.name && def.url === m.url ? 'background:#409eff;color:#fff;' : 'background:#f1f3f7;color:#94a3b8;'), '📌');
+      pin.title = (def && def.name === m.name && def.url === m.url) ? '取消固定' : '固定为默认（点图标直接打开）';
+      pin.onclick = function (e) {
+        e.stopPropagation();
+        var d = loadDefaults();
+        if (d[cat] && d[cat].name === m.name && d[cat].url === m.url) delete d[cat];
+        else d[cat] = { name: m.name, url: m.url };
+        saveDefaults(d);
+        render(cat, card);
+      };
+      row.appendChild(pin);
+      list.appendChild(row);
+    });
+    fly.appendChild(list);
+
+    var add = el('button', 'margin-top:8px;width:100%;padding:9px;border:1.5px dashed #93c5fd;border-radius:9px;' +
+      'background:#f0f7ff;color:#409eff;font-size:12px;cursor:pointer;', '＋ 添加月份');
+    add.onclick = function (e) {
+      e.stopPropagation();
+      close();
+      if (cat === 'warehouse') showWarehouseMonthSelector();
+      else if (cat === 'speed') showSpeedMonthSelector();
+      else showLineMonthSelector();
+    };
+    fly.appendChild(add);
+    fly.style.display = 'block';
+    position(card);
+  }
+
+  function openMonth(cat, m) {
+    var links = window.__buttonLinks || {};
+    var target = (links[cat] && links[cat].target) || 'iframe';
+    var name = CATS[cat].label + ' - ' + m.name;
+    if (target === 'blank') window.open(m.url, '_blank');
+    else if (typeof openPage === 'function') openPage(name, m.url);
+    else window.open(m.url, '_blank');
+  }
+
+  function close() {
+    clearTimeout(showTimer); clearTimeout(hideTimer);
+    curCat = null; stuck = false;
+    if (fly) fly.style.display = 'none';
+  }
+  function scheduleHide() {
+    if (stuck) return;
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(close, 220);
+  }
+  function scheduleShow(card, cat) {
+    clearTimeout(hideTimer);
+    if (curCat === cat && fly && fly.style.display === 'block') { position(card); return; }
+    clearTimeout(showTimer);
+    showTimer = setTimeout(function () { render(cat, card); }, 150);
+  }
+
+  function cardCat(node) {
+    var card = node && node.closest ? node.closest('.func-card') : null;
+    if (!card) return null;
+    var id = card.id;
+    return CATS[id] ? id : null;
+  }
+
+  document.addEventListener('mouseover', function (e) {
+    var cat = cardCat(e.target);
+    if (!cat) return;
+    scheduleShow(e.target.closest('.func-card'), cat);
+  }, true);
+
+  document.addEventListener('mouseout', function (e) {
+    var card = e.target.closest ? e.target.closest('.func-card') : null;
+    if (!card) return;
+    var to = e.relatedTarget;
+    if (to && (card.contains(to) || (fly && fly.contains(to)))) return;
+    scheduleHide();
+  }, true);
+
+  // 已固定默认月份时，点图标直接打开该月，跳过选择框
+  document.addEventListener('click', function (e) {
+    var cat = cardCat(e.target);
+    if (!cat) return;
+    var d = loadDefaults();
+    if (!d[cat]) return;              // 没固定：走原来的选择框逻辑
+    if (e.target.closest('.add-card')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    close();
+    openMonth(cat, d[cat]);
+  }, true);
+
+  // 打开大块弹窗/页面时收起浮层
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  window.addEventListener('scroll', function () { if (!stuck) close(); }, true);
 })();
 </script>
 </body></html>
