@@ -2753,12 +2753,6 @@ body {
     opacity: 1;
     pointer-events: auto;
 }
-.stage-rail-title {
-    font-size: 12px;
-    color: #64748b;
-    padding: 2px 10px;
-    letter-spacing: .05em;
-}
 .stage-rail-track {
     flex: 1;
     overflow-y: auto;
@@ -6763,19 +6757,12 @@ App.initHomePage = function() {
         const url = linkData.url;
         const openBlank = linkData.target === 'blank' || /weixin\.qq\.com/.test(url);
 
-        if (cardId === 'warehouse' || cardId === 'speed' || cardId === 'line') {
+        if (cardId === 'warehouse' || cardId === 'speed' || cardId === 'line' || cardId === 'full') {
           const zipSubgroup = document.getElementById('zip-subgroup');
           if (zipSubgroup) zipSubgroup.style.display = 'none';
-          // 改为月份选择器：可自由添加月份，列表可滚动
-          window._monthSelectorTarget = linkData.target || 'iframe';
-          if (cardId === 'warehouse') { showWarehouseMonthSelector(); }
-          else if (cardId === 'speed') { showSpeedMonthSelector(); }
-          else { showLineMonthSelector(); }
-        } else if (cardId === 'full') {
-          window._monthSelectorTarget = linkData.target || 'iframe';
-          showFullMonthSelector();
-          const zipSubgroup = document.getElementById('zip-subgroup');
-          if (zipSubgroup) zipSubgroup.style.display = 'none';
+          // 打开悬停用的月份浮层并保持住（不再弹旧的整屏选择框）
+          if (window.__monthFlyout && window.__monthFlyout.open) window.__monthFlyout.open(cardId);
+          else openPage(linkData.name, url);
         } else if (url.startsWith('modal:')) {
           const modalType = url.split(':')[1];
           if (modalType === 'recheck') {
@@ -8388,7 +8375,7 @@ function getLocalIPs(callback) {
   banner.addEventListener('selectstart', (e) => e.preventDefault());
 })();
 
-// 月份基础数据（三张卡共用一份，供选择器与悬停浮层使用）
+// ===== 月份数据源（唯一一份，供图标浮层使用） =====
 window.__MONTH_SETS = {
   warehouse: [
     { name: '六月份', url: 'https://www.kdocs.cn/l/ceSENEnBJ4ir' },
@@ -8410,492 +8397,44 @@ window.__MONTH_SETS = {
     { name: '九月份', url: 'https://www.kdocs.cn/l/cggj67gnJGFe' },
     { name: '十月份', url: 'https://www.kdocs.cn/l/cc6bft8XP51V' },
     { name: '十一月份', url: 'https://www.kdocs.cn/l/cenQA3qvwL1K' }
+  ],
+  full: [
+    { name: '七月份', url: 'https://www.kdocs.cn/l/cjHcYd3KIRkA' }
   ]
 };
 
-// 速量月份选择器
-function showSpeedMonthSelector() {
-  if (document.getElementById('speedMonthSelector')) return;
-  const months = window.__MONTH_SETS.speed;
-  
-  const allMonths = [...months, ...window.speedExtraMonths];
-  
-  let selectorHTML = `
-    <div id="speedMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
-      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
-        <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div id="speed-month-list" style="display:flex;flex-direction:column;gap:12px;max-height:52vh;overflow-y:auto;padding-right:4px;">
-  `;
-  
-  allMonths.forEach((month, index) => {
-    const isExtra = index >= months.length;
-    selectorHTML += `
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button 
-          style="flex:1;padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
-          onclick="selectSpeedMonth('速量 - ${month.name}','${month.url}')"
-        >
-          <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
-          <span>${month.name}</span>
-        </button>
-        ${isExtra ? `<button onclick="deleteSpeedMonth(${index - months.length})" style="padding:8px 12px;border:none;border-radius:8px;background:#fef0f0;color:#f56c6c;font-size:18px;cursor:pointer;transition:all 0.2s;" title="删除">🗑️</button>` : ''}
-      </div>
-    `;
-  });
-  
-  selectorHTML += `
-        </div>
-        <div id="speed-add-form" style="margin-top:16px;display:none;">
-          <input type="text" id="speed-add-name" placeholder="月份名称（如：八月份）" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
-          <input type="text" id="speed-add-url" placeholder="链接地址" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
-          <div style="display:flex;gap:8px;">
-            <button onclick="confirmAddSpeedMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#409eff;color:white;font-size:14px;cursor:pointer;">确定</button>
-            <button onclick="cancelAddSpeedMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#eee;color:#666;font-size:14px;cursor:pointer;">取消</button>
-          </div>
-        </div>
-        <button id="speed-add-btn"
-          style="margin-top:16px;width:100%;padding:12px;border:2px dashed #409eff;border-radius:10px;background:#f0f7ff;color:#409eff;font-size:14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;"
-          onclick="showSpeedAddForm()"
-        >
-          <span>➕</span><span>添加月份</span>
-        </button>
-        <button 
-          style="margin-top:8px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
-          onclick="document.getElementById('speedMonthSelector').remove()"
-        >
-          取消
-        </button>
-      </div>
-    </div>
-  `;
-  
-  document.body.insertAdjacentHTML('beforeend', selectorHTML);
-}
+// 额外月份的存储键与中文名
+var __MONTH_KEY = { warehouse: 'warehouseExtraMonths', speed: 'speedExtraMonths', line: 'lineExtraMonths', full: 'fullExtraMonths' };
+var __MONTH_LABEL = { warehouse: '仓储', speed: '速量', line: '专线', full: '全量' };
 
-function showSpeedAddForm() {
-  document.getElementById('speed-add-form').style.display = 'block';
-  document.getElementById('speed-add-btn').style.display = 'none';
-  document.getElementById('speed-add-name').focus();
+function monthsForCat(cat) {
+  var base = (window.__MONTH_SETS[cat] || []).slice();
+  var extra = (window[__MONTH_KEY[cat]] || []).slice();
+  return base.concat(extra);
 }
-
-function cancelAddSpeedMonth() {
-  document.getElementById('speed-add-form').style.display = 'none';
-  document.getElementById('speed-add-btn').style.display = 'flex';
-  document.getElementById('speed-add-name').value = '';
-  document.getElementById('speed-add-url').value = '';
+function baseMonthCount(cat) {
+  return (window.__MONTH_SETS[cat] || []).length;
 }
-
-function confirmAddSpeedMonth() {
-  const monthName = document.getElementById('speed-add-name').value.trim();
-  const monthUrl = document.getElementById('speed-add-url').value.trim();
-  
-  if (!monthName) {
-    alert('请输入月份名称');
-    return;
-  }
-  if (!monthUrl) {
-    alert('请输入链接地址');
-    return;
-  }
-  
-  window.speedExtraMonths.push({ name: monthName, url: monthUrl });
-  // 持久化保存
-  try { localStorage.setItem('speedExtraMonths', JSON.stringify(window.speedExtraMonths)); } catch(e) {}
-  
-  const monthList = document.getElementById('speed-month-list');
-  const newBtn = document.createElement('button');
-  newBtn.style.cssText = 'padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;';
-  newBtn.innerHTML = `<span style="font-size:20px;">🔵</span><span>${monthName}</span>`;
-  newBtn.onclick = function() {
-    document.getElementById('speedMonthSelector').remove();
-    openPage(`速量 - ${monthName}`, monthUrl);
-  };
-  monthList.appendChild(newBtn);
-  
-  cancelAddSpeedMonth();
+function addMonthForCat(cat, name, url) {
+  var key = __MONTH_KEY[cat];
+  if (!window[key]) window[key] = [];
+  window[key].push({ name: name, url: url });
+  try { localStorage.setItem(key, JSON.stringify(window[key])); } catch (e) {}
 }
-
-function selectSpeedMonth(name, url) {
-  document.getElementById('speedMonthSelector').remove();
-  if (window._monthSelectorTarget === 'blank') {
-    window.open(url, '_blank');
-  } else {
-    openPage(name, url);
-  }
+function removeMonthForCat(cat, idx) {
+  var key = __MONTH_KEY[cat];
+  if (!window[key] || idx < 0 || idx >= window[key].length) return;
+  window[key].splice(idx, 1);
+  try { localStorage.setItem(key, JSON.stringify(window[key])); } catch (e) {}
 }
-
-// 仓储月份选择器
-function showWarehouseMonthSelector() {
-  if (document.getElementById('warehouseMonthSelector')) return;
-  const months = window.__MONTH_SETS.warehouse;
-  
-  const allMonths = [...months, ...window.warehouseExtraMonths];
-  
-  let selectorHTML = `
-    <div id="warehouseMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
-      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
-        <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div id="warehouse-month-list" style="display:flex;flex-direction:column;gap:12px;max-height:52vh;overflow-y:auto;padding-right:4px;">
-  `;
-  
-  allMonths.forEach((month, index) => {
-    const isExtra = index >= months.length;
-    selectorHTML += `
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button 
-          style="flex:1;padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
-          onclick="selectWarehouseMonth('仓储 - ${month.name}','${month.url}')"
-        >
-          <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
-          <span>${month.name}</span>
-        </button>
-        ${isExtra ? `<button onclick="deleteWarehouseMonth(${index - months.length})" style="padding:8px 12px;border:none;border-radius:8px;background:#fef0f0;color:#f56c6c;font-size:18px;cursor:pointer;transition:all 0.2s;" title="删除">🗑️</button>` : ''}
-      </div>
-    `;
-  });
-  
-  selectorHTML += `
-        </div>
-        <div id="warehouse-add-form" style="margin-top:16px;display:none;">
-          <input type="text" id="warehouse-add-name" placeholder="月份名称（如：八月份）" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
-          <input type="text" id="warehouse-add-url" placeholder="链接地址" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
-          <div style="display:flex;gap:8px;">
-            <button onclick="confirmAddWarehouseMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#409eff;color:white;font-size:14px;cursor:pointer;">确定</button>
-            <button onclick="cancelAddWarehouseMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#eee;color:#666;font-size:14px;cursor:pointer;">取消</button>
-          </div>
-        </div>
-        <button id="warehouse-add-btn"
-          style="margin-top:16px;width:100%;padding:12px;border:2px dashed #409eff;border-radius:10px;background:#f0f7ff;color:#409eff;font-size:14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;"
-          onclick="showWarehouseAddForm()"
-        >
-          <span>➕</span><span>添加月份</span>
-        </button>
-        <button 
-          style="margin-top:8px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
-          onclick="document.getElementById('warehouseMonthSelector').remove()"
-        >
-          取消
-        </button>
-      </div>
-    </div>
-  `;
-  
-  document.body.insertAdjacentHTML('beforeend', selectorHTML);
+function openMonthForCat(cat, m) {
+  var links = window.__buttonLinks || {};
+  var target = (links[cat] && links[cat].target) || 'iframe';
+  var name = (__MONTH_LABEL[cat] || '') + ' - ' + m.name;
+  if (target === 'blank') window.open(m.url, '_blank');
+  else if (typeof openPage === 'function') openPage(name, m.url);
+  else window.open(m.url, '_blank');
 }
-
-function showWarehouseAddForm() {
-  document.getElementById('warehouse-add-form').style.display = 'block';
-  document.getElementById('warehouse-add-btn').style.display = 'none';
-  document.getElementById('warehouse-add-name').focus();
-}
-
-function cancelAddWarehouseMonth() {
-  document.getElementById('warehouse-add-form').style.display = 'none';
-  document.getElementById('warehouse-add-btn').style.display = 'flex';
-  document.getElementById('warehouse-add-name').value = '';
-  document.getElementById('warehouse-add-url').value = '';
-}
-
-function confirmAddWarehouseMonth() {
-  const monthName = document.getElementById('warehouse-add-name').value.trim();
-  const monthUrl = document.getElementById('warehouse-add-url').value.trim();
-  
-  if (!monthName) {
-    alert('请输入月份名称');
-    return;
-  }
-  if (!monthUrl) {
-    alert('请输入链接地址');
-    return;
-  }
-  
-  window.warehouseExtraMonths.push({ name: monthName, url: monthUrl });
-  // 持久化保存
-  try { localStorage.setItem('warehouseExtraMonths', JSON.stringify(window.warehouseExtraMonths)); } catch(e) {}
-  
-  const monthList = document.getElementById('warehouse-month-list');
-  const newBtn = document.createElement('button');
-  newBtn.style.cssText = 'padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;';
-  newBtn.innerHTML = `<span style="font-size:20px;">🔵</span><span>${monthName}</span>`;
-  newBtn.onclick = function() {
-    document.getElementById('warehouseMonthSelector').remove();
-    openPage(`仓储 - ${monthName}`, monthUrl);
-  };
-  monthList.appendChild(newBtn);
-  
-  cancelAddWarehouseMonth();
-}
-
-function selectWarehouseMonth(name, url) {
-  document.getElementById('warehouseMonthSelector').remove();
-  if (window._monthSelectorTarget === 'blank') {
-    window.open(url, '_blank');
-  } else {
-    openPage(name, url);
-  }
-}
-
-// 专线月份选择器
-function showLineMonthSelector() {
-  if (document.getElementById('lineMonthSelector')) return;
-  const months = window.__MONTH_SETS.line;
-  
-  const allMonths = [...months, ...window.lineExtraMonths];
-  
-  let selectorHTML = `
-    <div id="lineMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
-      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
-        <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div id="line-month-list" style="display:flex;flex-direction:column;gap:12px;max-height:52vh;overflow-y:auto;padding-right:4px;">
-  `;
-  
-  allMonths.forEach((month, index) => {
-    const isExtra = index >= months.length;
-    selectorHTML += `
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button 
-          style="flex:1;padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
-          onclick="selectLineMonth('专线 - ${month.name}','${month.url}')"
-        >
-          <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
-          <span>${month.name}</span>
-        </button>
-        ${isExtra ? `<button onclick="deleteLineMonth(${index - months.length})" style="padding:8px 12px;border:none;border-radius:8px;background:#fef0f0;color:#f56c6c;font-size:18px;cursor:pointer;transition:all 0.2s;" title="删除">🗑️</button>` : ''}
-      </div>
-    `;
-  });
-  
-  selectorHTML += `
-        </div>
-        <div id="line-add-form" style="margin-top:16px;display:none;">
-          <input type="text" id="line-add-name" placeholder="月份名称（如：八月份）" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
-          <input type="text" id="line-add-url" placeholder="链接地址" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
-          <div style="display:flex;gap:8px;">
-            <button onclick="confirmAddLineMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#409eff;color:white;font-size:14px;cursor:pointer;">确定</button>
-            <button onclick="cancelAddLineMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#eee;color:#666;font-size:14px;cursor:pointer;">取消</button>
-          </div>
-        </div>
-        <button id="line-add-btn"
-          style="margin-top:16px;width:100%;padding:12px;border:2px dashed #409eff;border-radius:10px;background:#f0f7ff;color:#409eff;font-size:14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;"
-          onclick="showLineAddForm()"
-        >
-          <span>➕</span><span>添加月份</span>
-        </button>
-        <button 
-          style="margin-top:8px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
-          onclick="document.getElementById('lineMonthSelector').remove()"
-        >
-          取消
-        </button>
-      </div>
-    </div>
-  `;
-  
-  document.body.insertAdjacentHTML('beforeend', selectorHTML);
-}
-
-function showLineAddForm() {
-  document.getElementById('line-add-form').style.display = 'block';
-  document.getElementById('line-add-btn').style.display = 'none';
-  document.getElementById('line-add-name').focus();
-}
-
-function cancelAddLineMonth() {
-  document.getElementById('line-add-form').style.display = 'none';
-  document.getElementById('line-add-btn').style.display = 'flex';
-  document.getElementById('line-add-name').value = '';
-  document.getElementById('line-add-url').value = '';
-}
-
-function confirmAddLineMonth() {
-  const monthName = document.getElementById('line-add-name').value.trim();
-  const monthUrl = document.getElementById('line-add-url').value.trim();
-  
-  if (!monthName) {
-    alert('请输入月份名称');
-    return;
-  }
-  if (!monthUrl) {
-    alert('请输入链接地址');
-    return;
-  }
-  
-  window.lineExtraMonths.push({ name: monthName, url: monthUrl });
-  // 持久化保存
-  try { localStorage.setItem('lineExtraMonths', JSON.stringify(window.lineExtraMonths)); } catch(e) {}
-  
-  const monthList = document.getElementById('line-month-list');
-  const newBtn = document.createElement('button');
-  newBtn.style.cssText = 'padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;';
-  newBtn.innerHTML = `<span style="font-size:20px;">🔵</span><span>${monthName}</span>`;
-  newBtn.onclick = function() {
-    document.getElementById('lineMonthSelector').remove();
-    openPage(`专线 - ${monthName}`, monthUrl);
-  };
-  monthList.appendChild(newBtn);
-  
-  cancelAddLineMonth();
-}
-
-function selectLineMonth(name, url) {
-  document.getElementById('lineMonthSelector').remove();
-  if (window._monthSelectorTarget === 'blank') {
-    window.open(url, '_blank');
-  } else {
-    openPage(name, url);
-  }
-}
-
-// 全量月份选择器
-function showFullMonthSelector() {
-  if (document.getElementById('fullMonthSelector')) return;
-  const months = [
-    { name: '七月份', url: 'https://www.kdocs.cn/l/cjHcYd3KIRkA' }
-  ];
-  
-  const allMonths = [...months, ...window.fullExtraMonths];
-  
-  let selectorHTML = `
-    <div id="fullMonthSelector" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;">
-      <div style="background:white;border-radius:16px;padding:24px;width:320px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-height:70vh;overflow-y:auto;">
-        <h3 style="margin:0 0 20px 0;font-size:18px;font-weight:bold;color:#333;text-align:center;">选择月份</h3>
-        <div id="full-month-list" style="display:flex;flex-direction:column;gap:12px;max-height:52vh;overflow-y:auto;padding-right:4px;">
-  `;
-  
-  allMonths.forEach((month, index) => {
-    const isExtra = index >= months.length;
-    selectorHTML += `
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button 
-          style="flex:1;padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;"
-          onclick="selectFullMonth('全量 - ${month.name}','${month.url}')"
-        >
-          <span style="font-size:20px;">${index === 0 ? '🟡' : '🔵'}</span>
-          <span>${month.name}</span>
-        </button>
-        ${isExtra ? `<button onclick="deleteFullMonth(${index - months.length})" style="padding:8px 12px;border:none;border-radius:8px;background:#fef0f0;color:#f56c6c;font-size:18px;cursor:pointer;transition:all 0.2s;" title="删除">🗑️</button>` : ''}
-      </div>
-    `;
-  });
-  
-  selectorHTML += `
-        </div>
-        <div id="full-add-form" style="margin-top:16px;display:none;">
-          <input type="text" id="full-add-name" placeholder="月份名称（如：八月份）" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
-          <input type="text" id="full-add-url" placeholder="链接地址" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;margin-bottom:8px;"/>
-          <div style="display:flex;gap:8px;">
-            <button onclick="confirmAddFullMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#409eff;color:white;font-size:14px;cursor:pointer;">确定</button>
-            <button onclick="cancelAddFullMonth()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#eee;color:#666;font-size:14px;cursor:pointer;">取消</button>
-          </div>
-        </div>
-        <button id="full-add-btn"
-          style="margin-top:16px;width:100%;padding:12px;border:2px dashed #409eff;border-radius:10px;background:#f0f7ff;color:#409eff;font-size:14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;"
-          onclick="showFullAddForm()"
-        >
-          <span>➕</span><span>添加月份</span>
-        </button>
-        <button 
-          style="margin-top:8px;width:100%;padding:12px;border:none;border-radius:10px;background:#eee;color:#666;font-size:14px;cursor:pointer;transition:background 0.2s;"
-          onclick="document.getElementById('fullMonthSelector').remove()"
-        >
-          取消
-        </button>
-      </div>
-    </div>
-  `;
-  
-  document.body.insertAdjacentHTML('beforeend', selectorHTML);
-}
-
-function showFullAddForm() {
-  document.getElementById('full-add-form').style.display = 'block';
-  document.getElementById('full-add-btn').style.display = 'none';
-  document.getElementById('full-add-name').focus();
-}
-
-function cancelAddFullMonth() {
-  document.getElementById('full-add-form').style.display = 'none';
-  document.getElementById('full-add-btn').style.display = 'flex';
-  document.getElementById('full-add-name').value = '';
-  document.getElementById('full-add-url').value = '';
-}
-
-function confirmAddFullMonth() {
-  const monthName = document.getElementById('full-add-name').value.trim();
-  const monthUrl = document.getElementById('full-add-url').value.trim();
-  
-  if (!monthName) {
-    alert('请输入月份名称');
-    return;
-  }
-  if (!monthUrl) {
-    alert('请输入链接地址');
-    return;
-  }
-  
-  window.fullExtraMonths.push({ name: monthName, url: monthUrl });
-  // 持久化保存
-  try { localStorage.setItem('fullExtraMonths', JSON.stringify(window.fullExtraMonths)); } catch(e) {}
-  
-  const monthList = document.getElementById('full-month-list');
-  const newBtn = document.createElement('button');
-  newBtn.style.cssText = 'padding:14px 20px;border:none;border-radius:10px;background:#f5f7fa;color:#333;font-size:16px;cursor:pointer;transition:all 0.2s;text-align:left;display:flex;align-items:center;gap:12px;';
-  newBtn.innerHTML = `<span style="font-size:20px;">🔵</span><span>${monthName}</span>`;
-  newBtn.onclick = function() {
-    document.getElementById('fullMonthSelector').remove();
-    openPage(`全量 - ${monthName}`, monthUrl);
-  };
-  monthList.appendChild(newBtn);
-  
-  cancelAddFullMonth();
-}
-
-function selectFullMonth(name, url) {
-  document.getElementById('fullMonthSelector').remove();
-  if (window._monthSelectorTarget === 'blank') {
-    window.open(url, '_blank');
-  } else {
-    openPage(name, url);
-  }
-}
-
-// ========== 删除额外月份功能 ==========
-function deleteSpeedMonth(idx) {
-  if (!confirm('确定删除该月份吗？')) return;
-  window.speedExtraMonths.splice(idx, 1);
-  try { localStorage.setItem('speedExtraMonths', JSON.stringify(window.speedExtraMonths)); } catch(e) {}
-  var sel = document.getElementById('speedMonthSelector');
-  if (sel) sel.remove();
-  showSpeedMonthSelector();
-}
-
-function deleteWarehouseMonth(idx) {
-  if (!confirm('确定删除该月份吗？')) return;
-  window.warehouseExtraMonths.splice(idx, 1);
-  try { localStorage.setItem('warehouseExtraMonths', JSON.stringify(window.warehouseExtraMonths)); } catch(e) {}
-  var sel = document.getElementById('warehouseMonthSelector');
-  if (sel) sel.remove();
-  showWarehouseMonthSelector();
-}
-
-function deleteLineMonth(idx) {
-  if (!confirm('确定删除该月份吗？')) return;
-  window.lineExtraMonths.splice(idx, 1);
-  try { localStorage.setItem('lineExtraMonths', JSON.stringify(window.lineExtraMonths)); } catch(e) {}
-  var sel = document.getElementById('lineMonthSelector');
-  if (sel) sel.remove();
-  showLineMonthSelector();
-}
-
-function deleteFullMonth(idx) {
-  if (!confirm('确定删除该月份吗？')) return;
-  window.fullExtraMonths.splice(idx, 1);
-  try { localStorage.setItem('fullExtraMonths', JSON.stringify(window.fullExtraMonths)); } catch(e) {}
-  var sel = document.getElementById('fullMonthSelector');
-  if (sel) sel.remove();
-  showFullMonthSelector();
-}
-
 // 全局函数
 
 // ========== 图片懒加载优化 ==========
@@ -9416,9 +8955,6 @@ function deleteFullMonth(idx) {
   }
 
   // 栏宽度/卡片高度变化后，重算所有缩略 iframe 的缩放
-  function refitRail() {
-    Array.prototype.forEach.call(railTrack.querySelectorAll('.stage-preview'), fitPreview);
-  }
 
   function buildRailPreview(tab, emoji) {
     var preview = document.createElement('div');
@@ -9985,12 +9521,8 @@ function deleteFullMonth(idx) {
 <script>
 /* ===== 月份快速浮层：悬停图标自动出现月份，可固定默认月份 ===== */
 (function () {
-  var CATS = {
-    warehouse: { label: '仓储', extra: 'warehouseExtraMonths', winArr: function () { return window.warehouseExtraMonths || []; } },
-    speed: { label: '速量', extra: 'speedExtraMonths', winArr: function () { return window.speedExtraMonths || []; } },
-    line: { label: '专线', extra: 'lineExtraMonths', winArr: function () { return window.lineExtraMonths || []; } }
-  };
-  var fly = null, showTimer = null, hideTimer = null, curCat = null, stuck = false;
+  var CATS = { warehouse: 1, speed: 1, line: 1, full: 1 };
+  var fly = null, showTimer = null, hideTimer = null, curCat = null, stuck = false, formOpen = false;
 
   function loadDefaults() {
     try { return JSON.parse(localStorage.getItem('defaultMonths') || '{}') || {}; } catch (e) { return {}; }
@@ -9998,12 +9530,6 @@ function deleteFullMonth(idx) {
   function saveDefaults(o) {
     try { localStorage.setItem('defaultMonths', JSON.stringify(o)); } catch (e) {}
   }
-  function monthList(cat) {
-    var base = (window.__MONTH_SETS || {})[cat] || [];
-    var extra = CATS[cat].winArr();
-    return base.concat(extra.map(function (m) { return { name: m.name, url: m.url }; }));
-  }
-
   function el(tag, css, text) {
     var e = document.createElement(tag);
     if (css) e.style.cssText = css;
@@ -10013,7 +9539,7 @@ function deleteFullMonth(idx) {
 
   function ensureFly() {
     if (fly) return fly;
-    fly = el('div', 'position:fixed;z-index:9994;width:236px;box-sizing:border-box;background:rgba(255,255,255,0.97);border-radius:14px;' +
+    fly = el('div', 'position:fixed;z-index:9994;width:240px;box-sizing:border-box;background:rgba(255,255,255,0.97);border-radius:14px;' +
       'box-shadow:0 18px 44px rgba(15,23,42,0.28);border:1px solid rgba(15,23,42,0.08);padding:10px;display:none;overflow:hidden;' +
       'backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);');
     fly.id = 'monthFlyout';
@@ -10024,8 +9550,9 @@ function deleteFullMonth(idx) {
   }
 
   function position(card) {
+    if (!card) return;
     var r = card.getBoundingClientRect();
-    var w = 224, h = fly.offsetHeight || 320;
+    var w = 240, h = fly.offsetHeight || 320;
     var left = r.right + 10;
     if (left + w > window.innerWidth - 8) left = Math.max(8, r.left - w - 10);
     var top = r.top + r.height / 2 - 30;
@@ -10035,77 +9562,108 @@ function deleteFullMonth(idx) {
     fly.style.top = Math.round(top) + 'px';
   }
 
-  function render(cat, card) {
+  function render(cat) {
     ensureFly();
     curCat = cat;
-    var defaults = loadDefaults();
-    var def = defaults[cat];
-    var months = monthList(cat);
+    var card = document.getElementById(cat);
+    var def = loadDefaults()[cat];
+    var months = monthsForCat(cat);
+    var baseLen = baseMonthCount(cat);
     fly.innerHTML = '';
 
+    // 标题
     var head = el('div', 'display:flex;align-items:center;gap:6px;padding:2px 6px 8px;');
-    head.appendChild(el('span', 'font-size:13px;font-weight:600;color:#334155;', CATS[cat].label + ' · 选择月份'));
-    if (def) {
-      var tip = el('span', 'margin-left:auto;font-size:11px;color:#409eff;', '已固定');
-      head.appendChild(tip);
-    }
+    head.appendChild(el('span', 'font-size:13px;font-weight:600;color:#334155;', (__MONTH_LABEL[cat] || '') + ' · 选择月份'));
+    if (def) head.appendChild(el('span', 'margin-left:auto;font-size:11px;color:#409eff;', '已固定'));
     fly.appendChild(head);
 
-    var list = el('div', 'display:flex;flex-direction:column;gap:6px;max-height:52vh;overflow-y:auto;overflow-x:hidden;width:100%;box-sizing:border-box;padding-right:2px;');
-    months.forEach(function (m) {
+    // 月份列表
+    var list = el('div', 'display:flex;flex-direction:column;gap:6px;max-height:46vh;overflow-y:auto;overflow-x:hidden;width:100%;box-sizing:border-box;padding-right:2px;');
+    months.forEach(function (m, i) {
+      var isDef = !!(def && def.name === m.name && def.url === m.url);
+      var isExtra = i >= baseLen;
       var row = el('div', 'display:flex;align-items:center;gap:6px;border-radius:10px;padding:2px;box-sizing:border-box;width:100%;' +
-        (def && def.name === m.name && def.url === m.url ? 'background:#eef5ff;' : ''));
+        (isDef ? 'background:#eef5ff;' : ''));
+
       var btn = el('button', 'flex:1 1 auto;min-width:0;text-align:left;border:none;background:#f4f6fa;color:#334155;font-size:13px;' +
         'padding:9px 10px;border-radius:9px;cursor:pointer;display:flex;align-items:center;gap:7px;' +
-        (def && def.name === m.name && def.url === m.url ? 'box-shadow:inset 0 0 0 1px rgba(64,158,255,.55);' : ''), null);
+        (isDef ? 'box-shadow:inset 0 0 0 1px rgba(64,158,255,.55);' : ''), null);
       btn.appendChild(el('span', 'font-size:13px;', '📄'));
       btn.appendChild(el('span', 'flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;', m.name));
-      if (def && def.name === m.name && def.url === m.url) btn.appendChild(el('span', 'font-size:11px;color:#409eff;', '默认'));
-      btn.onclick = function (e) { e.stopPropagation(); openMonth(cat, m); close(); };
+      if (isDef) btn.appendChild(el('span', 'font-size:11px;color:#409eff;', '默认'));
+      btn.onclick = function (e) { e.stopPropagation(); openMonthForCat(cat, m); close(); };
       row.appendChild(btn);
 
+      // 固定为默认
       var pin = el('button', 'flex:0 0 auto;width:28px;height:28px;border:none;border-radius:8px;cursor:pointer;font-size:13px;' +
-        (def && def.name === m.name && def.url === m.url ? 'background:#409eff;color:#fff;' : 'background:#f1f3f7;color:#94a3b8;'), '📌');
-      pin.title = (def && def.name === m.name && def.url === m.url) ? '取消固定' : '固定为默认（点图标直接打开）';
+        (isDef ? 'background:#409eff;color:#fff;' : 'background:#f1f3f7;color:#94a3b8;'), '📌');
+      pin.title = isDef ? '取消固定' : '固定为默认（点图标直接打开）';
       pin.onclick = function (e) {
         e.stopPropagation();
         var d = loadDefaults();
         if (d[cat] && d[cat].name === m.name && d[cat].url === m.url) delete d[cat];
         else d[cat] = { name: m.name, url: m.url };
         saveDefaults(d);
-        render(cat, card);
+        render(cat);
       };
       row.appendChild(pin);
+
+      // 自建月份可删除
+      if (isExtra) {
+        var del = el('button', 'flex:0 0 auto;width:28px;height:28px;border:none;border-radius:8px;cursor:pointer;font-size:12px;background:#fef0f0;color:#f56c6c;', '🗑️');
+        del.title = '删除这个自建月份';
+        del.onclick = function (e) {
+          e.stopPropagation();
+          if (!confirm('确定删除「' + m.name + '」吗？')) return;
+          removeMonthForCat(cat, i - baseLen);
+          render(cat);
+        };
+        row.appendChild(del);
+      }
       list.appendChild(row);
     });
     fly.appendChild(list);
 
-    var add = el('button', 'margin-top:8px;width:100%;padding:9px;border:1.5px dashed #93c5fd;border-radius:9px;' +
-      'background:#f0f7ff;color:#409eff;font-size:12px;cursor:pointer;', '＋ 添加月份');
-    add.onclick = function (e) {
-      e.stopPropagation();
-      close();
-      if (cat === 'warehouse') showWarehouseMonthSelector();
-      else if (cat === 'speed') showSpeedMonthSelector();
-      else showLineMonthSelector();
-    };
-    fly.appendChild(add);
+    // 添加月份（浮层内联表单，不再弹旧选择框）
+    if (!formOpen) {
+      var addBtn = el('button', 'margin-top:8px;width:100%;padding:9px;border:1.5px dashed #93c5fd;border-radius:9px;background:#f0f7ff;color:#409eff;font-size:12px;cursor:pointer;', '＋ 添加月份');
+      addBtn.onclick = function (e) { e.stopPropagation(); formOpen = true; render(cat); };
+      fly.appendChild(addBtn);
+    } else {
+      var form = el('div', 'margin-top:8px;display:flex;flex-direction:column;gap:6px;');
+      var nameIn = el('input', 'width:100%;box-sizing:border-box;padding:8px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;', null);
+      nameIn.type = 'text'; nameIn.placeholder = '月份名称（如：十二月份）';
+      var urlIn = el('input', 'width:100%;box-sizing:border-box;padding:8px;border:1px solid #e2e8f0;border-radius:8px;font-size:12px;', null);
+      urlIn.type = 'text'; urlIn.placeholder = '链接地址';
+      var ops = el('div', 'display:flex;gap:6px;');
+      var ok = el('button', 'flex:1;padding:8px;border:none;border-radius:8px;background:#409eff;color:#fff;font-size:12px;cursor:pointer;', '确定');
+      var cancel = el('button', 'flex:1;padding:8px;border:none;border-radius:8px;background:#eef1f6;color:#64748b;font-size:12px;cursor:pointer;', '取消');
+      ok.onclick = function (e) {
+        e.stopPropagation();
+        var n = nameIn.value.trim(), u = urlIn.value.trim();
+        if (!n) { alert('请输入月份名称'); return; }
+        if (!u) { alert('请输入链接地址'); return; }
+        addMonthForCat(cat, n, u);
+        formOpen = false;
+        render(cat);
+      };
+      cancel.onclick = function (e) { e.stopPropagation(); formOpen = false; render(cat); };
+      ops.appendChild(ok); ops.appendChild(cancel);
+      form.appendChild(nameIn); form.appendChild(urlIn); form.appendChild(ops);
+      fly.appendChild(form);
+      fly.style.display = 'block';
+      position(card);
+      setTimeout(function () { nameIn.focus(); }, 0);
+      return;
+    }
+
     fly.style.display = 'block';
     position(card);
   }
 
-  function openMonth(cat, m) {
-    var links = window.__buttonLinks || {};
-    var target = (links[cat] && links[cat].target) || 'iframe';
-    var name = CATS[cat].label + ' - ' + m.name;
-    if (target === 'blank') window.open(m.url, '_blank');
-    else if (typeof openPage === 'function') openPage(name, m.url);
-    else window.open(m.url, '_blank');
-  }
-
   function close() {
     clearTimeout(showTimer); clearTimeout(hideTimer);
-    curCat = null; stuck = false;
+    curCat = null; stuck = false; formOpen = false;
     if (fly) fly.style.display = 'none';
   }
   function scheduleHide() {
@@ -10117,20 +9675,18 @@ function deleteFullMonth(idx) {
     clearTimeout(hideTimer);
     if (curCat === cat && fly && fly.style.display === 'block') { position(card); return; }
     clearTimeout(showTimer);
-    showTimer = setTimeout(function () { render(cat, card); }, 150);
+    showTimer = setTimeout(function () { formOpen = false; render(cat); }, 150);
   }
 
   function cardCat(node) {
     var card = node && node.closest ? node.closest('.func-card') : null;
-    if (!card) return null;
-    var id = card.id;
-    return CATS[id] ? id : null;
+    if (!card || !CATS[card.id]) return null;
+    return card.id;
   }
 
   document.addEventListener('mouseover', function (e) {
     var cat = cardCat(e.target);
-    if (!cat) return;
-    scheduleShow(e.target.closest('.func-card'), cat);
+    if (cat) scheduleShow(e.target.closest('.func-card'), cat);
   }, true);
 
   document.addEventListener('mouseout', function (e) {
@@ -10141,22 +9697,37 @@ function deleteFullMonth(idx) {
     scheduleHide();
   }, true);
 
-  // 已固定默认月份时，点图标直接打开该月，跳过选择框
+  // 已固定默认月份时，点图标直接打开该月
   document.addEventListener('click', function (e) {
     var cat = cardCat(e.target);
     if (!cat) return;
+    close();
     var d = loadDefaults();
-    if (!d[cat]) return;              // 没固定：走原来的选择框逻辑
-    if (e.target.closest('.add-card')) return;
+    if (!d[cat]) return;              // 没固定：由卡片点击逻辑打开浮层
     e.preventDefault();
     e.stopPropagation();
-    close();
-    openMonth(cat, d[cat]);
+    openMonthForCat(cat, d[cat]);
   }, true);
 
-  // 打开大块弹窗/页面时收起浮层
+  // 点浮层/卡片以外的地方收起
+  document.addEventListener('pointerdown', function (e) {
+    if (!fly || fly.style.display !== 'block') return;
+    if (fly.contains(e.target)) return;
+    var card = e.target.closest ? e.target.closest('.func-card') : null;
+    if (card && CATS[card.id]) return;
+    close();
+  }, true);
+
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-  window.addEventListener('scroll', function () { if (!stuck) close(); }, true);
-})();
-</script>
+
+  // 供主脚本（卡片点击）调用：打开浮层并保持住
+  window.__monthFlyout = {
+    open: function (cat) {
+      if (!CATS[cat]) return;
+      stuck = true; formOpen = false;
+      render(cat);
+    },
+    close: close
+  };
+})();</script>
 </body></html>
