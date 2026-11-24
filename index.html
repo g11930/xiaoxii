@@ -2789,29 +2789,6 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 .stage-item:hover { box-shadow: 0 8px 22px rgba(15,23,42,0.20); transform: translateY(-1px); }
-/* 悬停：整卡放大铺满页面（大预览） */
-.stage-item.zoom {
-    position: fixed;
-    top: 3vh;
-    left: 3vw;
-    right: 3vw;
-    bottom: 3vh;
-    width: auto;
-    height: auto;
-    z-index: 9998;
-    display: flex;
-    flex-direction: column;
-    border-radius: 18px;
-    border-color: rgba(37,99,235,0.5);
-    box-shadow: 0 30px 90px rgba(10,20,40,0.45);
-    transform: none;
-}
-.stage-item.zoom .stage-preview { flex: 1 1 auto; height: auto; }
-.stage-item.zoom .stage-preview iframe { pointer-events: auto; transition: transform .3s cubic-bezier(.22,.61,.36,1); }
-.stage-item.zoom .stage-meta { padding: 10px 16px; }
-.stage-item.zoom .stage-meta .stage-name { font-size: 14px; font-weight: 600; color: #1f2937; }
-.stage-item.zoom .stage-badge { bottom: auto; top: 10px; right: 12px; }
-.stage-item.zoom .stage-close { width: 22px; height: 22px; font-size: 14px; }
 .stage-item.active {
     border-color: rgba(37,99,235,0.55);
     box-shadow: 0 8px 22px rgba(37,99,235,0.24);
@@ -9423,57 +9400,18 @@ function deleteFullMonth(idx) {
     var ifr = preview.querySelector('iframe');
     if (!ifr) return;
     var w = preview.clientWidth || 184;
-    var h = preview.clientHeight || 116;
-    var card = preview.closest ? preview.closest('.stage-item') : null;
-    var zoomed = !!(card && card.classList.contains('zoom'));
-    if (zoomed) {
-      // 大预览：等比铺满（contain）并居中
-      var z = Math.min(w / 1280, h / 800);
-      ifr.style.width = '1280px';
-      ifr.style.height = '800px';
-      ifr.style.transform = 'scale(' + z + ')';
-      ifr.style.left = Math.max(0, Math.round((w - 1280 * z) / 2)) + 'px';
-      ifr.style.top = Math.max(0, Math.round((h - 800 * z) / 2)) + 'px';
-    } else {
-      ifr.style.width = '1280px';
-      ifr.style.height = '800px';
-      ifr.style.transform = 'scale(' + (w / 1280) + ')';
-      ifr.style.left = '0px';
-      ifr.style.top = '0px';
-    }
+    var s = w / 1280;
+    ifr.style.width = '1280px';
+    ifr.style.height = '800px';
+    ifr.style.transform = 'scale(' + s + ')';
+    ifr.style.left = '0px';
+    ifr.style.top = '0px';
   }
 
-  // 铣栏宽度/卡片高度变化后，重算所有缩略 iframe 的缩放
+  // 栏宽度/卡片高度变化后，重算所有缩略 iframe 的缩放
   function refitRail() {
     Array.prototype.forEach.call(railTrack.querySelectorAll('.stage-preview'), fitPreview);
   }
-  function refitRailSoon() {
-    refitRail();
-    requestAnimationFrame(refitRail);
-    setTimeout(refitRail, 140);
-    setTimeout(refitRail, 320);
-  }
-
-  // ===== 悬停整卡放大铺满页面 / 移开还原 =====
-  var curZoomItem = null;
-  function zoomItem(item, on) {
-    if (!item) return;
-    if (on) {
-      item.classList.add('zoom');
-    } else {
-      item.classList.remove('zoom');
-    }
-    refitRailSoon();
-  }
-  function closeZoom() {
-    if (curZoomItem) zoomItem(curZoomItem, false);
-    curZoomItem = null;
-  }
-
-  // ===== 底部标签拖拽/悬停后的兜底：ESC 关闭大预览 =====
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && curZoomItem) closeZoom();
-  });
 
   function buildRailPreview(tab, emoji) {
     var preview = document.createElement('div');
@@ -9538,38 +9476,12 @@ function deleteFullMonth(idx) {
     var alive = { home: true };
     tabs.forEach(function (t) { alive[t.id] = true; });
     Object.keys(railPreviews).forEach(function (k) { if (!alive[k]) delete railPreviews[k]; });
-    curZoomItem = null;
-    // 鼠标停在缩略图上时（例如滚轮切页后重建），让光标下的卡片继续保持大预览
-    if (rail && rail.classList.contains('show')) {
-      var rr = railTrack.getBoundingClientRect();
-      if (lastPointer.x >= rr.left && lastPointer.x <= rr.right && lastPointer.y >= rr.top && lastPointer.y <= rr.bottom) {
-        var t = document.elementFromPoint(lastPointer.x, lastPointer.y);
-        var it = t && t.closest ? t.closest('.stage-item') : null;
-        if (it && railTrack.contains(it)) { curZoomItem = it; zoomItem(it, true); }
-      }
-    }
   }
 
-  var lastPointer = { x: -1, y: -1 };
-  document.addEventListener('mousemove', function (e) { lastPointer.x = e.clientX; lastPointer.y = e.clientY; }, { passive: true });
-
   if (railTrack) {
-    // 鼠标放上去 → 该窗口放大铺满页面；移开 → 还原成缩略卡
-    railTrack.addEventListener('mouseover', function (e) {
-      var it = e.target.closest ? e.target.closest('.stage-item') : null;
-      if (!it || it === curZoomItem) return;
-      if (curZoomItem) zoomItem(curZoomItem, false);
-      curZoomItem = it;
-      zoomItem(it, true);
-    });
-    railTrack.addEventListener('mouseleave', function () {
-      if (curZoomItem) zoomItem(curZoomItem, false);
-      curZoomItem = null;
-    });
-    // 滚轮 = 切换下一个/上一个页面（大预览期间不响应，交给页面本身）
+    // 滚轮 = 切换下一个/上一个页面
     var wheelLock = 0;
     railTrack.addEventListener('wheel', function (e) {
-      if (curZoomItem) return;
       e.preventDefault();
       var dy = e.deltaY || 0;
       if (!dy) return;
@@ -9593,7 +9505,6 @@ function deleteFullMonth(idx) {
     if (rail) rail.classList.add('show');
   }
   function hideRail() {
-    closeZoom();
     if (rail) rail.classList.remove('show');
   }
   if (railHot) {
@@ -9606,12 +9517,6 @@ function deleteFullMonth(idx) {
   // 鼠标一旦离开右侧条带，立即收起（无延迟）
   document.addEventListener('mousemove', function (e) {
     if (!rail || !rail.classList.contains('show')) return;
-    // 大预览打开时，只有离开大预览区域才还原并收起
-    if (curZoomItem) {
-      var r = curZoomItem.getBoundingClientRect();
-      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) hideRail();
-      return;
-    }
     if (e.clientX < window.innerWidth - 240) hideRail();
   }, { passive: true });
   document.addEventListener('touchstart', function (e) {
