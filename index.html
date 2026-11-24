@@ -405,6 +405,28 @@ body {
     border: none;
 }
 
+/* 首次加载骨架（避免 iframe 白屏） */
+.viewer-skeleton {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f7f9ff 0%, #eff3ff 45%, #faf7ff 100%);
+    transition: opacity 0.28s ease;
+    pointer-events: none;
+}
+.viewer-skeleton::before {
+    content: "";
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 3px solid rgba(120, 140, 200, 0.22);
+    border-top-color: #6b8afd;
+    animation: spin 0.8s linear infinite;
+}
+
 /* ===== 增强型文档查看器样式 ===== */
 .document-viewer {
     position: absolute;
@@ -4818,6 +4840,11 @@ const App = {
       
       // 添加加载完成事件
       iframe.onload = () => {
+        const sk = document.getElementById(`skeleton-${tabId}`);
+        if (sk) {
+          sk.style.opacity = '0';
+          setTimeout(() => sk.remove(), 320);
+        }
         this.onViewerLoaded(tabId, iframe);
       };
       
@@ -4825,6 +4852,20 @@ const App = {
         console.log('iframe加载失败:', tabId);
       };
       
+      // 首次加载骨架，避免 iframe 白屏
+      const skeleton = document.createElement('div');
+      skeleton.className = 'viewer-skeleton';
+      skeleton.id = `skeleton-${tabId}`;
+      contentArea.appendChild(skeleton);
+      // 兜底：最多 8 秒后收掉骨架，避免 iframe 无响应时一直转圈
+      setTimeout(() => {
+        const sk = document.getElementById(`skeleton-${tabId}`);
+        if (sk) {
+          sk.style.opacity = '0';
+          setTimeout(() => sk.remove(), 320);
+        }
+      }, 8000);
+
       contentArea.appendChild(iframe);
       viewer.appendChild(contentArea);
       
@@ -5472,7 +5513,10 @@ openPage(name, url) {
       }
     });
 
+    // 旧页先留一帧，交给淡出动画收尾（而不是直接 display:none 硬切）
+    const prevPageEl = document.querySelector('.page.active');
     document.querySelectorAll('.page').forEach(page => {
+      if (page === prevPageEl) return;
       page.classList.remove('active');
       page.style.display = 'none';
     });
@@ -5525,6 +5569,104 @@ openPage(name, url) {
         }
       }
     }
+
+    // ===== 页面切换动效：新页从点击的图标位置放大，旧页淡出缩小 =====
+    let targetEl = null;
+    if (id === 'home') targetEl = homePage;
+    else if (id === 'illustration') targetEl = illustrationPage;
+    else if (id === 'chat') targetEl = networkSelectPage;
+    else targetEl = this.pageElements[id] || null;
+
+    if (targetEl) {
+      if (prevPageEl && prevPageEl !== targetEl) this.animatePageOut(prevPageEl);
+      this.animatePageIn(targetEl, window.__openOrigin);
+      window.__openOrigin = null;
+    }
+  },
+
+  __reduceMotion() {
+    try { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
+    catch (e) { return false; }
+  },
+
+  __cancelPageAnims(el) {
+    if (!el || !el.getAnimations) return;
+    try {
+      el.getAnimations().forEach(a => { if (a.__isPageAnim) { try { a.cancel(); } catch (e) {} } });
+    } catch (e) {}
+  },
+
+  animatePageIn(el, origin) {
+    if (!el) return;
+    // 让任何挂起的"淡出后隐藏"失效（快速 A→B→A 时不要把刚回来的页面隐藏掉）
+    el.__outToken = (el.__outToken || 0) + 1;
+    if (el.__hideTimer) { clearTimeout(el.__hideTimer); el.__hideTimer = null; }
+    // 同一页面在极短时间内被重复 switchTab（例如打开后立即同步刷新）时不重播动画
+    const nowIn = Date.now();
+    if (el.__animInAt && nowIn - el.__animInAt < 600) { el.style.zIndex = '6'; el.style.display = 'block'; return; }
+    el.__animInAt = nowIn;
+    this.__cancelPageAnims(el);
+    el.style.zIndex = '6';
+    el.style.display = 'block';
+    const clear = () => { el.style.zIndex = ''; el.style.willChange = ''; };
+    if (!el.animate || this.__reduceMotion()) { setTimeout(clear, 0); return; }
+    const r = el.getBoundingClientRect();
+    const fresh = origin && origin.w > 8 && origin.h > 8 && (Date.now() - (origin.t || 0) < 1500);
+    el.style.willChange = 'transform, opacity';
+    try {
+      if (fresh && r.width > 0 && r.height > 0) {
+        // 从图标矩形放大到整页
+        const sx = Math.max(0.02, origin.w / r.width);
+        const sy = Math.max(0.02, origin.h / r.height);
+        const dx = (origin.x + origin.w / 2) - (r.left + r.width / 2);
+        const dy = (origin.y + origin.h / 2) - (r.top + r.height / 2);
+        const anim = el.animate([
+          { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, opacity: 0.42, borderRadius: '20px' },
+          { transform: 'translate(0px, 0px) scale(1, 1)', opacity: 1, borderRadius: '0px' }
+        ], { duration: 380, easing: 'cubic-bezier(0.22, 0.9, 0.26, 1)' });
+        anim.__isPageAnim = true;
+        anim.onfinish = clear;
+        anim.oncancel = clear;
+        setTimeout(clear, 420);
+      } else {
+        // 非图标入口（底部导航 / 恢复标签）：轻淡入
+        const anim = el.animate([
+          { opacity: 0, transform: 'scale(0.985)' },
+          { opacity: 1, transform: 'scale(1)' }
+        ], { duration: 240, easing: 'ease-out' });
+        anim.__isPageAnim = true;
+        anim.onfinish = clear;
+        setTimeout(clear, 280);
+      }
+    } catch (e) { clear(); }
+  },
+
+  animatePageOut(el) {
+    if (!el) return;
+    el.__outToken = (el.__outToken || 0) + 1;
+    const myToken = el.__outToken;
+    const done = () => {
+      if (el.__outToken !== myToken) return; // 已被新的切换接管
+      if (el.__hideTimer) { clearTimeout(el.__hideTimer); el.__hideTimer = null; }
+      el.classList.remove('active');
+      el.style.display = 'none';
+      el.style.pointerEvents = '';
+      el.style.willChange = '';
+      el.style.zIndex = '';
+    };
+    el.style.pointerEvents = 'none';
+    if (!el.animate || this.__reduceMotion()) { done(); return; }
+    this.__cancelPageAnims(el);
+    el.style.willChange = 'transform, opacity';
+    try {
+      const anim = el.animate([
+        { opacity: 1, transform: 'scale(1)' },
+        { opacity: 0, transform: 'scale(0.965)' }
+      ], { duration: 220, easing: 'ease-out', fill: 'forwards' });
+      anim.__isPageAnim = true;
+      anim.onfinish = () => { anim.cancel(); done(); };
+      el.__hideTimer = setTimeout(done, 260);
+    } catch (e) { done(); }
   },
 
   destroyPageIframe(pageId) {
@@ -6745,6 +6887,14 @@ App.initHomePage = function() {
         localStorage.setItem('cardOrder', JSON.stringify(order));
       } catch(e) {}
     }
+
+    // 记录点击图标的矩形，供 switchTab 做"从图标放大"的入场动效
+    funcGrid.addEventListener('pointerdown', (e) => {
+      const card = e.target.closest('.func-card');
+      if (!card || card.classList.contains('add-card')) { window.__openOrigin = null; return; }
+      const r = card.getBoundingClientRect();
+      window.__openOrigin = { x: r.left, y: r.top, w: r.width, h: r.height, t: Date.now() };
+    }, true);
 
     funcGrid.addEventListener('click', (e) => {
       const card = e.target.closest('.func-card');
