@@ -9072,16 +9072,18 @@ function deleteFullMonth(idx) {
       if (!funcGrid || !addCardBtnEl) return;
       // 确保不重复添加
       const existingIds = Array.from(funcGrid.querySelectorAll('.func-card')).map(c => c.id);
+      const bl = window.__buttonLinks || (typeof buttonLinks !== 'undefined' ? buttonLinks : null);
       savedCards.forEach(card => {
+        // 无论卡片是否已在 DOM 中，都要把链接登记进链接表（否则点击没反应）
+        if (bl) {
+          bl[card.id] = { name: card.name, url: card.url, target: card.target || 'iframe' };
+        }
         if (existingIds.includes(card.id)) return;
         const newCard = document.createElement('div');
         newCard.className = 'func-card';
         newCard.id = card.id;
         newCard.setAttribute('draggable', 'true');
         newCard.innerHTML = '<span class="func-emoji">' + (card.emoji || '⭐') + '</span><span>' + card.name + '</span>';
-        if (typeof buttonLinks !== 'undefined') {
-          buttonLinks[card.id] = { name: card.name, url: card.url, target: card.target || 'iframe' };
-        }
         funcGrid.insertBefore(newCard, addCardBtnEl);
       });
       if (typeof updateCardIndexes === 'function') updateCardIndexes();
