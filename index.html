@@ -9423,8 +9423,24 @@ function deleteFullMonth(idx) {
     var ifr = preview.querySelector('iframe');
     if (!ifr) return;
     var w = preview.clientWidth || 184;
-    var s = w / 1280;
-    ifr.style.transform = 'scale(' + s + ')';
+    var h = preview.clientHeight || 116;
+    var card = preview.closest ? preview.closest('.stage-item') : null;
+    var zoomed = !!(card && card.classList.contains('zoom'));
+    if (zoomed) {
+      // 大预览：等比铺满（contain）并居中
+      var z = Math.min(w / 1280, h / 800);
+      ifr.style.width = '1280px';
+      ifr.style.height = '800px';
+      ifr.style.transform = 'scale(' + z + ')';
+      ifr.style.left = Math.max(0, Math.round((w - 1280 * z) / 2)) + 'px';
+      ifr.style.top = Math.max(0, Math.round((h - 800 * z) / 2)) + 'px';
+    } else {
+      ifr.style.width = '1280px';
+      ifr.style.height = '800px';
+      ifr.style.transform = 'scale(' + (w / 1280) + ')';
+      ifr.style.left = '0px';
+      ifr.style.top = '0px';
+    }
   }
 
   // 铣栏宽度/卡片高度变化后，重算所有缩略 iframe 的缩放
