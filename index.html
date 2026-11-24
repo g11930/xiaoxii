@@ -6664,6 +6664,8 @@ App.initHomePage = function() {
     'system-settings': { name: '系统设置', url: 'modal:system-settings', target: 'iframe' }
   };
   // __BUTTON_LINKS_END__
+  // 暴露给恢复/同步脚本使用（同名卡片链接被修改后需要在刷新时重新套用）
+  window.__buttonLinks = buttonLinks;
   
   window.speedExtraMonths = [];
   window.warehouseExtraMonths = [];
@@ -9112,8 +9114,9 @@ function deleteFullMonth(idx) {
 
   function restoreCardLinks() {
     try {
-      // 确保 buttonLinks 可用
-      if (typeof buttonLinks === 'undefined') {
+      // 通过 window.__buttonLinks 访问主脚本里的链接表（跨 <script> 作用域）
+      var bl = window.__buttonLinks || (typeof buttonLinks !== 'undefined' ? buttonLinks : null);
+      if (!bl) {
         console.log('[restore] buttonLinks 未就绪，跳过链接恢复');
         return;
       }
@@ -9121,11 +9124,11 @@ function deleteFullMonth(idx) {
       const keys = Object.keys(cardLinks);
       if (!keys.length) return;
       keys.forEach(function(cardId) {
-        if (buttonLinks[cardId]) {
+        if (bl[cardId]) {
           // 覆盖内置卡片的链接
-          buttonLinks[cardId].name = cardLinks[cardId].name;
-          buttonLinks[cardId].url = cardLinks[cardId].url;
-          buttonLinks[cardId].target = /weixin\.qq\.com/.test(cardLinks[cardId].url) ? 'blank' : cardLinks[cardId].target;
+          if (cardLinks[cardId].name) bl[cardId].name = cardLinks[cardId].name;
+          bl[cardId].url = cardLinks[cardId].url;
+          bl[cardId].target = /weixin\.qq\.com/.test(cardLinks[cardId].url) ? 'blank' : cardLinks[cardId].target;
           // 更新卡片显示名称
           var cardEl = document.getElementById(cardId);
           if (cardEl) {
