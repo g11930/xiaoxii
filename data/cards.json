@@ -1,6 +1,6 @@
 {
   "v": 4,
-  "updatedAt": "2026-11-24T07:08:22.040Z",
+  "updatedAt": "2026-11-25T04:59:46.477Z",
   "customCards": [
     {
       "id": "custom-1795486052823",
@@ -15,6 +15,13 @@
       "url": "https://doc.weixin.qq.com/sheet/e3_AX4ADQYYAIcCNw5xAM1F2STG4905n?scode=AGMAxAeNAHYKjOA4shATMAqQaKAPU&tab=vuiera",
       "emoji": "⭐",
       "target": "blank"
+    },
+    {
+      "id": "custom-1795513260437",
+      "name": "预约",
+      "url": "http://visitor.tarry.cn/mobile/pages/yue/yueFrom?comId=2",
+      "emoji": "⭐",
+      "target": "iframe"
     }
   ],
   "cardLinks": {
@@ -32,6 +39,11 @@
       "name": "转单",
       "url": "http://120.77.151.112:16321/module/index?mv=index",
       "target": "blank"
+    },
+    "custom-1795513260437": {
+      "name": "预约",
+      "url": "http://visitor.tarry.cn/mobile/pages/yue/yueFrom?comId=2",
+      "target": "iframe"
     }
   },
   "deletedCards": [
@@ -42,6 +54,7 @@
     "channel-search"
   ],
   "cardOrder": [
+    "usage-guide",
     "warehouse",
     "speed",
     "line",
@@ -61,9 +74,10 @@
     "illustration",
     "zip-search",
     "system-settings",
-    "custom-1795486052823"
+    "custom-1795486052823",
+    "custom-1795513260437"
   ],
-  "siteTitle": "添加新链接，云同步可自己更新网站的内容",
+  "siteTitle": "雪糕",
   "siteSubtitle": "花有重开日，人无再少年",
   "speedExtraMonths": [],
   "warehouseExtraMonths": [
