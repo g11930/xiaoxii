@@ -4932,8 +4932,9 @@ const App = {
       iframe.id = `iframe-${tabId}`;
       iframe.className = 'viewer-iframe';
       iframe.loading = 'lazy';
-      iframe.sandbox = 'allow-scripts allow-same-origin allow-forms allow-popups';
-      iframe.allow = 'clipboard-read clipboard-write camera microphone geolocation notifications payment';
+      // 不加 sandbox：金山文档/WPS 的「复制为图片」「下载」「打印」等能力需要完整权限，
+      // sandbox 会把它降级成不能写剪贴板、不能下载的受限环境。
+      iframe.allow = 'clipboard-read; clipboard-write; fullscreen; camera; microphone; geolocation; notifications; payment; autoplay; encrypted-media; display-capture';
       iframe.allowFullscreen = true;
       iframe.style.width = '100%';
       iframe.style.height = '100%';
@@ -4993,7 +4994,7 @@ const App = {
     iframe.dataset.id = tabId;
     iframe.id = `iframe-${tabId}`;
     iframe.loading = 'lazy';
-    iframe.sandbox = 'allow-scripts allow-same-origin allow-forms allow-popups';
+    iframe.allow = 'clipboard-read; clipboard-write; fullscreen; camera; microphone; geolocation; notifications; payment; autoplay; encrypted-media';
     iframe.style.width = '100%';
     iframe.style.height = '100%';
     iframe.style.border = 'none';
